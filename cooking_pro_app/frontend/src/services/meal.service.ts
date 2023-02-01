@@ -2,18 +2,18 @@ import { URLSearchParams } from 'url';
 
 import HttpService from './http.service';
 
-import { BACKEND_KEYS } from '../../consts/app-keys.const';
+import { BACKEND_KEYS } from '../consts/app-keys.const';
 
 class MealService extends HttpService {
-  getMealsByCategory(params: URLSearchParams) {
+  getCategoriesAndIngredients() {
     return this.get({
-      url: `${BACKEND_KEYS.GET_MEALS_BY_CATEGORY}?${params}`,
+      url: BACKEND_KEYS.GET_CATEGORIES_AND_INGREDIENTS,
     });
   }
 
-  getMealsByIngredient(params: URLSearchParams) {
+  getMealsByFilter(params: URLSearchParams) {
     return this.get({
-      url: `${BACKEND_KEYS.GET_MEALS_BY_INGREDIENT}?${params}`,
+      url: `${BACKEND_KEYS.GET_MEALS_BY_FILTER}?${params}`,
     });
   }
 
@@ -23,6 +23,12 @@ class MealService extends HttpService {
 
   getSingleMeal(id: string) {
     return this.get({ url: `${BACKEND_KEYS.GET_SINGLE_MEAL}${id}` });
+  }
+
+  getUserMealsByIngredients(id: string) {
+    return this.get({
+      url: `${BACKEND_KEYS.GET_USER_MEALS_BY_INGREDIENTS}${id}`,
+    });
   }
 }
 

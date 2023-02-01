@@ -1,7 +1,6 @@
 import HttpService from './http.service';
-import { Ingredient, User, Meal } from '../../types';
-import { BACKEND_KEYS } from '../../consts';
-import { URLSearchParams } from 'url';
+import { Ingredient, User } from '../types';
+import { BACKEND_KEYS } from '../consts';
 
 class UserService extends HttpService {
   registerUser(user: User) {
@@ -22,16 +21,6 @@ class UserService extends HttpService {
     return this.get({ url: `${BACKEND_KEYS.GET_USER_INGREDIENTS}${id}` });
   }
 
-  getUserIngredientsByCategory(id: string, params: URLSearchParams) {
-    return this.get({
-      url: `${BACKEND_KEYS.GET_USER_INGREDIENTS}${id}?${params}`,
-    });
-  }
-
-  getUserMeals(id: string) {
-    return this.get({ url: `${BACKEND_KEYS.GET_USER_MEALS}${id}` });
-  }
-
   createUserIngredient(id: string, ingredient: Ingredient) {
     return this.post({
       url: `${BACKEND_KEYS.CREATE_USER_INGREDIENT}${id}`,
@@ -39,12 +28,13 @@ class UserService extends HttpService {
     });
   }
 
-  createUserMeal(id: string, meal: Meal) {
-    return this.post({
-      url: `${BACKEND_KEYS.CREATE_USER_MEAL}${id}`,
-      data: meal,
-    });
-  }
+  // --------- additional task --------- //
+  // createUserMeal(id: string, meal: Meal) {
+  //   return this.post({
+  //     url: `${BACKEND_KEYS.CREATE_USER_MEAL}${id}`,
+  //     data: meal,
+  //   });
+  // }
 }
 
 export const userService = new UserService();

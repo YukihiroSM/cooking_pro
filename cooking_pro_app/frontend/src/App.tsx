@@ -1,26 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-export default App;
+import { ChakraProvider } from '@chakra-ui/react';
+import { theme } from './theme';
+import { MainRouter } from './navigation';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      keepPreviousData: true,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
+      cacheTime: Infinity,
+    },
+  },
+});
+
+const AppContainer = () => {
+  return (
+    <ChakraProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <MainRouter />
+      </QueryClientProvider>
+    </ChakraProvider>
+  );
+};
+
+export default AppContainer;

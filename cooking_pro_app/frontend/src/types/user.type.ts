@@ -3,4 +3,9 @@ type User = {
   password: string;
 };
 
-export type { User };
+type LocalStorageUser = {
+  id: string | undefined;
+  token: string | undefined;
+};
+
+export type { User, LocalStorageUser };

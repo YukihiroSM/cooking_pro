@@ -1,13 +1,13 @@
 import { URLSearchParams } from 'url';
-import { mealService } from './services/meal.service';
+import { mealService } from '../services';
 
-const getMealsByCategory = async (params: URLSearchParams) => {
-  const { data } = await mealService.getMealsByCategory(params);
+const getCategoriesAndIngredients = async () => {
+  const { data } = await mealService.getCategoriesAndIngredients();
   return data;
 };
 
-const getMealsByIngredient = async (params: URLSearchParams) => {
-  const { data } = await mealService.getMealsByIngredient(params);
+const getMealsByFilter = async (params: URLSearchParams) => {
+  const { data } = await mealService.getMealsByFilter(params);
   return data;
 };
 
@@ -21,9 +21,15 @@ const getSingleMeal = async (id: string) => {
   return data;
 };
 
+const getUserMealsByIngredients = async (id: string) => {
+  const { data } = await mealService.getUserMealsByIngredients(id);
+  return data;
+};
+
 export {
-  getMealsByCategory,
-  getMealsByIngredient,
+  getMealsByFilter,
   getRandomMeal,
   getSingleMeal,
+  getCategoriesAndIngredients,
+  getUserMealsByIngredients,
 };

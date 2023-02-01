@@ -28,10 +28,11 @@ export default class HttpService {
   }
 
   private populateTokenToHeaderConfig() {
-    const token = localStorage.getItem('todo-app-token');
-    if (!token) return;
+    const { token } = JSON.parse(
+      localStorage.getItem('cooking-app-user') || '{}'
+    );
     return {
-      Authorization: JSON.parse(token),
+      Authorization: `Bearer ${token}`,
     };
   }
 
