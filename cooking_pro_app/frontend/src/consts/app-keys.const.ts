@@ -1,3 +1,5 @@
+import { NavItem } from '../types';
+
 const BACKEND_KEYS = {
   // categories and ingredients
   GET_CATEGORIES_AND_INGREDIENTS: 'categories_and_ingredients',
@@ -38,4 +40,27 @@ const ROUTER_KEYS = {
   // CREATE_MEAL: '/meal/create-meal',
 };
 
-export { BACKEND_KEYS, ROUTER_KEYS };
+const TEAM = [
+  {
+    name: 'Andrii Smidonov',
+    linkedIn: 'https://www.linkedin.com/in/andrii-smidonov',
+    gitHub: 'https://github.com/yukihirosm',
+  },
+  {
+    name: 'Ruslan Kotliarenko',
+    linkedIn: 'https://linkedin.com/in/ruslan-kotliarenko',
+    gitHub: 'https://github.com/ruslankotliar',
+  },
+  {
+    name: 'Dmytro Omelian',
+    linkedIn: 'https://linkedin.com/in/dichik',
+    gitHub: 'https://github.com/Dichik',
+  },
+  {
+    name: 'Sofiia Shaposhnikova',
+    linkedIn: 'https://linkedin.com/in/sofiia-shaposhnikova',
+    gitHub: 'https://github.com/Teasotea',
+  },
+];
+
+export { BACKEND_KEYS, ROUTER_KEYS, TEAM };

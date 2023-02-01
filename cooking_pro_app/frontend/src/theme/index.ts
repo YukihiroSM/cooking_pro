@@ -1,11 +1,30 @@
-import { extendTheme } from '@chakra-ui/react';
+import { extendTheme, theme as defaultTheme } from '@chakra-ui/react';
+import foundations from './foundations';
+import typography from './typography';
 
-const colors = {
-  brand: {
-    900: '#1a365d',
-    800: '#153e75',
-    700: '#2a69ac',
+export const theme = extendTheme(
+  {
+    ...foundations,
+    ...typography,
   },
-};
-
-export const theme = extendTheme({ colors });
+  {
+    config: defaultTheme.config,
+    direction: defaultTheme.direction,
+    transition: defaultTheme.transition,
+    // breakpoints,
+    zIndices: defaultTheme.zIndices,
+    components: {},
+    styles: {},
+    borders: {},
+    colors: {},
+    radii: {},
+    shadows: {},
+    sizes: {},
+    space: {},
+    fonts: {},
+    fontSizes: {},
+    fontWeights: {},
+    letterSpacings: {},
+    lineHeights: {},
+  }
+);

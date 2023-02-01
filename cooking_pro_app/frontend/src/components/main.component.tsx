@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Box } from '@chakra-ui/react';
+
 export const MainPageComponent = () => {
-  return <div>MainPageComponent</div>;
+  return <Box bg='primary'>MainPageComponent</Box>;
 };
