@@ -6,6 +6,9 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 
+from routes import meals
+from routes import ingredients
+
 SECRET_KEY = "my_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 800
@@ -14,6 +17,9 @@ dummy_user = {
     "password": "test",
 }
 app = FastAPI()
+app.include_router(ingredients.router)
+app.include_router(meals.router)
+
 origins = [
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
@@ -59,6 +65,11 @@ def startup_db_client():
 @app.on_event("shutdown")
 def shutdown_db_client():
     app.mongodb_client.close()
+
+
+@app.get("/ping")
+def ping():
+    return "ok"
 
 
 @app.options("/login")
