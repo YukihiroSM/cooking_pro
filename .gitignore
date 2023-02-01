@@ -130,3 +130,7 @@ dmypy.json
 
 # Pycharm config ignore
 .idea/
+
+
+**/*.env
+**/*yarn-error.log*
