@@ -17,83 +17,83 @@ import { useState } from 'react';
 
 // TEST
 const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: 'Recipes',
-    children: [
-      {
-        label: 'Beef',
-      },
-      {
-        label: 'Beef',
-      },
-      {
-        label: 'Beef',
-      },
-      {
-        label: 'Beef',
-      },
-      {
-        label: 'Beef',
-      },
-      {
-        label: 'Beef',
-      },
-      {
-        label: 'Beef',
-      },
-    ],
-  },
-  {
-    label: 'Ingredients',
-    children: [
-      {
-        label: 'Chicken',
-        children: [
-          {
-            label: 'Chicken',
-          },
-          {
-            label: 'Freelance Projects',
-          },
-          {
-            label: 'Chicken',
-          },
-        ],
-      },
-      {
-        label: 'Freelance Projects',
-        children: [
-          {
-            label: 'Chicken',
-          },
-          {
-            label: 'Freelance Projects',
-          },
-          {
-            label: 'Chicken',
-          },
-        ],
-      },
-      {
-        label: 'Chicken',
-      },
-      {
-        label: 'Freelance Projects',
-      },
-      {
-        label: 'Chicken',
-      },
-      {
-        label: 'Freelance Projects',
-      },
-      {
-        label: 'Chicken',
-      },
-      {
-        label: 'Freelance Projects',
-      },
-    ],
-  },
+  // {
+  //   label: 'Recipes',
+  //   children: [
+  //     {
+  //       label: 'Beef',
+  //     },
+  //     {
+  //       label: 'Beef',
+  //     },
+  //     {
+  //       label: 'Beef',
+  //     },
+  //     {
+  //       label: 'Beef',
+  //     },
+  //     {
+  //       label: 'Beef',
+  //     },
+  //     {
+  //       label: 'Beef',
+  //     },
+  //     {
+  //       label: 'Beef',
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: 'Ingredients',
+  //   children: [
+  //     {
+  //       label: 'Chicken',
+  //       children: [
+  //         {
+  //           label: 'Chicken',
+  //         },
+  //         {
+  //           label: 'Freelance Projects',
+  //         },
+  //         {
+  //           label: 'Chicken',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: 'Freelance Projects',
+  //       children: [
+  //         {
+  //           label: 'Chicken',
+  //         },
+  //         {
+  //           label: 'Freelance Projects',
+  //         },
+  //         {
+  //           label: 'Chicken',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: 'Chicken',
+  //     },
+  //     {
+  //       label: 'Freelance Projects',
+  //     },
+  //     {
+  //       label: 'Chicken',
+  //     },
+  //     {
+  //       label: 'Freelance Projects',
+  //     },
+  //     {
+  //       label: 'Chicken',
+  //     },
+  //     {
+  //       label: 'Freelance Projects',
+  //     },
+  //   ],
+  // },
 ];
 
 export const HeaderComponent = () => {
