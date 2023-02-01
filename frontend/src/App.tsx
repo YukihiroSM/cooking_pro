@@ -7,7 +7,7 @@ import { theme } from './theme';
 import { MainRouter } from './navigation';
 import LayoutComponent from './layouts/main.layout';
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       keepPreviousData: true,

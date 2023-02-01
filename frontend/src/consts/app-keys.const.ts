@@ -1,5 +1,3 @@
-import { NavItem } from '../types';
-
 const BACKEND_KEYS = {
   // categories and ingredients
   GET_CATEGORIES_AND_INGREDIENTS: 'categories_and_ingredients',
@@ -7,7 +5,7 @@ const BACKEND_KEYS = {
   // filtering by category or ingredient
   GET_MEALS_BY_FILTER: 'meals', // + filter in search params
   // random meal
-  GET_RANDOM_MEAL: 'meals/random',
+  GET_RANDOM_MEALS: 'meals/random',
   // single meal
   GET_SINGLE_MEAL: 'meals/single/', // + meal ID
   // meals which match the set of ingredients that user has

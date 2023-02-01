@@ -6,23 +6,29 @@ import { BACKEND_KEYS } from '../consts/app-keys.const';
 
 class MealService extends HttpService {
   getCategoriesAndIngredients() {
-    return this.get({
-      url: BACKEND_KEYS.GET_CATEGORIES_AND_INGREDIENTS,
-    });
+    return this.get(
+      {
+        url: BACKEND_KEYS.GET_CATEGORIES_AND_INGREDIENTS,
+      },
+      false
+    );
   }
 
   getMealsByFilter(params: URLSearchParams) {
-    return this.get({
-      url: `${BACKEND_KEYS.GET_MEALS_BY_FILTER}?${params}`,
-    });
+    return this.get(
+      {
+        url: `${BACKEND_KEYS.GET_MEALS_BY_FILTER}?${params}`,
+      },
+      false
+    );
   }
 
-  getRandomMeal() {
-    return this.get({ url: BACKEND_KEYS.GET_RANDOM_MEAL });
+  getRandomMeals() {
+    return this.get({ url: BACKEND_KEYS.GET_RANDOM_MEALS }, false);
   }
 
   getSingleMeal(id: string) {
-    return this.get({ url: `${BACKEND_KEYS.GET_SINGLE_MEAL}${id}` });
+    return this.get({ url: `${BACKEND_KEYS.GET_SINGLE_MEAL}${id}` }, false);
   }
 
   getUserMealsByIngredients(id: string) {

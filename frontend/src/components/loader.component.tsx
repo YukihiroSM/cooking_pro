@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Flex, Spinner } from '@chakra-ui/react';
 
-const LoadingStatus = () => {
+export const Loader = () => {
   return (
     <Flex
       justifyContent={'center'}
@@ -16,5 +16,3 @@ const LoadingStatus = () => {
     </Flex>
   );
 };
-
-export default LoadingStatus;

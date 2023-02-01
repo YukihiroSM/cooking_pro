@@ -11,8 +11,8 @@ const getMealsByFilter = async (params: URLSearchParams) => {
   return data;
 };
 
-const getRandomMeal = async () => {
-  const { data } = await mealService.getRandomMeal();
+const getRandomMeals = async () => {
+  const { data } = await mealService.getRandomMeals();
   return data;
 };
 
@@ -28,7 +28,7 @@ const getUserMealsByIngredients = async (id: string) => {
 
 export {
   getMealsByFilter,
-  getRandomMeal,
+  getRandomMeals,
   getSingleMeal,
   getCategoriesAndIngredients,
   getUserMealsByIngredients,
