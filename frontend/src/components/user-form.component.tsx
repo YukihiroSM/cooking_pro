@@ -101,6 +101,7 @@ export const UserFormPageComponent = () => {
         status: 'success',
         duration: 3000,
         isClosable: true,
+        position: 'top-right',
       });
     }
     if (isError) {
@@ -110,6 +111,7 @@ export const UserFormPageComponent = () => {
         status: 'error',
         duration: 3000,
         isClosable: true,
+        position: 'top-right',
       });
     }
   }, [isError, error, isSuccess]);
@@ -130,6 +132,7 @@ export const UserFormPageComponent = () => {
                 as={Link}
                 href={'/user/login'}
                 _selected={{
+                  bg: 'gray.50',
                   color: 'orange',
                   border: 0.5,
                   borderBottom: 0,
@@ -144,6 +147,7 @@ export const UserFormPageComponent = () => {
                 as={Link}
                 href={'/user/register'}
                 _selected={{
+                  bg: 'gray.50',
                   color: 'orange',
                   border: 0.5,
                   borderBottom: 0,

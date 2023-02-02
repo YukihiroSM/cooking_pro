@@ -13,105 +13,78 @@ import {
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
 import { NavItem } from '../types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { throttle } from '../utils';
 
 // TEST
 const NAV_ITEMS: Array<NavItem> = [
-  // {
-  //   label: 'Recipes',
-  //   children: [
-  //     {
-  //       label: 'Beef',
-  //     },
-  //     {
-  //       label: 'Beef',
-  //     },
-  //     {
-  //       label: 'Beef',
-  //     },
-  //     {
-  //       label: 'Beef',
-  //     },
-  //     {
-  //       label: 'Beef',
-  //     },
-  //     {
-  //       label: 'Beef',
-  //     },
-  //     {
-  //       label: 'Beef',
-  //     },
-  //   ],
-  // },
-  // {
-  //   label: 'Ingredients',
-  //   children: [
-  //     {
-  //       label: 'Chicken',
-  //       children: [
-  //         {
-  //           label: 'Chicken',
-  //         },
-  //         {
-  //           label: 'Freelance Projects',
-  //         },
-  //         {
-  //           label: 'Chicken',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       label: 'Freelance Projects',
-  //       children: [
-  //         {
-  //           label: 'Chicken',
-  //         },
-  //         {
-  //           label: 'Freelance Projects',
-  //         },
-  //         {
-  //           label: 'Chicken',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       label: 'Chicken',
-  //     },
-  //     {
-  //       label: 'Freelance Projects',
-  //     },
-  //     {
-  //       label: 'Chicken',
-  //     },
-  //     {
-  //       label: 'Freelance Projects',
-  //     },
-  //     {
-  //       label: 'Chicken',
-  //     },
-  //     {
-  //       label: 'Freelance Projects',
-  //     },
-  //   ],
-  // },
+  {
+    label: 'Recipes',
+    children: [
+      {
+        label: 'Beef',
+      },
+    ],
+  },
+  {
+    label: 'Ingredients',
+    children: [
+      {
+        label: 'Chicken',
+        children: [
+          {
+            label: 'Chicken',
+          },
+          {
+            label: 'Freelance Projects',
+          },
+        ],
+      },
+      {
+        label: 'Freelance Projects',
+        children: [
+          {
+            label: 'Chicken',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export const HeaderComponent = () => {
   // fetch nav items
   const [navItems] = useState<NavItem[]>(NAV_ITEMS);
 
+  const [scrollTop, setScrollTop] = useState<number>(0);
+
+  useEffect(() => {
+    const handleScroll = (event: Event) => {
+      setScrollTop(window.scrollY);
+    };
+
+    window.addEventListener('scroll', throttle(handleScroll, 250));
+
+    return () => {
+      window.removeEventListener('scroll', throttle(handleScroll, 100));
+    };
+  }, []);
+
   return (
-    <Box>
+    <Box as='header' position='fixed' w='100%' zIndex={5}>
       <Flex
         bg={'dark'}
         color={'white'}
-        textStyle={{ base: 'display2', md: 'display1' }}
+        transition={'font-size 0.5s'}
+        textStyle={{
+          base: 'display2',
+          md: scrollTop > 0 ? 'body1Semi' : 'display1',
+        }}
         py={{ base: 2 }}
         px={{ base: 4 }}
         borderBottom={1}
         borderStyle={'solid'}
         borderColor={'gray.200'}
-        minH={'80px'}
         align={'center'}
         position={'relative'}
         justifyContent={'center'}
@@ -131,7 +104,7 @@ export const HeaderComponent = () => {
         >
           <Button
             as={'a'}
-            fontSize={'sm'}
+            fontSize={'lg'}
             fontWeight={400}
             variant={'link'}
             href={'/user/login'}
@@ -141,7 +114,7 @@ export const HeaderComponent = () => {
           </Button>
           <Button
             display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
+            fontSize={'lg'}
             fontWeight={600}
             color={'white'}
             bg={'attention.dark'}
@@ -159,7 +132,7 @@ export const HeaderComponent = () => {
         display={'flex'}
         justify={{ base: 'space-between', md: 'start' }}
         py={{ base: 2 }}
-        px={{ base: 10 }}
+        px={{ base: 20 }}
         bg={'dark'}
         color={'white'}
         minH={'60px'}
@@ -181,7 +154,7 @@ const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
               <PopoverTrigger>
                 <Link
                   p={2}
-                  fontSize={'sm'}
+                  fontSize={'lg'}
                   fontWeight={500}
                   color={'light'}
                   _hover={{
@@ -262,6 +235,7 @@ const DesktopSubNav = ({ label, children }: NavItem) => {
           <Stack direction={'row'} align={'center'}>
             <Box>
               <Text
+                fontSize={'md'}
                 transition={'all .3s ease'}
                 _groupHover={{ color: 'attention.dark' }}
                 fontWeight={500}
@@ -324,6 +298,7 @@ const DesktopSubSubNav = ({ label }: NavItem) => {
       <Stack direction={'row'} align={'center'}>
         <Box>
           <Text
+            fontSize={'sm'}
             transition={'all .3s ease'}
             _groupHover={{ color: 'attention.dark' }}
             fontWeight={500}

@@ -1,6 +1,6 @@
 const typography = {
   fonts: {
-    body: 'Poppins, sans-serif',
+    body: 'Artifika, serif',
   },
 };
 
