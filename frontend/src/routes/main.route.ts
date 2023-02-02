@@ -1,4 +1,4 @@
-import { MainPageComponent } from '../components/main.component';
+import { MainPageComponent } from '../pages';
 
 const page = {
   element: MainPageComponent,

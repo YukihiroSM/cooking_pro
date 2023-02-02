@@ -7,6 +7,8 @@ import { theme } from './theme';
 import { MainRouter } from './navigation';
 import LayoutComponent from './layouts/main.layout';
 
+import './App.css';
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
