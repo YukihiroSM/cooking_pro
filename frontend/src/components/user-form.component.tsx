@@ -55,7 +55,7 @@ type Action = {
   };
 };
 
-export const UserFormPageComponent = () => {
+export const UserFormComponent = () => {
   const location = useLocation();
   const toast = useToast();
   const {
