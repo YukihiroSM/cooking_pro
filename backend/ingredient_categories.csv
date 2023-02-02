@@ -1,0 +1,575 @@
+id,ingredient,category
+1,Chicken,meat
+2,Salmon,seafood
+3,Beef,meat
+4,Pork,meat
+5,Avocado,vegetables
+6,Apple Cider Vinegar,vegetables
+7,Asparagus,herb
+8,Aubergine,vegetables
+9,Baby Plum Tomatoes,vegetables
+10,Bacon,meat
+11,Baking Powder,others
+12,Balsamic Vinegar,vinegar
+13,Basil,herb
+14,Basil Leaves,herb
+15,Basmati Rice,cereals
+16,Bay Leaf,spices
+17,Bay Leaves,spices
+18,Beef Brisket,meat
+19,Beef Fillet,meat
+20,Beef Gravy,meat
+21,Beef Stock,meat
+22,Bicarbonate Of Soda,others
+23,Biryani Masala,spices
+24,Black Pepper,spices
+25,Black Treacle,spices
+26,Borlotti Beans,herb
+27,Bowtie Pasta,pasta
+28,Bramley Apples,fruits
+29,Brandy,alcohol
+30,Bread,others
+31,Breadcrumbs,others
+32,Broccoli,vegetables
+33,Brown Lentils,spices
+34,Brown Rice,cereals
+35,Brown Sugar,sugar
+36,Butter,dairy_products
+37,Cacao,others
+38,Cajun,spices
+39,Canned Tomatoes,vegetables
+40,Cannellini Beans,vegetables
+41,Cardamom,spices
+42,Carrots,vegetables
+43,Cashew Nuts,others
+44,Cashews,others
+45,Caster Sugar,sugar
+46,Cayenne Pepper,spices
+47,Celeriac,vegetables
+48,Celery,vegetables
+49,Celery Salt,spices
+50,Challots,vegetables
+51,Charlotte Potatoes,vegetables
+52,Cheddar Cheese,dairy_products
+53,Cheese,dairy_products
+54,Cheese Curds,dairy_products
+55,Cherry Tomatoes,vegetables
+56,Chestnut Mushroom,vegetables
+57,Chicken Breast,meat
+58,Chicken Breasts,meat
+59,Chicken Legs,meat
+60,Chicken Stock,meat
+61,Chicken Thighs,meat
+62,Chickpeas,meat
+63,Chili Powder,spices
+64,Chilled Butter,spices
+65,Chilli,spices
+66,Chilli Powder,spices
+67,Chinese Broccoli,vegetables
+68,Chocolate Chips,others
+69,Chopped Onion,vegetables
+70,Chopped Parsley,vegetables
+71,Chopped Tomatoes,vegetables
+72,Chorizo,meat
+73,Christmas Pudding,others
+74,Cilantro,herb
+75,Cinnamon,spices
+76,Cinnamon Stick,spices
+77,Cloves,spices
+78,Coco Sugar,sugar
+79,Cocoa,others
+80,Coconut Cream,dairy_products
+81,Coconut Milk,dairy_products
+82,Colby Jack Cheese,dairy_products
+83,Cold Water,others
+84,Condensed Milk,dairy_products
+85,Coriander,herb
+86,Coriander Leaves,herb
+87,Coriander Seeds,herb
+88,Corn Tortillas,others
+89,Cornstarch,others
+90,Cream,others
+91,Creme Fraiche,dairy_products
+92,Cubed Feta Cheese,dairy_products
+93,Cucumber,vegetables
+94,Cumin,spices
+95,Cumin Seeds,spices
+96,Curry Powder,spices
+97,Dark Brown Sugar,sugar
+98,Dark Soft Brown Sugar,sugar
+99,Dark Soy Sauce,spices
+100,Demerara Sugar,sugar
+101,Diced Tomatoes,vegetables
+102,Digestive Biscuits,others
+103,Dill,herb
+104,Doner Meat,meat
+105,Double Cream,dairy_products
+106,Dried Oregano,spices
+107,Dry White Wine,alcohol
+108,Egg Plants,vegetables
+109,Egg Rolls,others
+110,Egg White,others
+111,Egg Yolks,others
+112,Eggs,others
+113,Enchilada Sauce,spices
+114,English Mustard,spices
+115,Extra Virgin Olive Oil,others
+116,Fajita Seasoning,spices
+117,Farfalle,pasta
+118,Fennel Bulb,herb
+119,Fennel Seeds,herb
+120,Fenugreek,spices
+121,Feta,dairy_products
+122,Fish Sauce,spices
+123,Flaked Almonds,cereals
+124,Flax Eggs,others
+125,Flour,others
+126,Flour Tortilla,others
+127,Floury Potatoes,others
+128,"Free-range Egg, Beaten",others
+129,"Free-range Eggs, Beaten",others
+130,French Lentils,spices
+131,Fresh Basil,herb
+132,Fresh Thyme,herb
+133,Freshly Chopped Parsley,herb
+134,Fries,vegetables
+135,Full Fat Yogurt,dairy_products
+136,Garam Masala,spices
+137,Garlic,vegetables
+138,Garlic Clove,vegetables
+139,Garlic Powder,spices
+140,Garlic Sauce,spices
+141,Ghee,others
+142,Ginger,herb
+143,Ginger Cordial,alcohol
+144,Ginger Garlic Paste,others
+145,Ginger Paste,others
+146,Golden Syrup,others
+147,Gouda Cheese,dairy_products
+148,Granulated Sugar,sugar
+149,Grape Tomatoes,vegetables
+150,Greek Yogurt,dairy_products
+151,Green Beans,others
+152,Green Chilli,vegetables
+153,Green Olives,vegetables
+154,Green Red Lentils,spices
+155,Green Salsa,spices
+156,Ground Almonds,spices
+157,Ground Cumin,spices
+158,Ground Ginger,spices
+159,Gruyère,dairy_products
+160,Hard Taco Shells,others
+161,Harissa Spice,spices
+162,Heavy Cream,dairy_products
+163,Honey,others
+164,Horseradish,vegetables
+165,Hot Beef Stock,others
+166,Hotsauce,others
+167,Ice Cream,others
+168,Italian Fennel Sausages,meat
+169,Italian Seasoning,spices
+170,Jalapeno,herb
+171,Jasmine Rice,cereals
+172,Jerusalem Artichokes,vegetables
+173,Kale,herb
+174,Khus Khus,cereals
+175,King Prawns,seafood
+176,Kosher Salt,spices
+177,Lamb,meat
+178,Lamb Loin Chops,meat
+179,Lamb Mince,meat
+180,Lasagne Sheets,pasta
+181,Lean Minced Beef,meat
+182,Leek,vegetables
+183,Lemon,vegetables
+184,Lemon Juice,others
+185,Lemon Zest,others
+186,Lemons,vegetables
+187,Lettuce,vegetables
+188,Lime,vegetables
+189,Little Gem Lettuce,vegetables
+190,Macaroni,pasta
+191,Mackerel,seafood
+192,Madras Paste,spices
+193,Marjoram,herb
+194,Massaman Curry Paste,spices
+195,Medjool Dates,others
+196,Meringue Nests,others
+197,Milk,dairy_products
+198,Minced Garlic,spices
+199,Miniature Marshmallows,others
+200,Mint,herb
+201,Monterey Jack Cheese,dairy_products
+202,Mozzarella Balls,dairy_products
+203,Muscovado Sugar,sugar
+204,Mushrooms,vegetables
+205,Mustard,others
+206,Mustard Powder,spices
+207,Mustard Seeds,spices
+208,Nutmeg,herb
+209,Oil,others
+210,Olive Oil,others
+211,Onion Salt,others
+212,Onions,vegetables
+213,Orange,fruits
+214,Orange Zest,others
+215,Oregano,herb
+216,Oyster Sauce,spices
+217,Paprika,spices
+218,Parma Ham,meat
+219,Parmesan,dairy_products
+220,Parmesan Cheese,dairy_products
+221,Parmigiano-reggiano,dairy_products
+222,Parsley,herb
+223,Peanut Butter,others
+224,Peanut Oil,others
+225,Peanuts,others
+226,Peas,fruits
+227,Pecorino,dairy_products
+228,Penne Rigate,pasta
+229,Pepper,spices
+230,Pine Nuts,others
+231,Pitted Black Olives,vegetables
+232,Plain Chocolate,others
+233,Plain Flour,others
+234,Plum Tomatoes,vegetables
+235,Potato Starch,vegetables
+236,Potatoes,vegetables
+237,Prawns,seafood
+238,Puff Pastry,others
+239,Raspberry Jam,others
+240,Raw King Prawns,seafood
+241,Red Chile Flakes,spices
+242,Red Chilli,spices
+243,Red Chilli Powder,spices
+244,Red Onions,vegetables
+245,Red Pepper,spices
+246,Red Pepper Flakes,spices
+247,Red Wine,alcohol
+248,Refried Beans,vegetables
+249,Rice,cereals
+250,Rice Noodles,pasta
+251,Rice Stick Noodles,pasta
+252,Rice Vermicelli,pasta
+253,Rigatoni,pasta
+254,Rocket,herb
+255,Rolled Oats,cereals
+256,Saffron,spices
+257,Sage,herb
+258,Sake,alcohol
+259,Salsa,spices
+260,Salt,spices
+261,Salted Butter,dairy_products
+262,Sausages,meat
+263,Sea Salt,spices
+264,Self-raising Flour,others
+265,Semi-skimmed Milk,dairy_products
+266,Sesame Seed,herb
+267,Shallots,vegetables
+268,Shredded Mexican Cheese,dairy_products
+269,Shredded Monterey Jack Cheese,dairy_products
+270,Small Potatoes,vegetables
+271,Smoked Paprika,spices
+272,Smoky Paprika,spices
+273,Sour Cream,dairy_products
+274,Soy Sauce,spices
+275,Soya Milk,others
+276,Spaghetti,pasta
+277,Spinach,vegetables
+278,Spring Onions,vegetables
+279,Squash,vegetables
+280,Stir-fry Vegetables,vegetables
+281,Strawberries,fruits
+282,Sugar,sugar
+283,Sultanas,others
+284,Sunflower Oil,others
+285,Tamarind Ball,others
+286,Tamarind Paste,spices
+287,Thai Fish Sauce,spices
+288,Thai Green Curry Paste,spices
+289,Thai Red Curry Paste,spices
+290,Thyme,herb
+291,Tomato Ketchup,spices
+292,Tomato Puree,vegetables
+293,Tomatoes,vegetables
+294,Toor Dal,cereals
+295,Tuna,seafood
+296,Turmeric,spices
+297,Turmeric Powder,spices
+298,Turnips,vegetables
+299,Vanilla,spices
+300,Vanilla Extract,spices
+301,Veal,meat
+302,Vegan Butter,dairy_products
+303,Vegetable Oil,others
+304,Vegetable Stock,others
+305,Vegetable Stock Cube,others
+306,Vinaigrette Dressing,spices
+307,Vine Leaves,herb
+308,Vinegar,vinegar
+309,Water,others
+310,White Chocolate Chips,others
+311,White Fish,seafood
+312,White Fish Fillets,seafood
+313,White Vinegar,vinegar
+314,White Wine,alcohol
+315,Whole Milk,dairy_products
+316,Whole Wheat,others
+317,Wholegrain Bread,others
+318,Worcestershire Sauce,spices
+319,Yogurt,dairy_products
+320,Zucchini,vegetables
+321,Pretzels,others
+322,Cream Cheese,dairy_products
+323,Icing Sugar,sugar
+324,Toffee Popcorn,others
+325,Caramel,others
+326,Caramel Sauce,spices
+327,Tagliatelle,pasta
+328,Fettuccine,pasta
+329,Clotted Cream,dairy_products
+330,Corn Flour,others
+331,Mussels,seafood
+332,Fideo,others
+333,Monkfish,seafood
+334,Vermicelli Pasta,pasta
+335,Baby Squid,seafood
+336,Squid,seafood
+337,Fish Stock,seafood
+338,Pilchards,seafood
+339,Black Olives,vegetables
+340,Onion,vegetables
+341,Tomato,vegetables
+342,Duck,meat
+343,Duck Legs,meat
+344,Chicken Stock Cube,meat
+345,Pappardelle Pasta,pasta
+346,Paccheri Pasta,pasta
+347,Linguine Pasta,pasta
+348,Sugar Snap Peas,vegetables
+349,Crusty Bread,others
+350,Fromage Frais,dairy_products
+351,Clams,seafood
+352,Passata,spices
+353,Rapeseed Oil,others
+354,Stilton Cheese,dairy_products
+355,Lamb Leg,meat
+356,Lamb Shoulder,meat
+357,Apricot,fruits
+358,Butternut Squash,vegetables
+359,Couscous,cereals
+360,Minced Beef,meat
+361,Turkey Mince,meat
+362,Barbeque Sauce,spices
+363,Sweetcorn,vegetables
+364,Goose Fat,meat
+365,Duck Fat,meat
+366,Fennel,herb
+367,Red Wine Vinegar,vinegar
+368,Haricot Beans,vegetables
+369,Rosemary,herb
+370,Butter Beans,vegetables
+371,Pinto Beans,vegetables
+372,Tomato Sauce,spices
+373,Mascarpone,dairy_products
+374,Mozzarella,dairy_products
+375,Ricotta,dairy_products
+376,Dried Apricots,fruits
+377,Capers,vegetables
+378,Banana,fruits
+379,Raspberries,fruits
+380,Blueberries,fruits
+381,Walnuts,others
+382,Pecan Nuts,others
+383,Maple Syrup,spices
+384,Light Brown Soft Sugar,others
+385,Dark Brown Soft Sugar,others
+386,Dark Chocolate Chips,others
+387,Milk Chocolate,others
+388,Dark Chocolate,others
+389,Pumpkin,vegetables
+390,Shortcrust Pastry,others
+391,Peanut Cookies,others
+392,Gelatine Leafs,others
+393,Peanut Brittle,others
+394,Peaches,fruits
+395,Yellow Pepper,vegetables
+396,Green Pepper,vegetables
+397,Courgettes,vegetables
+398,Tinned Tomatos,vegetables
+399,Chestnuts,others
+400,Wild Mushrooms,others
+401,Truffle Oil,others
+402,Paneer,dairy_products
+403,Naan Bread,others
+404,Lentils,cereals
+405,Roasted Vegetables,vegetables
+406,Kidney Beans,vegetables
+407,Mixed Grain,others
+408,Tahini,spices
+409,Tortillas,others
+410,Udon Noodles,pasta
+411,Cabbage,vegetables
+412,Shiitake Mushrooms,vegetables
+413,Mirin,spices
+414,Sesame Seed Oil,others
+415,Baguette,others
+416,Vine Tomatoes,vegetables
+417,Suet,meat
+418,Swede,vegetables
+419,Ham,meat
+420,Oysters,seafood
+421,Stout,alcohol
+422,Lard,others
+423,Lamb Kidney,meat
+424,Beef Kidney,meat
+425,Haddock,seafood
+426,Smoked Haddock,seafood
+427,Brussels Sprouts,vegetables
+428,Raisins,others
+429,Currants,fruits
+430,Custard,others
+431,Mixed Peel,fruits
+432,Redcurrants,fruits
+433,Blackberries,fruits
+434,Hazlenuts,others
+435,Braeburn Apples,fruits
+436,Red Food Colouring,others
+437,Pink Food Colouring,others
+438,Blue Food Colouring,others
+439,Yellow Food Colouring,others
+440,Apricot Jam,others
+441,Marzipan,others
+442,Almonds,others
+443,Black Pudding,others
+444,Baked Beans,vegetables
+445,White Flour,others
+446,Yeast,others
+447,Fruit Mix,fruits
+448,Dried Fruit,fruits
+449,Cherry,fruits
+450,Glace Cherry,others
+451,Treacle,spices
+452,Oatmeal,cereals
+453,Oats,cereals
+454,Egg,others
+455,Beef Shin,meat
+456,Bouquet Garni,herb
+457,Single Cream,dairy_products
+458,Red Wine Jelly,alcohol
+459,Apples,fruits
+460,Goats Cheese,dairy_products
+461,Prosciutto,meat
+462,Unsalted Butter,dairy_products
+463,Brie,dairy_products
+464,Tarragon Leaves,herb
+465,Chives,herb
+466,Pears,fruits
+467,White Chocolate,others
+468,Star Anise,herb
+469,Tiger Prawns,seafood
+470,Custard Powder,spices
+471,Desiccated Coconut,fruits
+472,Frozen Peas,fruits
+473,Minced Pork,meat
+474,Creamed Corn,vegetables
+475,Sun-Dried Tomatoes,vegetables
+476,Dijon Mustard,spices
+477,Tabasco Sauce,spices
+478,Canola Oil,others
+479,Cod,seafood
+480,Salt Cod,seafood
+481,Ackee,herb
+482,Jerk,meat
+483,Ground Beef,meat
+484,Baby Aubergine,vegetables
+485,Paella Rice,others
+486,Scotch Bonnet,herb
+487,Oxtail,meat
+488,Broad Beans,others
+489,Red Snapper,seafood
+490,Malt Vinegar,vinegar
+491,Rice Vinegar,vinegar
+492,Water Chestnut,others
+493,Tofu,others
+494,Doubanjiang,spices
+495,Fermented Black Beans,others
+496,Scallions,herb
+497,Sichuan Pepper,spices
+498,Wonton Skin,others
+499,Starch,others
+500,Rice wine,alcohol
+501,Cooking wine,alcohol
+502,Duck Sauce,spices
+503,Gochujang,spices
+504,Bean Sprouts,herb
+505,Noodles,pasta
+506,Wood Ear Mushrooms,vegetables
+507,Dark Rum,alcohol
+508,Light Rum,alcohol
+509,Rum,alcohol
+510,English Muffins,others
+511,Muffins,others
+512,White Wine Vinegar,vinegar
+513,Smoked Salmon,seafood
+514,Mars Bar,others
+515,Rice Krispies,others
+516,Ancho Chillies,spices
+517,Almond Milk,dairy_products
+518,Allspice,spices
+519,Almond Extract,spices
+520,Tripe,meat
+521,Goat Meat,meat
+522,Black Beans,others
+523,Anchovy Fillet,seafood
+524,Ras el hanout,spices
+525,Filo Pastry,others
+526,Orange Blossom Water,others
+527,Candied Peel,others
+528,Grand Marnier,alcohol
+529,Sherry,alcohol
+530,Rose water,others
+531,Mixed Spice,spices
+532,Mincemeat,others
+533,Sweet Potatoes,vegetables
+534,Bread Rolls,others
+535,Bun,others
+536,Potatoe Buns,others
+537,Ground Pork,meat
+538,Pork Chops,meat
+539,Yukon Gold Potatoes,vegetables
+540,Yellow Onion,vegetables
+541,Beef Stock Concentrate,others
+542,Chicken Stock Concentrate,others
+543,Persian Cucumber,vegetables
+544,Mayonnaise,spices
+545,Sriracha,spices
+546,Rhubarb,herb
+547,Pita Bread,others
+548,Bulgur Wheat,cereals
+549,Quinoa,cereals
+550,Dill Pickles,vegetables
+551,Sesame Seed Burger Buns,others
+552,Buns,others
+553,Iceberg Lettuce,vegetables
+554,Gherkin Relish,others
+555,Cheese Slices,dairy_products
+556,Shortening,others
+557,Warm Water,others
+558,Boiling Water,others
+559,Pickle Juice,others
+560,Powdered Sugar,sugar
+561,Kielbasa,meat
+562,Polish Sausage,meat
+563,Sauerkraut,vegetables
+564,Caraway Seed,herb
+565,Herring,seafood
+566,Jam,others
+567,Mulukhiyah,vegetables
+568,Sushi Rice,cereals
+569,Figs,fruits
+570,Cider,alcohol
+571,Beetroot,vegetables
+572,Sardines,seafood
+573,Ciabatta,others
+574,Buckwheat,cereals
