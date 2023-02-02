@@ -11,8 +11,9 @@ export const Loader = () => {
       h={'calc(100vh)'}
       pos={'fixed'}
       top={0}
+      zIndex={10}
     >
-      <Spinner color='attention.dark' size='xl' />
+      <Spinner color='orange' size='xl' />
     </Flex>
   );
 };

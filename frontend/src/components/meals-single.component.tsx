@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Grid,
@@ -10,11 +10,14 @@ import {
   Divider,
   SimpleGrid,
   Flex,
+  useToast,
   Link,
 } from '@chakra-ui/react';
 import { Meal } from '../types';
+import { useMeal, useSetSearchParams } from '../hooks';
+import { Loader } from './loader.component';
 
-const meal: Meal = {
+const templateMeal: Meal = {
   idMeal: '53012',
   strMeal: 'Gigantes Plaki',
   strCategory: 'Vegetarian',
@@ -28,11 +31,51 @@ const meal: Meal = {
   strMeasures: ['400g', '3 tbs', '1 chopped', '2 chopped'],
 };
 
-const meals: Meal[] = Array(10).fill(meal);
+const templateMeals: Meal[] = Array(10).fill(templateMeal);
 
 export const SingleMealComponent = () => {
+  const toast = useToast();
+  const { singleMeal, allMeals, setTrigger } = useMeal();
+  const { params, trigger, setParam, resetParams } = useSetSearchParams();
+  const {
+    isLoading: isLoadingSingle,
+    isError: isErrorSingle,
+    error: errorSingle,
+    data: meal = templateMeal,
+  } = singleMeal;
+  const {
+    isLoading: isLoadingAll,
+    isError: isErrorAll,
+    error: errorAll,
+    data = { data: templateMeals, metadata: { total: 0 } }, // remove this
+  } = allMeals;
+
+  const { data: meals } = data;
+
+  useEffect(() => {
+    if (isErrorSingle || isErrorAll) {
+      toast({
+        title: 'Something went wrong...',
+        description: errorSingle?.message || errorAll?.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  }, [isErrorSingle, isErrorAll]);
+
+  useEffect(() => {
+    setParam('category', meal.strCategory);
+  }, []);
+
+  useEffect(() => {
+    setTrigger(trigger);
+  }, [trigger]);
+
   return (
     <>
+      {/* {(isLoadingSingle || isLoadingAll) && <Loader />} */}
       <Grid
         borderBottom={0.5}
         borderColor={'black'}
@@ -42,13 +85,13 @@ export const SingleMealComponent = () => {
       >
         <GridItem as={Flex} justifyContent={'center'} alignItems={'center'}>
           <Stack>
-            <Text textStyle={'display2'}>{meal.strMeal}</Text>
+            <Text textStyle={'display2'}>{meal?.strMeal}</Text>
             <Divider />
             <SimpleGrid fontSize={'1.25rem'} mt={2} columns={2} spacing={2}>
               <Text fontWeight={'bold'}>Category</Text>
-              <Text>{meal.strCategory}</Text>
+              <Text>{meal?.strCategory}</Text>
               <Text fontWeight={'bold'}>Area</Text>
-              <Text>{meal.strArea}</Text>
+              <Text>{meal?.strArea}</Text>
             </SimpleGrid>
           </Stack>
         </GridItem>
@@ -59,12 +102,13 @@ export const SingleMealComponent = () => {
               align={'center'}
               fit={'cover'}
               w={'full'}
-              src={meal.strMealThumb}
+              src={meal?.strMealThumb}
             />
           </Box>
         </GridItem>
       </Grid>
       <Grid
+        bg={'light'}
         templateColumns={'repeat(2, 1fr)'}
         templateRows={'2fr, 1fr'}
         w={'100vw'}
@@ -73,19 +117,18 @@ export const SingleMealComponent = () => {
           <Stack ml={'5rem'} my={'2rem'}>
             <Text textStyle={'body1Semi'}>Instructions</Text>
             <Divider />
-            <Text textStyle={'body2'}>{meal.strInstructions}</Text>
+            <Text textStyle={'body2'}>{meal?.strInstructions}</Text>
           </Stack>
         </GridItem>
         <GridItem
-          my={'5.5rem'}
           px={10}
           as={Flex}
           justifyContent={'center'}
-          alignItems={'flex-start'}
+          alignItems={'center'}
         >
           <Box
             as='iframe'
-            src={`${meal.strYoutube.replace(
+            src={`${meal?.strYoutube.replace(
               'watch?v=',
               'embed/'
             )}?autoplay=1&mute=1`}
@@ -98,8 +141,7 @@ export const SingleMealComponent = () => {
         <GridItem>
           <Stack ml={'5rem'} my={'2rem'}>
             <Text textStyle={'body1Semi'}>Ingredients</Text>
-            {/* <Divider maxWidth={'20rem'} /> */}
-            {meal.strIngredients.map((ingredient, index) => (
+            {meal?.strIngredients.map((ingredient, index) => (
               <Text
                 borderBottom={0.5}
                 borderColor={'orange'}
@@ -113,10 +155,12 @@ export const SingleMealComponent = () => {
         </GridItem>
         <GridItem>
           <Stack mr={'5rem'} my={'2rem'}>
-            <Text textStyle={'body1Semi'}>Measures</Text>
-            {/* <Divider maxWidth={'20rem'} /> */}
-            {meal.strMeasures.map((measure, index) => (
+            <Text px={10} textStyle={'body1Semi'}>
+              Measures
+            </Text>
+            {meal?.strMeasures.map((measure, index) => (
               <Text
+                px={10}
                 borderBottom={0.5}
                 borderColor={'orange'}
                 borderStyle={'solid'}
@@ -127,53 +171,54 @@ export const SingleMealComponent = () => {
         </GridItem>
       </Grid>
       <Stack py={20} direction={'column'} align={'center'}>
-        <Text textStyle={'h1Semi'}>More of {meal.strCategory}</Text>
+        <Text textStyle={'h1Semi'}>More of {meal?.strCategory}</Text>
         <Grid
           px={20}
           templateColumns={'repeat(2, 1fr)'}
           templateRows={'repeat(4, 1fr)'}
           w={'100vw'}
         >
-          {meals.slice(0, 8).map((meal) => (
-            <GridItem position={'relative'}>
-              <Box w={'full'} h={'auto'}>
-                <Box
+          {meals &&
+            meals.slice(0, 8).map((meal) => (
+              <GridItem position={'relative'}>
+                <Box w={'full'} h={'auto'}>
+                  <Box
+                    position={'absolute'}
+                    zIndex={2}
+                    shadow={'innerBasic'}
+                    _hover={{
+                      shadow: 'innerHovered',
+                    }}
+                    w={'full'}
+                    h={'640px'}
+                    as={Link}
+                    href={`/meals/single-meal/${meal.idMeal}`}
+                  ></Box>
+                  <Image
+                    alt={'Random meal'}
+                    align={'center'}
+                    fit={'cover'}
+                    w={'full'}
+                    src={meal.strMealThumb}
+                    zIndex={1}
+                  />
+                </Box>
+                <Text
+                  zIndex={3}
                   position={'absolute'}
-                  zIndex={2}
-                  shadow={'innerBasic'}
-                  _hover={{
-                    shadow: 'innerHovered',
-                  }}
-                  w={'full'}
-                  h={'640px'}
-                  as={Link}
-                  href={`/meals/single-meal/${meal.idMeal}`}
-                ></Box>
-                <Image
-                  alt={'Random meal'}
-                  align={'center'}
-                  fit={'cover'}
-                  w={'full'}
-                  src={meal.strMealThumb}
-                  zIndex={1}
-                />
-              </Box>
-              <Text
-                zIndex={3}
-                position={'absolute'}
-                ml={'auto'}
-                mr={'auto'}
-                left={0}
-                right={0}
-                bottom={8}
-                textAlign={'center'}
-                color={'light'}
-                textStyle={'h1Semi'}
-              >
-                {meal.strMeal}
-              </Text>
-            </GridItem>
-          ))}
+                  ml={'auto'}
+                  mr={'auto'}
+                  left={0}
+                  right={0}
+                  bottom={8}
+                  textAlign={'center'}
+                  color={'light'}
+                  textStyle={'h1Semi'}
+                >
+                  {meal.strMeal}
+                </Text>
+              </GridItem>
+            ))}
         </Grid>
       </Stack>
     </>

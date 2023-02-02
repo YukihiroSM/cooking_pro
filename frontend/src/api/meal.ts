@@ -21,15 +21,9 @@ const getSingleMeal = async (id: string) => {
   return data;
 };
 
-const getUserMealsByIngredients = async (id: string) => {
-  const { data } = await mealService.getUserMealsByIngredients(id);
-  return data;
-};
-
 export {
   getMealsByFilter,
   getRandomMeals,
   getSingleMeal,
   getCategoriesAndIngredients,
-  getUserMealsByIngredients,
 };

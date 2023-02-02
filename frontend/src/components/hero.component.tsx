@@ -1,3 +1,5 @@
+import React, { useEffect } from 'react';
+
 import {
   Box,
   Grid,
@@ -8,8 +10,11 @@ import {
   SimpleGrid,
   Divider,
   Link,
+  useToast,
 } from '@chakra-ui/react';
+import { useMeal } from '../hooks';
 import { Meal } from '../types';
+import { Loader } from './loader.component';
 
 const meal = {
   idMeal: '53012',
@@ -26,98 +31,124 @@ const meal = {
   strMeasures: ['400g', '3 tbs', '1 chopped', '2 chopped'],
 };
 
-const meals: Meal[] = Array(4).fill(meal);
+const templateMeals: Meal[] = Array(4).fill(meal);
 
 export const HeroComponent = () => {
+  const toast = useToast();
+  const { randomMeals } = useMeal();
+
+  const {
+    isLoading,
+    isError,
+    error,
+    data: meals = templateMeals,
+  } = randomMeals;
+
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: 'Something went wrong...',
+        description: error?.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  }, [isError]);
   return (
-    <Grid
-      templateColumns='repeat(2, 1fr)'
-      w={'100vw'}
-      px={{ base: 20 }}
-      py={{ base: 20 }}
-      gap={10}
-    >
-      <GridItem
-        key={meals[0].idMeal}
-        bottom={0}
-        mt={'auto'}
-        position={'sticky'}
+    <>
+      {/* {isLoading && <Loader />} */}
+      <Grid
+        templateColumns='repeat(2, 1fr)'
+        w={'100vw'}
+        px={{ base: 20 }}
+        py={{ base: 20 }}
+        gap={10}
       >
-        <Stack spacing={4}>
-          <Box
-            rounded={'2xl'}
-            h={'40rem'}
-            boxShadow={'2xl'}
-            overflow={'hidden'}
-            as={Link}
-            href={`/meals/single-meal/${meals[0].idMeal}`}
-          >
-            <Image
-              alt={'Random meal'}
-              align={'center'}
-              fit={'cover'}
-              h={'100%'}
-              src={meals[0].strMealThumb}
-            />
-          </Box>
-          <Text
-            as={Link}
-            href={`/meals/single-meal/${meals[0].idMeal}`}
-            textDecoration={'none'}
-            textStyle={'h1Semi'}
-          >
-            {meals[0].strMeal}
-          </Text>
-        </Stack>
-      </GridItem>
-      <GridItem>
-        <Grid templateRows='repeat(3, 1fr)' gap={5}>
-          {meals.slice(1).map((meal) => (
-            <GridItem key={meal.idMeal}>
-              <Stack direction={'row'} spacing={4}>
-                <Box
-                  rounded={'2xl'}
-                  h={'25rem'}
-                  w={'20rem'}
-                  boxShadow={'2xl'}
-                  overflow={'hidden'}
-                  as={Link}
-                  href={`/meals/single-meal/${meal.idMeal}`}
-                >
-                  <Image
-                    alt={'Random meal'}
-                    align={'center'}
-                    fit={'cover'}
-                    h={'100%'}
-                    src={meal.strMealThumb}
-                  />
-                </Box>
-                <Box>
-                  <Text
-                    as={Link}
-                    href={`/meals/single-meal/${meal.idMeal}`}
-                    textStyle={'body1Semi'}
-                  >
-                    {meal.strMeal}
-                  </Text>
-                  <Divider />
-                  <SimpleGrid
-                    fontSize={'1.25rem'}
-                    mt={2}
-                    columns={2}
-                    spacing={2}
-                  >
-                    <Text fontWeight={'bold'}>Category</Text>
-                    <Text>{meal.strCategory}</Text>
-                    <Text fontWeight={'bold'}>Area</Text>
-                    <Text>{meal.strArea}</Text>
-                  </SimpleGrid>
-                </Box>
-              </Stack>
-            </GridItem>
-          ))}
-        </Grid>
-      </GridItem>
-    </Grid>
+        <GridItem
+          key={meals && meals[0].idMeal}
+          bottom={0}
+          mt={'auto'}
+          position={'sticky'}
+        >
+          <Stack spacing={4}>
+            <Box
+              rounded={'2xl'}
+              h={'40rem'}
+              boxShadow={'2xl'}
+              overflow={'hidden'}
+              as={Link}
+              href={`/meals/single-meal/${meals && meals[0].idMeal}`}
+            >
+              <Image
+                alt={'Random meal'}
+                align={'center'}
+                fit={'cover'}
+                h={'100%'}
+                src={meals && meals[0].strMealThumb}
+              />
+            </Box>
+            <Text
+              as={Link}
+              href={`/meals/single-meal/${meals && meals[0].idMeal}`}
+              textDecoration={'none'}
+              textStyle={'h1Semi'}
+            >
+              {meals && meals[0].strMeal}
+            </Text>
+          </Stack>
+        </GridItem>
+        <GridItem>
+          <Grid templateRows='repeat(3, 1fr)' gap={5}>
+            {meals &&
+              meals.slice(1).map((meal) => (
+                <GridItem key={meal.idMeal}>
+                  <Stack direction={'row'} spacing={4}>
+                    <Box
+                      rounded={'2xl'}
+                      h={'25rem'}
+                      w={'20rem'}
+                      boxShadow={'2xl'}
+                      overflow={'hidden'}
+                      as={Link}
+                      href={`/meals/single-meal/${meal.idMeal}`}
+                    >
+                      <Image
+                        alt={'Random meal'}
+                        align={'center'}
+                        fit={'cover'}
+                        h={'100%'}
+                        src={meal.strMealThumb}
+                      />
+                    </Box>
+                    <Box>
+                      <Text
+                        as={Link}
+                        href={`/meals/single-meal/${meal.idMeal}`}
+                        textStyle={'body1Semi'}
+                      >
+                        {meal.strMeal}
+                      </Text>
+                      <Divider />
+                      <SimpleGrid
+                        fontSize={'1.25rem'}
+                        mt={2}
+                        columns={2}
+                        spacing={2}
+                      >
+                        <Text fontWeight={'bold'}>Category</Text>
+                        <Text>{meal.strCategory}</Text>
+                        <Text fontWeight={'bold'}>Area</Text>
+                        <Text>{meal.strArea}</Text>
+                      </SimpleGrid>
+                    </Box>
+                  </Stack>
+                </GridItem>
+              ))}
+          </Grid>
+        </GridItem>
+      </Grid>
+    </>
   );
 };

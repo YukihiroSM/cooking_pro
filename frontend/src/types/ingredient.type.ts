@@ -1,5 +1,15 @@
-type Ingredient = {
+type CreateIngredient = {
   id: string;
 };
 
-export type { Ingredient };
+type Ingredient = {
+  name: string;
+  id: string;
+};
+
+type IngredientsByCategory = {
+  category: string;
+  ingredient: Ingredient[];
+};
+
+export type { CreateIngredient, Ingredient, IngredientsByCategory };

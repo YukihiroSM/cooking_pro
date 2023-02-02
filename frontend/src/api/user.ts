@@ -1,4 +1,4 @@
-import { Ingredient, User } from '../types';
+import { CreateIngredient, User } from '../types';
 import { userService } from '../services/user.service';
 
 const registerUser = async (user: User) => {
@@ -16,7 +16,10 @@ const getUserIngredients = async (id: string) => {
   return data;
 };
 
-const createUserIngredient = async (id: string, ingredient: Ingredient) => {
+const createUserIngredient = async (
+  id: string,
+  ingredient: CreateIngredient
+) => {
   const { data } = await userService.createUserIngredient(id, ingredient);
   return data;
 };
