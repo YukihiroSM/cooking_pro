@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './theme';
 import { MainRouter } from './navigation';
-import LayoutComponent from './layouts/main.layout';
 
 import './App.css';
 
@@ -25,9 +24,7 @@ const AppContainer = () => {
   return (
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <LayoutComponent>
-          <MainRouter />
-        </LayoutComponent>
+        <MainRouter />
       </QueryClientProvider>
     </ChakraProvider>
   );

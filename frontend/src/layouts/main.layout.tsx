@@ -19,10 +19,10 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
         display={'flex'}
         flexDirection={'column'}
         alignItems={'center'}
-        bg={'light'}
-        pt={'10rem'}
-        pb={'1.5rem'}
-        margin={'auto'}
+        bg={'white'}
+        mt={'7.6rem'}
+        mx={0}
+        px={0}
         maxWidth={'100vw'}
       >
         {children}

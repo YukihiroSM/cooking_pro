@@ -1,5 +1,3 @@
-import { Ingredient } from './ingredient.type';
-
 type Meal = {
   idMeal: string;
   strMeal: string;
@@ -8,7 +6,7 @@ type Meal = {
   strInstructions: string;
   strMealThumb: string;
   strYoutube: string;
-  strIngredients: Ingredient[];
+  strIngredients: string[];
   strMeasures: string[];
 };
 
