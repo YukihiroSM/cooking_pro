@@ -1,6 +1,8 @@
-class Category:
-    def __init__(self, id, name, description):
-        self.id = id
-        self.name = name
-        self.description = description
+from pydantic import BaseModel
+
+
+class Category(BaseModel):
+    id: int
+    name: str
+    description: str
 

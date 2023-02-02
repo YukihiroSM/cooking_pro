@@ -67,11 +67,6 @@ def shutdown_db_client():
     app.mongodb_client.close()
 
 
-@app.get("/ping")
-def ping():
-    return "ok"
-
-
 @app.options("/login")
 @app.post("/login")
 async def login_user(login_item: LoginItem):

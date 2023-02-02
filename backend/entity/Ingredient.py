@@ -1,10 +1,7 @@
-class Ingredient:
-    def __init__(self, name, measure):
-        self.name = name
-        self.measure = measure
+from pydantic import BaseModel
 
-    def getName(self):
-        return self.name
 
-    def getMeasure(self):
-        return self.measure
+class Ingredient(BaseModel):
+    name: str
+    measure: str
+

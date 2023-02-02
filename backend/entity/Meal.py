@@ -1,15 +1,18 @@
 from typing import List
 
+from pydantic import BaseModel
+
 from entity.Ingredient import Ingredient
 
 
-class Meal(object):
-    def __init__(self, id, name, category, area, instructions, ingredients: List[Ingredient]):
-        self.id = id
-        self.name = name
-        self.category = category
-        self.area = area
-        self.instructions = instructions
-        self.ingredients = ingredients
+class Meal(BaseModel):
+    id: int
+    name: str
+    category: str
+    area: str
+    instructions: str
+    image: str
+    video: str
+    ingredients: List[Ingredient]
 
 
