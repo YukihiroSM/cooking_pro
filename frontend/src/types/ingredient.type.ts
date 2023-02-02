@@ -1,7 +1,5 @@
 type Ingredient = {
-  name: string;
-  category: string;
-  userID: string;
+  id: string;
 };
 
 export type { Ingredient };

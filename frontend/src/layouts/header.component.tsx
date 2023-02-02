@@ -1,3 +1,6 @@
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+
 import {
   Box,
   Flex,
@@ -53,32 +56,40 @@ const NAV_ITEMS: Array<NavItem> = [
 ];
 
 export const HeaderComponent = () => {
+  const location = useLocation();
   // fetch nav items
   const [navItems] = useState<NavItem[]>(NAV_ITEMS);
 
-  const [scrollTop, setScrollTop] = useState<number>(0);
+  const [scrollTop, setScrollTop] = useState<number | null>(0);
 
   useEffect(() => {
-    const handleScroll = (event: Event) => {
-      setScrollTop(window.scrollY);
-    };
+    if (location.pathname === '/') {
+      const handleScroll = (event: Event) => {
+        setScrollTop(window.scrollY);
+      };
 
-    window.addEventListener('scroll', throttle(handleScroll, 250));
+      window.addEventListener('scroll', throttle(handleScroll, 100));
 
-    return () => {
-      window.removeEventListener('scroll', throttle(handleScroll, 100));
-    };
+      return () => {
+        window.removeEventListener('scroll', throttle(handleScroll, 100));
+      };
+    } else {
+      setScrollTop(null);
+    }
   }, []);
 
   return (
-    <Box as='header' position='fixed' w='100%' zIndex={5}>
+    <Box as='header' position='fixed' top={0} w='100%' zIndex={5}>
       <Flex
         bg={'dark'}
         color={'white'}
         transition={'font-size 0.5s'}
         textStyle={{
           base: 'display2',
-          md: scrollTop > 0 ? 'body1Semi' : 'display1',
+          md:
+            scrollTop === null || (scrollTop && scrollTop > 0)
+              ? 'body1Semi'
+              : 'display1',
         }}
         py={{ base: 2 }}
         px={{ base: 4 }}

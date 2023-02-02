@@ -1,4 +1,4 @@
-import { SingleMealPageComponent } from '../components/meals-single.component';
+import { SingleMealPageComponent } from '../pages';
 const page = {
   element: SingleMealPageComponent,
   path: 'SINGLE_MEAL',

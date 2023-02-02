@@ -21,7 +21,7 @@ const BACKEND_KEYS = {
   LOGIN_USER: 'user/login',
 
   // ----------- additional tasks ---------- //
-  // GET_USER_MEALS: 'user/meals/',
+  // GET_USER_MEALS: 'user/meals/', // + userID
   // CREATE_USER_MEAL: 'user/create_meal/',
 };
 
