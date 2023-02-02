@@ -6,17 +6,15 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from constants.constants import BASE_URL
-from entity.Category import Category
-from entity.Ingredient import Ingredient
-from entity.Meal import Meal
+from backend.constants import MEAL_API_BASE_URL
+from backend.schemas import Ingredient, Meal, Category
 
 router = APIRouter(prefix="/api/meals")
 
 
 @router.get("/random")
 async def getRandomMeal():
-    url = BASE_URL + "/random.php"
+    url = f"{MEAL_API_BASE_URL}/random.php"
     response = requests.get(url)
     data = response.json().get("meals")[0]
     return JSONResponse(buildMeal(data))
@@ -27,9 +25,9 @@ class DemoMeal(BaseModel):
     name: str
 
 
-@router.get("/")
+@router.get("/by_category")
 async def getFilteredMealsByCategory(category: str):
-    url = BASE_URL + "/filter.php?c=" + category
+    url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
     response = requests.get(url)
     data = response.json().get("meals")
     meals = []
@@ -42,9 +40,9 @@ async def getFilteredMealsByCategory(category: str):
     return JSONResponse(meals)
 
 
-@router.get("/")
+@router.get("/by_area")
 async def getFilteredMealsByArea(area: str):
-    url = BASE_URL + "/filter.php?a=" + area
+    url = f"{MEAL_API_BASE_URL}/filter.php?a={area}"
     response = requests.get(url)
     data = response.json().get("meals")
     meals = []
@@ -59,10 +57,9 @@ async def getFilteredMealsByArea(area: str):
 
 @router.get("/categories")
 async def getAllCategories():
-    name = "categories"
-    url = BASE_URL + f"/{name}.php"
+    url = f"{MEAL_API_BASE_URL}/categories.php"
     response = requests.get(url)
-    data = response.json().get(name)
+    data = response.json().get("categories")
     categories = []
     for item in data:
         category = buildCategory(item)
@@ -82,7 +79,7 @@ def buildCategory(category):
 @router.get("/random")
 async def getRandomMeals():
     # FIXME move key to .env files
-    url = "https://www.themealdb.com/api/json/v2/9973533/randomselection.php"
+    url = f"{MEAL_API_BASE_URL}/randomselection.php"
     response = requests.get(url)
     data = response.json().get("meals")
     numberOfMeals = 4
@@ -98,7 +95,7 @@ async def getRandomMeals():
 @router.get("/single/{mealID}")
 async def getRandomMeals(mealID: int):
     # FIXME move key to .env files
-    url = BASE_URL + f"/lookup.php?i={mealID}"
+    url = f"{MEAL_API_BASE_URL}/lookup.php?i={mealID}"
     response = requests.get(url)
     data = response.json().get("meals")
     if len(data) == 0:

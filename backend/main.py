@@ -1,11 +1,10 @@
 import pymongo.errors
 from fastapi import FastAPI
-from pydantic import BaseModel
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import jwt_auth
-from models import LoginItem, TestItem
+from schemas import LoginItem, TestItem
 from routes import meals
 from routes import ingredients
 
@@ -69,12 +68,3 @@ async def login_user(login_item: LoginItem):
         return {'token': encoded_jwt, "username": user_query["username"]}
     else:
         return {'message': 'Login failed. No such user.'}
-
-
-@app.options("/test_sending_token")
-@app.post("/test_sending_token")
-def test_token(request: TestItem):
-    data = jsonable_encoder(request)
-    token = data["token"]
-    user = app.collection.find_one({"token": token})
-    print(user)
