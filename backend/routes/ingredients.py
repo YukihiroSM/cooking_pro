@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/api/v1/ingredients")
+router = APIRouter(prefix="/api/ingredients")
 
 
 @router.get("/", response_model=str)

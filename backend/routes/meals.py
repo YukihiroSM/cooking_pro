@@ -1,3 +1,5 @@
+from http.client import HTTPException
+
 import requests
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
@@ -9,7 +11,7 @@ from entity.Category import Category
 from entity.Ingredient import Ingredient
 from entity.Meal import Meal
 
-router = APIRouter(prefix="/api/v1/meals")
+router = APIRouter(prefix="/api/meals")
 
 
 @router.get("/random")
@@ -77,17 +79,32 @@ def buildCategory(category):
     return jsonable_encoder(category)
 
 
-@router.get("/random10")  # FIXME fix endpoint
+@router.get("/random")
 async def getRandomMeals():
     # FIXME move key to .env files
     url = "https://www.themealdb.com/api/json/v2/9973533/randomselection.php"
     response = requests.get(url)
     data = response.json().get("meals")
+    numberOfMeals = 4
     meals = []
     for item in data:
+        if len(meals) >= numberOfMeals:
+            break
         meal = buildMeal(item)
         meals.append(meal)
     return JSONResponse(meals)
+
+
+@router.get("/single/{mealID}")
+async def getRandomMeals(mealID: int):
+    # FIXME move key to .env files
+    url = BASE_URL + f"/lookup.php?i={mealID}"
+    response = requests.get(url)
+    data = response.json().get("meals")
+    if len(data) == 0:
+        raise HTTPException(status_code=404, detail="Item not found")
+    meal = buildMeal(data[0])
+    return JSONResponse(meal)
 
 
 # TODO move to MealService
