@@ -19,6 +19,43 @@ async def getRandomMeal():
     return buildMeal(data)
 
 
+class DemoMeal:
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+
+
+@router.get("/")
+async def getFilteredMealsByCategory(category: str):
+    url = BASE_URL + "/filter.php?c=" + category
+    response = requests.get(url)
+    data = response.json()["meals"]
+    meals = []
+    for m in data:
+        meal = DemoMeal(
+            m["idMeal"],
+            m["strMeal"]
+        )
+        meals.append(meal)
+    return meals
+
+
+@router.get("/")
+async def getFilteredMealsByArea(area: str):
+    url = BASE_URL + "/filter.php?a=" + area
+    response = requests.get(url)
+    data = response.json()["meals"]
+    meals = []
+    for m in data:
+        meal = DemoMeal(
+            m["idMeal"],
+            m["strMeal"]
+        )
+        print(meal)
+        meals.append(meal)
+    return meals
+
+
 @router.get("/categories")
 async def getAllCategories():
     name = "categories"
