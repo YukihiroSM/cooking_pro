@@ -50,7 +50,7 @@ export const HeroComponent = () => {
             boxShadow={'2xl'}
             overflow={'hidden'}
             as={Link}
-            href={`meals/single-meal/${meals[0].idMeal}`}
+            href={`/meals/single-meal/${meals[0].idMeal}`}
           >
             <Image
               alt={'Random meal'}
@@ -62,7 +62,7 @@ export const HeroComponent = () => {
           </Box>
           <Text
             as={Link}
-            href={`meals/single-meal/${meals[0].idMeal}`}
+            href={`/meals/single-meal/${meals[0].idMeal}`}
             textDecoration={'none'}
             textStyle={'h1Semi'}
           >
@@ -82,7 +82,7 @@ export const HeroComponent = () => {
                   boxShadow={'2xl'}
                   overflow={'hidden'}
                   as={Link}
-                  href={`meals/single-meal/${meal.idMeal}`}
+                  href={`/meals/single-meal/${meal.idMeal}`}
                 >
                   <Image
                     alt={'Random meal'}
@@ -95,7 +95,7 @@ export const HeroComponent = () => {
                 <Box>
                   <Text
                     as={Link}
-                    href={`meals/single-meal/${meal.idMeal}`}
+                    href={`/meals/single-meal/${meal.idMeal}`}
                     textStyle={'body1Semi'}
                   >
                     {meal.strMeal}

@@ -147,7 +147,7 @@ export const SingleMealComponent = () => {
                   w={'full'}
                   h={'640px'}
                   as={Link}
-                  href={`meals/single-meal/${meals[0].idMeal}`}
+                  href={`/meals/single-meal/${meal.idMeal}`}
                 ></Box>
                 <Image
                   alt={'Random meal'}

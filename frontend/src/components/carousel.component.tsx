@@ -112,7 +112,7 @@ export const CarouselComponent = () => {
                 boxShadow={'lg'}
                 overflow={'hidden'}
                 as={Link}
-                href={`meals/single-meal/${meal.idMeal}`}
+                href={`/meals/single-meal/${meal.idMeal}`}
                 textDecoration={'none'}
               >
                 <Image
@@ -125,7 +125,7 @@ export const CarouselComponent = () => {
               </Box>
               <Text
                 as={Link}
-                href={`meals/single-meal/${meal.idMeal}`}
+                href={`/meals/single-meal/${meal.idMeal}`}
                 textDecoration={'none'}
                 h={'6rem'}
                 textStyle={'body2'}
