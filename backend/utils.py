@@ -1,5 +1,5 @@
 import requests
-from backend.constants import MEAL_API_BASE_URL
+from constants import MEAL_API_BASE_URL
 
 
 def initial_ingredients_collection():

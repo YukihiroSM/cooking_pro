@@ -1,4 +1,5 @@
 from http.client import HTTPException
+from typing import List
 
 import requests
 from fastapi import APIRouter
@@ -6,8 +7,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from backend.constants import MEAL_API_BASE_URL
-from backend.schemas import Ingredient, Meal, Category
+from constants import MEAL_API_BASE_URL
+from schemas import Ingredient, Meal, Category
 
 router = APIRouter(prefix="/api/meals")
 
@@ -102,6 +103,25 @@ async def getRandomMeals(mealID: int):
         raise HTTPException(status_code=404, detail="Item not found")
     meal = buildMeal(data[0])
     return JSONResponse(meal)
+
+
+@router.get("/filtered")
+async def getFiltered(ingredients: str):
+    if ingredients is None:
+        raise HTTPException(status_code=400, detail="Bad request")
+    url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
+    response = requests.get(url)
+    data = response.json().get("meals")
+    if data is None:
+        raise HTTPException(status_code=204, detail="Meals were not found")
+    meals = []
+    for item in data:
+        meal = DemoMeal(
+            id=item["idMeal"],
+            name=item["strMeal"]
+        )
+        meals.append(jsonable_encoder(meal))
+    return JSONResponse(meals)
 
 
 # TODO move to MealService
