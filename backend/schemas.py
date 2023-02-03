@@ -16,24 +16,24 @@ class AddUserIngredient(BaseModel):
     ingredient_id: str
 
 
-class Ingredient(BaseModel):
-    name: str
-    measure: str
-
-
 class Meal(BaseModel):
-    id: int
+    id: str
     name: str
     category: str
     area: str
     instructions: str
     image: str
     video: str
-    ingredients: List[Ingredient]
+    ingredients: List[str]
+    measures: List[str]
 
 
 class Category(BaseModel):
-    id: int
+    id: str
     name: str
     description: str
 
+
+class DemoMeal(BaseModel):
+    id: str
+    name: str
