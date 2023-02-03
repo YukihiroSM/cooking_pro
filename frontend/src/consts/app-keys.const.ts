@@ -1,6 +1,6 @@
 const BACKEND_KEYS = {
   // categories and ingredients
-  GET_CATEGORIES_AND_INGREDIENTS: 'categories_and_ingredients',
+  GET_CATEGORIES_AND_INGREDIENTS: 'meals/categories_and_ingredients',
 
   // filtering by category or ingredient
   GET_MEALS_BY_FILTER: 'meals', // + filter in search params
@@ -38,6 +38,15 @@ const ROUTER_KEYS = {
   // CREATE_MEAL: '/meal/create-meal',
 };
 
+const REACT_QUERY_KEYS = {
+  USER_INGREDIENTS: 'user-ingredients',
+  SINGLE_MEAL: 'single-meal',
+  ALL_MEALS: 'all-meals',
+  RANDOM_MEAL: 'random-meal',
+  USER_MEALS: 'user-meals',
+  CATEGORIES_AND_INGREDIENTS: 'categories-and-ingredients',
+};
+
 const TEAM = [
   {
     name: 'Andrii Smidonov',
@@ -61,4 +70,4 @@ const TEAM = [
   },
 ];
 
-export { BACKEND_KEYS, ROUTER_KEYS, TEAM };
+export { BACKEND_KEYS, ROUTER_KEYS, TEAM, REACT_QUERY_KEYS };

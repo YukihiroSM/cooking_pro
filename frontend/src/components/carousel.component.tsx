@@ -9,6 +9,7 @@ import {
   TabList,
   Tab,
   Link,
+  useToast,
 } from '@chakra-ui/react';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -20,6 +21,8 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
 
 import { Meal } from '../types';
+import { useMeal, useSetSearchParams } from '../hooks';
+import { Loader } from './loader.component';
 
 const meal = {
   idMeal: '53012',
@@ -36,106 +39,142 @@ const meal = {
   strMeasures: ['400g', '3 tbs', '1 chopped', '2 chopped'],
 };
 
-const meals: Meal[] = Array(10).fill(meal);
+const templateMeals: Meal[] = Array(10).fill(meal);
 
 export const CarouselComponent = () => {
-  const [category, setCategory] = useState<string>('all');
-  const [filteredMeals, setFilteredMeals] = useState<Meal[]>([]);
+  const toast = useToast();
+  const { randomMeals, allMeals, setTrigger } = useMeal();
+  const { params, trigger, setParam, resetParams } = useSetSearchParams();
+
+  const [meals, setMeals] = useState<Meal[] | undefined>(undefined);
+
+  const {
+    isLoading: isLoadingAll,
+    isError: isErrorAll,
+    isSuccess: isSuccessAll,
+    error: errorAll,
+    data: allData = { data: templateMeals, metadata: { total: 0 } }, // remove this
+  } = allMeals;
+  const {
+    isLoading: isLoadingRandom,
+    isError: isErrorRandom,
+    isSuccess: isSuccessRandom,
+    error: errorRandom,
+    data: mealsRandom,
+  } = randomMeals;
+
+  const { data: mealsByCategory } = allData;
 
   const handleChangeCategory = (index: number) => {
     switch (index) {
       case 0:
-        setCategory('all');
+        resetParams();
         break;
       case 1:
-        setCategory('breakfast');
+        setParam('category', 'Breakfast');
         break;
       case 2:
-        setCategory('vegan');
+        setParam('category', 'Vegan');
         break;
       case 3:
-        setCategory('dessert');
-        break;
-      default:
-        setCategory('all');
+        setParam('category', 'Dessert');
         break;
     }
   };
 
   useEffect(() => {
-    console.log(category);
-    // filter meals here
-    setFilteredMeals([]);
-  }, [category]);
+    setTrigger(trigger);
+  }, [trigger]);
+
+  useEffect(() => {
+    setMeals(mealsRandom || mealsByCategory);
+  }, [mealsRandom, mealsByCategory]);
+
+  useEffect(() => {
+    if (isErrorAll || isErrorRandom) {
+      toast({
+        title: 'Something went wrong...',
+        description: errorAll?.message || errorRandom?.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  }, [isErrorAll, isErrorRandom]);
 
   return (
-    <Stack
-      bg={'light'}
-      px={{ base: 20 }}
-      py={{ base: 14 }}
-      h={'full'}
-      direction={'column'}
-      alignItems={'center'}
-      w={'full'}
-    >
-      <Text textStyle={'h1Semi'}>Our recommendations</Text>
-      <Tabs
-        py={{ base: 4 }}
-        onChange={handleChangeCategory}
-        variant='soft-rounded'
-        colorScheme='orange'
+    <>
+      {/* {(isLoadingAll || isLoadingRandom) && <Loader />} */}
+      <Stack
+        bg={'light'}
+        px={{ base: 20 }}
+        py={{ base: 14 }}
+        h={'full'}
+        direction={'column'}
+        alignItems={'center'}
+        w={'full'}
       >
-        <TabList>
-          <Tab value={'all'}>All</Tab>
-          <Tab value={'breakfast'}>Breakfast</Tab>
-          <Tab value={'vegan'}>Vegan</Tab>
-          <Tab value={'dessert'}>Dessert</Tab>
-        </TabList>
-      </Tabs>
-      <Swiper
-        slidesPerView={4}
-        grabCursor={true}
-        spaceBetween={30}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[Pagination, Navigation]}
-        className='mySwiper'
-        navigation={true}
-      >
-        {meals.map((meal) => (
-          <SwiperSlide>
-            <Stack bg={'light'} spacing={2}>
-              <Box
-                rounded={'2xl'}
-                h={'25rem'}
-                boxShadow={'lg'}
-                overflow={'hidden'}
-                as={Link}
-                href={`/meals/single-meal/${meal.idMeal}`}
-                textDecoration={'none'}
-              >
-                <Image
-                  alt={'Random meal'}
-                  align={'center'}
-                  fit={'cover'}
-                  h={'100%'}
-                  src={meal.strMealThumb}
-                />
-              </Box>
-              <Text
-                as={Link}
-                href={`/meals/single-meal/${meal.idMeal}`}
-                textDecoration={'none'}
-                h={'6rem'}
-                textStyle={'body2'}
-              >
-                {meal.strMeal}
-              </Text>
-            </Stack>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </Stack>
+        <Text textStyle={'h1Semi'}>Our recommendations</Text>
+        <Tabs
+          py={{ base: 4 }}
+          onChange={handleChangeCategory}
+          variant='soft-rounded'
+          colorScheme='orange'
+        >
+          <TabList>
+            <Tab value={'all'}>All</Tab>
+            <Tab value={'breakfast'}>Breakfast</Tab>
+            <Tab value={'vegan'}>Vegan</Tab>
+            <Tab value={'dessert'}>Dessert</Tab>
+          </TabList>
+        </Tabs>
+        <Swiper
+          slidesPerView={4}
+          grabCursor={true}
+          spaceBetween={30}
+          pagination={{
+            clickable: true,
+          }}
+          modules={[Pagination, Navigation]}
+          className='mySwiper'
+          navigation={true}
+        >
+          {meals &&
+            meals.map((meal) => (
+              <SwiperSlide>
+                <Stack bg={'light'} spacing={2}>
+                  <Box
+                    rounded={'2xl'}
+                    h={'25rem'}
+                    boxShadow={'lg'}
+                    overflow={'hidden'}
+                    as={Link}
+                    href={`/meals/single-meal/${meal.idMeal}`}
+                    textDecoration={'none'}
+                  >
+                    <Image
+                      alt={'Random meal'}
+                      align={'center'}
+                      fit={'cover'}
+                      h={'100%'}
+                      src={meal.strMealThumb}
+                    />
+                  </Box>
+                  <Text
+                    as={Link}
+                    href={`/meals/single-meal/${meal.idMeal}`}
+                    textDecoration={'none'}
+                    h={'6rem'}
+                    textStyle={'body2'}
+                  >
+                    {meal.strMeal}
+                  </Text>
+                </Stack>
+              </SwiperSlide>
+            ))}
+        </Swiper>
+      </Stack>
+    </>
   );
 };

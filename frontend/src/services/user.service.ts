@@ -1,5 +1,5 @@
 import HttpService from './http.service';
-import { Ingredient, User } from '../types';
+import { CreateIngredient, User } from '../types';
 import { BACKEND_KEYS } from '../consts';
 
 class UserService extends HttpService {
@@ -21,7 +21,7 @@ class UserService extends HttpService {
     return this.get({ url: `${BACKEND_KEYS.GET_USER_INGREDIENTS}${id}` });
   }
 
-  createUserIngredient(id: string, ingredient: Ingredient) {
+  createUserIngredient(id: string, ingredient: CreateIngredient) {
     return this.post({
       url: `${BACKEND_KEYS.CREATE_USER_INGREDIENT}${id}`,
       data: ingredient,

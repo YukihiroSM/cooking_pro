@@ -4,3 +4,4 @@ export * from './meal.type';
 export * from './navigation.type';
 export * from './response.type';
 export * from './params.type';
+export * from './category.type';

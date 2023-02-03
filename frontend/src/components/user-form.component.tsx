@@ -114,18 +114,18 @@ export const UserFormComponent = () => {
         position: 'top-right',
       });
     }
-  }, [isError, error, isSuccess]);
+  }, [isError, isSuccess]);
 
   return (
     <>
       {isLoading && <Loader />}
       <Flex
-        bg='light'
+        bg='white'
         align='center'
         justify='center'
         h={action.type === 'register' ? '72vh' : '60vh'}
       >
-        <Box bg='white' p={6} rounded='md' w={'lg'}>
+        <Box bg='light' p={6} rounded='md' w={'lg'}>
           <Tabs defaultIndex={action.index} isFitted variant='enclosed'>
             <TabList mb='1em'>
               <Tab
@@ -133,11 +133,14 @@ export const UserFormComponent = () => {
                 href={'/user/login'}
                 _selected={{
                   bg: 'gray.50',
-                  color: 'orange',
+                  color: 'attention.dark',
                   border: 0.5,
                   borderBottom: 0,
                   borderStyle: 'solid',
                   borderColor: 'gray.300',
+                }}
+                _hover={{
+                  textDecoration: 'none',
                 }}
                 value='login'
               >
@@ -148,11 +151,14 @@ export const UserFormComponent = () => {
                 href={'/user/register'}
                 _selected={{
                   bg: 'gray.50',
-                  color: 'orange',
+                  color: 'attention.dark',
                   border: 0.5,
                   borderBottom: 0,
                   borderStyle: 'solid',
                   borderColor: 'gray.300',
+                }}
+                _hover={{
+                  textDecoration: 'none',
                 }}
                 value='register'
               >
@@ -217,7 +223,15 @@ export const UserFormComponent = () => {
                       </FormErrorMessage>
                     </FormControl>
                   )}
-                  <Button type='submit' colorScheme='orange' width='full'>
+                  <Button
+                    type='submit'
+                    bg={'attention.dark'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'attention.light',
+                    }}
+                    width='full'
+                  >
                     {action.type === 'register' ? 'Sign up' : 'Sign in'}
                   </Button>
                 </VStack>

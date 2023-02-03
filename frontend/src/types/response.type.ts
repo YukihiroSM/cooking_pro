@@ -1,3 +1,9 @@
+import { CreateIngredient, IngredientsByCategory } from './ingredient.type';
+
+import { AxiosError } from 'axios';
+import { Meal } from './meal.type';
+import { Category } from './category.type';
+
 type AxiosResponse = {
   message: string;
 };
@@ -7,4 +13,53 @@ type Response = {
   token: string;
 };
 
-export type { AxiosResponse, Response };
+type MealsResponseData = {
+  data: Meal[] | undefined;
+  metadata: {
+    total: number;
+  };
+};
+
+type CategoriesAndIngredients = {
+  categories: Category[];
+  ingredients: IngredientsByCategory[];
+};
+
+interface IMutationResponse {
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  error: AxiosError<AxiosResponse, any> | null | undefined | AxiosResponse;
+}
+
+interface IUserIngredientsResponse extends IMutationResponse {
+  data: IngredientsByCategory[] | undefined;
+}
+
+interface ISingleMealResponse extends IMutationResponse {
+  data: Meal | undefined;
+}
+
+interface IAllMealsResponse extends IMutationResponse {
+  data: MealsResponseData | undefined;
+}
+
+interface IRandomMealsResponse extends IMutationResponse {
+  data: Meal[] | undefined;
+}
+
+interface ICategoriesAndIngredientsResponse extends IMutationResponse {
+  data: CategoriesAndIngredients | undefined;
+}
+
+export type {
+  AxiosResponse,
+  Response,
+  IUserIngredientsResponse,
+  ISingleMealResponse,
+  IAllMealsResponse,
+  MealsResponseData,
+  IRandomMealsResponse,
+  ICategoriesAndIngredientsResponse,
+  CategoriesAndIngredients,
+};
