@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { URLSearchParams } from 'url';
+// import { URLSearchParams } from 'url';
 import { useSearchParams } from 'react-router-dom';
 import { debounce } from '../utils';
+import { SearchParams } from '../types';
 
 export function useSetSearchParams() {
-  const defaultParams = {
-    category: '',
-    ingredient: '',
-    userID: '',
+  const defaultParams: SearchParams = {
     page: 0,
     perPage: 10,
   };
@@ -15,7 +13,10 @@ export function useSetSearchParams() {
   const [params, setParams] = useState<any>(defaultParams);
   const [trigger, setTrigger] = useState<number>(Date.now());
 
-  const setParam = (key: string, value: number | string) => {
+  const setParam = (
+    key: number | string,
+    value: number | string | string[] | number[]
+  ) => {
     searchParams.set(key.toString(), value.toString());
     params[key] = value;
     setParams({ ...params });
@@ -25,7 +26,6 @@ export function useSetSearchParams() {
     searchParams.delete('category');
     searchParams.delete('ingredient');
     searchParams.delete('userID');
-    setParams(defaultParams);
   };
 
   const updateParams = useMemo(
@@ -44,6 +44,7 @@ export function useSetSearchParams() {
   return {
     params,
     trigger,
+    searchParams,
     setParam,
     resetParams,
   };

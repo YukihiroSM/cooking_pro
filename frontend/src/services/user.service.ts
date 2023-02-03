@@ -18,12 +18,12 @@ class UserService extends HttpService {
   }
 
   getUserIngredients(id: string) {
-    return this.get({ url: `${BACKEND_KEYS.GET_USER_INGREDIENTS}${id}` });
+    return this.get({ url: `user/${id}${BACKEND_KEYS.GET_USER_INGREDIENTS}` });
   }
 
   createUserIngredient(id: string, ingredient: CreateIngredient) {
     return this.post({
-      url: `${BACKEND_KEYS.CREATE_USER_INGREDIENT}${id}`,
+      url: `user/${id}${BACKEND_KEYS.CREATE_USER_INGREDIENT}`,
       data: ingredient,
     });
   }

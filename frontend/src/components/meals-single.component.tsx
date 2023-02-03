@@ -16,22 +16,7 @@ import {
 import { Meal } from '../types';
 import { useMeal, useSetSearchParams } from '../hooks';
 import { Loader } from './loader.component';
-
-const templateMeal: Meal = {
-  idMeal: '53012',
-  strMeal: 'Gigantes Plaki',
-  strCategory: 'Vegetarian',
-  strArea: 'Greek',
-  strInstructions:
-    'Soak the beans overnight in plenty of water. Drain, rinse, then place in a pan covered with water. Bring to the boil, reduce the heat, then simmer for approx 50 mins until slightly tender but not soft. Drain, then set aside.\r\n\r\nHeat oven to 180C/160C fan/gas 4. Heat the olive oil in a large frying pan, tip in the onion and garlic, then cook over a medium heat for 10 mins until softened but not browned. Add the tomato purée, cook for a further min, add remaining ingredients, then simmer for 2-3 mins. Season generously, then stir in the beans. Tip into a large ovenproof dish, then bake for approximately 1 hr, uncovered and without stirring, until the beans are tender. The beans will absorb all the fabulous flavours and the sauce will thicken. Allow to cool, then scatter with parsley and drizzle with a little more olive oil to serve.',
-  strMealThumb:
-    'https://www.themealdb.com/images/media/meals/b79r6f1585566277.jpg',
-  strYoutube: 'https://www.youtube.com/watch?v=e-2K2iyPASA',
-  strIngredients: ['Butter Beans', 'Olive Oil', 'Onion', 'Garlic Clove'],
-  strMeasures: ['400g', '3 tbs', '1 chopped', '2 chopped'],
-};
-
-const templateMeals: Meal[] = Array(10).fill(templateMeal);
+import { templateMeal, templateMeals } from '../templateData';
 
 export const SingleMealComponent = () => {
   const toast = useToast();
@@ -53,6 +38,14 @@ export const SingleMealComponent = () => {
   const { data: meals } = data;
 
   useEffect(() => {
+    setParam('category', meal.category);
+  }, []);
+
+  useEffect(() => {
+    setTrigger(trigger);
+  }, [trigger]);
+
+  useEffect(() => {
     if (isErrorSingle || isErrorAll) {
       toast({
         title: 'Something went wrong...',
@@ -64,14 +57,6 @@ export const SingleMealComponent = () => {
       });
     }
   }, [isErrorSingle, isErrorAll]);
-
-  useEffect(() => {
-    setParam('category', meal.strCategory);
-  }, []);
-
-  useEffect(() => {
-    setTrigger(trigger);
-  }, [trigger]);
 
   return (
     <>
@@ -85,13 +70,13 @@ export const SingleMealComponent = () => {
       >
         <GridItem as={Flex} justifyContent={'center'} alignItems={'center'}>
           <Stack>
-            <Text textStyle={'display2'}>{meal?.strMeal}</Text>
+            <Text textStyle={'display2'}>{meal?.name}</Text>
             <Divider />
             <SimpleGrid fontSize={'1.25rem'} mt={2} columns={2} spacing={2}>
               <Text fontWeight={'bold'}>Category</Text>
-              <Text>{meal?.strCategory}</Text>
+              <Text>{meal?.category}</Text>
               <Text fontWeight={'bold'}>Area</Text>
-              <Text>{meal?.strArea}</Text>
+              <Text>{meal?.area}</Text>
             </SimpleGrid>
           </Stack>
         </GridItem>
@@ -102,7 +87,7 @@ export const SingleMealComponent = () => {
               align={'center'}
               fit={'cover'}
               w={'full'}
-              src={meal?.strMealThumb}
+              src={meal?.image}
             />
           </Box>
         </GridItem>
@@ -117,7 +102,7 @@ export const SingleMealComponent = () => {
           <Stack ml={'5rem'} my={'2rem'}>
             <Text textStyle={'body1Semi'}>Instructions</Text>
             <Divider />
-            <Text textStyle={'body2'}>{meal?.strInstructions}</Text>
+            <Text textStyle={'body2'}>{meal?.instructions}</Text>
           </Stack>
         </GridItem>
         <GridItem
@@ -127,8 +112,9 @@ export const SingleMealComponent = () => {
           alignItems={'center'}
         >
           <Box
+            title='Video tutorial'
             as='iframe'
-            src={`${meal?.strYoutube.replace(
+            src={`${meal?.video.replace(
               'watch?v=',
               'embed/'
             )}?autoplay=1&mute=1`}
@@ -141,7 +127,7 @@ export const SingleMealComponent = () => {
         <GridItem>
           <Stack ml={'5rem'} my={'2rem'}>
             <Text textStyle={'body1Semi'}>Ingredients</Text>
-            {meal?.strIngredients.map((ingredient, index) => (
+            {meal?.ingredients.map((ingredient, index) => (
               <Text
                 borderBottom={0.5}
                 borderColor={'orange'}
@@ -158,7 +144,7 @@ export const SingleMealComponent = () => {
             <Text px={10} textStyle={'body1Semi'}>
               Measures
             </Text>
-            {meal?.strMeasures.map((measure, index) => (
+            {meal?.measures.map((measure, index) => (
               <Text
                 px={10}
                 borderBottom={0.5}
@@ -171,7 +157,7 @@ export const SingleMealComponent = () => {
         </GridItem>
       </Grid>
       <Stack py={20} direction={'column'} align={'center'}>
-        <Text textStyle={'h1Semi'}>More of {meal?.strCategory}</Text>
+        <Text textStyle={'h1Semi'}>More of {meal?.category}</Text>
         <Grid
           px={20}
           templateColumns={'repeat(2, 1fr)'}
@@ -192,14 +178,14 @@ export const SingleMealComponent = () => {
                     w={'full'}
                     h={'640px'}
                     as={Link}
-                    href={`/meals/single-meal/${meal.idMeal}`}
+                    href={`/meals/single-meal/${meal.id}`}
                   ></Box>
                   <Image
                     alt={'Random meal'}
                     align={'center'}
                     fit={'cover'}
                     w={'full'}
-                    src={meal.strMealThumb}
+                    src={meal.image}
                     zIndex={1}
                   />
                 </Box>
@@ -215,7 +201,7 @@ export const SingleMealComponent = () => {
                   color={'light'}
                   textStyle={'h1Semi'}
                 >
-                  {meal.strMeal}
+                  {meal.name}
                 </Text>
               </GridItem>
             ))}

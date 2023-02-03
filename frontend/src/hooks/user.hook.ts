@@ -22,6 +22,7 @@ import {
   IngredientsByCategory,
   CreateIngredient,
   IUserIngredientsResponse,
+  IngredientByCategoryResponse,
 } from '../types';
 
 import { REACT_QUERY_KEYS } from '../consts';
@@ -60,11 +61,12 @@ const useCreateIngredient = (id: string | undefined) => {
     };
   } else {
     createIngredient = useMutation<
-      IngredientsByCategory,
+      IngredientByCategoryResponse,
       AxiosError<AxiosResponse, any> | undefined,
       CreateIngredient
     >((ingredient) => createUserIngredient(id, ingredient), {
-      onSuccess: (ingredient: IngredientsByCategory) => {
+      onSuccess: (ingredient: IngredientByCategoryResponse) => {
+        // change this
         queryClient.setQueryData(
           [REACT_QUERY_KEYS.USER_INGREDIENTS],
           (currentIngredients: IngredientsByCategory[] = []) =>

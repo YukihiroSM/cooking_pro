@@ -30,12 +30,6 @@ class MealService extends HttpService {
   getSingleMeal(id: string) {
     return this.get({ url: `${BACKEND_KEYS.GET_SINGLE_MEAL}${id}` }, false);
   }
-
-  getUserMealsByIngredients(id: string) {
-    return this.get({
-      url: `${BACKEND_KEYS.GET_USER_MEALS_BY_INGREDIENTS}${id}`,
-    });
-  }
 }
 
 export const mealService = new MealService();

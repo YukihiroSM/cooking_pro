@@ -20,9 +20,16 @@ type MealsResponseData = {
   };
 };
 
-type CategoriesAndIngredients = {
-  categories: Category[];
-  ingredients: IngredientsByCategory[];
+interface NavItem {
+  label: string;
+  id?: string;
+  children?: NavItem[];
+}
+
+type IngredientByCategoryResponse = {
+  name: string;
+  id: string;
+  category: string;
 };
 
 interface IMutationResponse {
@@ -49,7 +56,7 @@ interface IRandomMealsResponse extends IMutationResponse {
 }
 
 interface ICategoriesAndIngredientsResponse extends IMutationResponse {
-  data: CategoriesAndIngredients | undefined;
+  data: NavItem[] | undefined;
 }
 
 export type {
@@ -61,5 +68,6 @@ export type {
   MealsResponseData,
   IRandomMealsResponse,
   ICategoriesAndIngredientsResponse,
-  CategoriesAndIngredients,
+  NavItem,
+  IngredientByCategoryResponse,
 };

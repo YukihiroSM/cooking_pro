@@ -12,53 +12,29 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  useToast,
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
 import { NavItem } from '../types';
 import { useEffect, useState } from 'react';
 import { throttle } from '../utils';
-
-// TEST
-const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: 'Recipes',
-    children: [
-      {
-        label: 'Beef',
-      },
-    ],
-  },
-  {
-    label: 'Ingredients',
-    children: [
-      {
-        label: 'Chicken',
-        children: [
-          {
-            label: 'Chicken',
-          },
-          {
-            label: 'Freelance Projects',
-          },
-        ],
-      },
-      {
-        label: 'Freelance Projects',
-        children: [
-          {
-            label: 'Chicken',
-          },
-        ],
-      },
-    ],
-  },
-];
+import { useSetSearchParams, useMeal } from '../hooks';
+import { ROUTER_KEYS } from '../consts';
+import { NAV_ITEMS } from '../templateData';
 
 export const HeaderComponent = () => {
+  const { categoriesAndIngredients } = useMeal();
   const location = useLocation();
-  // fetch nav items
-  const [navItems] = useState<NavItem[]>(NAV_ITEMS);
+  const toast = useToast();
+
+  const {
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    data: navItems = NAV_ITEMS,
+  } = categoriesAndIngredients;
 
   const [scrollTop, setScrollTop] = useState<number | null>(0);
 
@@ -78,80 +54,96 @@ export const HeaderComponent = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: 'Something went wrong...',
+        description: error?.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  }, [isError]);
+
   return (
-    <Box as='header' position='fixed' top={0} w='100%' zIndex={5}>
-      <Flex
-        bg={'dark'}
-        color={'white'}
-        transition={'font-size 0.5s'}
-        textStyle={{
-          base: 'display2',
-          md:
-            scrollTop === null || (scrollTop && scrollTop > 0)
-              ? 'body1Semi'
-              : 'display1',
-        }}
-        py={{ base: 2 }}
-        px={{ base: 4 }}
-        borderBottom={1}
-        borderStyle={'solid'}
-        borderColor={'gray.200'}
-        align={'center'}
-        position={'relative'}
-        justifyContent={'center'}
-      >
-        <Text as='a' href={'/'}>
-          Cooking Pro
-        </Text>
-        <Stack
-          position={'absolute'}
-          right={'2rem'}
-          flex={{ base: 1, md: 0 }}
-          justify={'flex-end'}
-          justifySelf={'flex-end'}
-          direction={'row'}
-          spacing={6}
-          display={{ base: 'none', md: 'flex' }}
+    <>
+      {/* {isLoading && <Loader />} */}
+      <Box as='header' position='fixed' top={0} w='100%' zIndex={5}>
+        <Flex
+          bg={'dark'}
+          color={'white'}
+          transition={'font-size 0.5s'}
+          textStyle={{
+            base: 'display2',
+            md:
+              scrollTop === null || (scrollTop && scrollTop > 0)
+                ? 'body1Semi'
+                : 'display1',
+          }}
+          py={{ base: 2 }}
+          px={{ base: 4 }}
+          borderBottom={1}
+          borderStyle={'solid'}
+          borderColor={'gray.200'}
+          align={'center'}
+          position={'relative'}
+          justifyContent={'center'}
         >
-          <Button
-            as={'a'}
-            fontSize={'lg'}
-            fontWeight={400}
-            variant={'link'}
-            href={'/user/login'}
-            color={'white'}
+          <Text as='a' href={'/'}>
+            Cooking Pro
+          </Text>
+          <Stack
+            position={'absolute'}
+            right={'2rem'}
+            flex={{ base: 1, md: 0 }}
+            justify={'flex-end'}
+            justifySelf={'flex-end'}
+            direction={'row'}
+            spacing={6}
+            display={{ base: 'none', md: 'flex' }}
           >
-            Sign In
-          </Button>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'lg'}
-            fontWeight={600}
-            color={'white'}
-            bg={'attention.dark'}
-            as='a'
-            href={'/user/register'}
-            _hover={{
-              bg: 'attention.light',
-            }}
-          >
-            Sign Up
-          </Button>
-        </Stack>
-      </Flex>
-      <Flex
-        display={'flex'}
-        justify={{ base: 'space-between', md: 'start' }}
-        py={{ base: 2 }}
-        px={{ base: 20 }}
-        bg={'dark'}
-        color={'white'}
-        minH={'60px'}
-        align={'center'}
-      >
-        <DesktopNav navItems={navItems} />
-      </Flex>
-    </Box>
+            <Button
+              as={'a'}
+              fontSize={'lg'}
+              fontWeight={400}
+              variant={'link'}
+              href={'/user/login'}
+              color={'white'}
+            >
+              Sign In
+            </Button>
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize={'lg'}
+              fontWeight={600}
+              color={'white'}
+              bg={'attention.dark'}
+              as='a'
+              href={'/user/register'}
+              _hover={{
+                bg: 'attention.light',
+              }}
+            >
+              Sign Up
+            </Button>
+          </Stack>
+        </Flex>
+        <Flex
+          display={'flex'}
+          justify={{ base: 'space-between', md: 'start' }}
+          py={{ base: 2 }}
+          px={{ base: 20 }}
+          bg={'dark'}
+          color={'white'}
+          minH={'60px'}
+          align={'center'}
+        >
+          <DesktopNav navItems={navItems} />
+        </Flex>
+      </Box>
+    </>
   );
 };
 
@@ -179,7 +171,9 @@ const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
 
               {navItem.children && (
                 <PopoverContent
-                  border={0}
+                  border={1}
+                  borderStyle={'solid'}
+                  borderColor={'attention.light'}
                   boxShadow={'xl'}
                   bg={'black'}
                   p={4}
@@ -187,7 +181,11 @@ const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
                 >
                   <Stack>
                     {navItem.children.map((child) => (
-                      <DesktopSubNav key={child.label} {...child} />
+                      <DesktopSubNav
+                        key={child.label}
+                        parentLabel={navItem.label}
+                        {...child}
+                      />
                     ))}
                   </Stack>
                 </PopoverContent>
@@ -232,11 +230,47 @@ const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
   );
 };
 
-const DesktopSubNav = ({ label, children }: NavItem) => {
+type WithParentLabel = {
+  parentLabel: string;
+};
+
+const DesktopSubNav = ({
+  parentLabel,
+  label,
+  children,
+}: NavItem & WithParentLabel) => {
+  const location = useLocation();
+  const { setTrigger } = useMeal();
+  const { params, searchParams, trigger, setParam, resetParams } =
+    useSetSearchParams();
+
+  const handleFilterUpdate = (
+    param: string,
+    value: string,
+    notAFilter: boolean
+  ) => {
+    if (notAFilter) return;
+    resetParams();
+    switch (param) {
+      case 'Ingredients':
+        param = 'ingredient';
+        break;
+      case 'Recipes':
+        param = 'category';
+        break;
+    }
+    if (location.pathname !== '/meals/') {
+      window.location.href = `${ROUTER_KEYS.MEALS_BY_FILTER}?${param}=${value}&page=0&perPage=0`;
+    } else {
+      setParam(param, [value]);
+    }
+    setTrigger(trigger);
+  };
   return (
     <Popover trigger={'hover'} placement={'right-start'}>
       <PopoverTrigger>
         <Link
+          onClick={() => handleFilterUpdate(parentLabel, label, !!children)}
           role={'group'}
           display={'block'}
           p={2}
@@ -279,7 +313,6 @@ const DesktopSubNav = ({ label, children }: NavItem) => {
         <PopoverContent
           border={1}
           borderStyle={'solid'}
-          // eslint-disable-next-line react-hooks/rules-of-hooks
           borderColor={'attention.light'}
           boxShadow={'xl'}
           bg={'black'}
@@ -288,36 +321,15 @@ const DesktopSubNav = ({ label, children }: NavItem) => {
         >
           <Stack>
             {children.map((child) => (
-              <DesktopSubSubNav key={child.label} {...child} />
+              <DesktopSubNav
+                parentLabel={parentLabel}
+                key={child.label}
+                {...child}
+              />
             ))}
           </Stack>
         </PopoverContent>
       )}
     </Popover>
-  );
-};
-
-const DesktopSubSubNav = ({ label }: NavItem) => {
-  return (
-    <Link
-      role={'group'}
-      display={'block'}
-      p={2}
-      rounded={'md'}
-      _hover={{ bg: 'dark' }}
-    >
-      <Stack direction={'row'} align={'center'}>
-        <Box>
-          <Text
-            fontSize={'sm'}
-            transition={'all .3s ease'}
-            _groupHover={{ color: 'attention.dark' }}
-            fontWeight={500}
-          >
-            {label}
-          </Text>
-        </Box>
-      </Stack>
-    </Link>
   );
 };
