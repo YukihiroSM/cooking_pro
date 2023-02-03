@@ -1,3 +1,3 @@
-type Category = string[];
+type Category = string;
 
 export type { Category };

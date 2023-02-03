@@ -106,7 +106,7 @@ export const FooterComponent = () => {
             ))}
           </Stack>
           <Stack align={'flex-start'}>
-            <ListHeader>Fu*k Russian</ListHeader>
+            <ListHeader>Fu*k russia</ListHeader>
             <Image
               src='https://media.giphy.com/media/0SPa3c91z2l1giDIMH/giphy.gif'
               alt='Ukraine'

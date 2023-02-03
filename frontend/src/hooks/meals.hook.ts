@@ -20,7 +20,7 @@ import { REACT_QUERY_KEYS } from '../consts/app-keys.const';
 
 import {
   AxiosResponse,
-  CategoriesAndIngredients,
+  NavItem,
   IAllMealsResponse,
   ICategoriesAndIngredientsResponse,
   IRandomMealsResponse,
@@ -73,7 +73,7 @@ const useRandomMeals = () => {
 
 const useCategoriesAndIngredients = () => {
   const categoriesAndIngredients: ICategoriesAndIngredientsResponse = useQuery<
-    CategoriesAndIngredients,
+    NavItem[],
     AxiosError<AxiosResponse, any> | null
   >([REACT_QUERY_KEYS.CATEGORIES_AND_INGREDIENTS], getCategoriesAndIngredients);
   return categoriesAndIngredients;

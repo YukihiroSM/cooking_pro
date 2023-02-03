@@ -4,9 +4,9 @@ type Params = {
 };
 
 type SearchParams = {
-  category: string;
-  ingredient: string;
-  userID: string;
+  category?: string;
+  ingredient?: string[];
+  userID?: string;
   page: number;
   perPage: number;
 };
