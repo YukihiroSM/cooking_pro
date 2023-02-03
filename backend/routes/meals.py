@@ -6,8 +6,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from backend.constants import MEAL_API_BASE_URL
-from backend.schemas import Ingredient, Meal, Category
+from constants import MEAL_API_BASE_URL
+from schemas import Ingredient, Meal, Category
 
 router = APIRouter(prefix="/api/meals")
 
