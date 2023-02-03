@@ -85,7 +85,7 @@ async def get_random_meals():
 
 
 @router.get("/{mealID}")
-async def get_random_meals(mealID: int):
+async def get_meal_by_id(mealID: int):
     url = f"{MEAL_API_BASE_URL}/lookup.php?i={mealID}"
     response = requests.get(url)
     data = response.json().get("meals")
