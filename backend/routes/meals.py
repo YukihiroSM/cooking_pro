@@ -129,8 +129,13 @@ def build_meal(data):
         area=data["strArea"],
         instructions=data["strInstructions"],
         image=data["strMealThumb"],
-        video=data["strYoutube"],
+        video=parse_video(data["strYoutube"]),
         ingredients=ingredients,
         measures=measures
     )
     return jsonable_encoder(meal)
+
+
+def parse_video(link: str):
+    key = link[link.find("=") + 1:]
+    return f"https://www.youtube.com/embed/{key}?autoplay=1&mute=1"
