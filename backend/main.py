@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import jwt_auth
-from schemas import LoginItem, TestItem
+from schemas import LoginItem
 from routes import meals
 from routes import ingredients
 

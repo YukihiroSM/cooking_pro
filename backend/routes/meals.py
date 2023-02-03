@@ -1,28 +1,24 @@
 from http.client import HTTPException
+from typing import List
 
 import requests
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 
-from backend.constants import MEAL_API_BASE_URL
-from backend.schemas import Ingredient, Meal, Category
+from constants import MEAL_API_BASE_URL
+from schemas import Meal, Category, DemoMeal
 
 router = APIRouter(prefix="/api/meals")
 
 
 @router.get("/random")
-async def getRandomMeal():
+async def get_random_meal():
     url = f"{MEAL_API_BASE_URL}/random.php"
     response = requests.get(url)
     data = response.json().get("meals")[0]
-    return JSONResponse(buildMeal(data))
+    return JSONResponse(build_meal(data))
 
-
-class DemoMeal(BaseModel):
-    id: int
-    name: str
 
 
 @router.get("/by_category")
@@ -41,7 +37,7 @@ async def getFilteredMealsByCategory(category: str):
 
 
 @router.get("/by_area")
-async def getFilteredMealsByArea(area: str):
+async def get_filtered_meals_by_area(area: str):
     url = f"{MEAL_API_BASE_URL}/filter.php?a={area}"
     response = requests.get(url)
     data = response.json().get("meals")
@@ -56,18 +52,18 @@ async def getFilteredMealsByArea(area: str):
 
 
 @router.get("/categories")
-async def getAllCategories():
+async def get_all_categories():
     url = f"{MEAL_API_BASE_URL}/categories.php"
     response = requests.get(url)
     data = response.json().get("categories")
     categories = []
     for item in data:
-        category = buildCategory(item)
+        category = build_category(item)
         categories.append(category)
     return JSONResponse(categories)
 
 
-def buildCategory(category):
+def build_category(category):
     category = Category(
         id=category["idCategory"],
         name=category["strCategory"],
@@ -77,43 +73,55 @@ def buildCategory(category):
 
 
 @router.get("/random")
-async def getRandomMeals():
-    # FIXME move key to .env files
+async def get_random_meals():
     url = f"{MEAL_API_BASE_URL}/randomselection.php"
     response = requests.get(url)
     data = response.json().get("meals")
-    numberOfMeals = 4
     meals = []
     for item in data:
-        if len(meals) >= numberOfMeals:
-            break
-        meal = buildMeal(item)
+        meal = build_meal(item)
         meals.append(meal)
     return JSONResponse(meals)
 
 
-@router.get("/single/{mealID}")
-async def getRandomMeals(mealID: int):
-    # FIXME move key to .env files
+@router.get("/{mealID}")
+async def get_meal_by_id(mealID: int):
     url = f"{MEAL_API_BASE_URL}/lookup.php?i={mealID}"
     response = requests.get(url)
     data = response.json().get("meals")
     if len(data) == 0:
         raise HTTPException(status_code=404, detail="Item not found")
-    meal = buildMeal(data[0])
+    meal = build_meal(data[0])
     return JSONResponse(meal)
 
 
+@router.get("/filtered")
+async def get_filtered(ingredients: str):
+    if ingredients is None:
+        raise HTTPException(status_code=400, detail="Bad request")
+    url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
+    response = requests.get(url)
+    data = response.json().get("meals")
+    if data is None:
+        raise HTTPException(status_code=204, detail="Meals were not found")
+    meals = []
+    for item in data:
+        meal = DemoMeal(
+            id=item["idMeal"],
+            name=item["strMeal"]
+        )
+        meals.append(jsonable_encoder(meal))
+    return JSONResponse(meals)
+
+
 # TODO move to MealService
-def buildMeal(data):
+def build_meal(data):
     ingredients = []
+    measures = []
     for key in data.keys():
         if key.startswith("strIngredient") and data[key]:
-            ingredient = Ingredient(
-                name=data[key],
-                measure=data["strMeasure" + key.replace("strIngredient", "")]
-            )
-            ingredients.append(ingredient)
+            ingredients.append(data[key])
+            measures.append(data["strMeasure" + key.replace("strIngredient", "")])
     meal = Meal(
         id=data["idMeal"],
         name=data["strMeal"],
@@ -121,7 +129,13 @@ def buildMeal(data):
         area=data["strArea"],
         instructions=data["strInstructions"],
         image=data["strMealThumb"],
-        video=data["strYoutube"],
-        ingredients=ingredients
+        video=parse_video(data["strYoutube"]),
+        ingredients=ingredients,
+        measures=measures
     )
     return jsonable_encoder(meal)
+
+
+def parse_video(link: str):
+    key = link[link.find("=") + 1:]
+    return f"https://www.youtube.com/embed/{key}?autoplay=1&mute=1"
