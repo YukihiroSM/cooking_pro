@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import jwt_auth
 from schemas import LoginItem
-from routes import meals
-from routes import ingredients
+from routes import meals, ingredients
+import utils
 
 SECRET_KEY = "my_secret_key"
 ALGORITHM = "HS256"
@@ -44,8 +44,14 @@ def startup_db_client():
 
     try:
         app.database.create_collection("ingredients")
+
     except pymongo.errors.CollectionInvalid:
         pass
+
+    ingredient = app.database.ingredients.find_one({"_id": "1"})
+    if not ingredient:
+        if not utils.initialise_ingredients(app.database.ingredients):
+            print("Unable to write Ingredients entities into DB!")
 
     print("Connected to the MongoDB database!")
 
