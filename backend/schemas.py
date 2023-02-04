@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 
-class LoginItem(BaseModel):
+class AuthItem(BaseModel):
     username: str
     password: str
 
