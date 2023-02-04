@@ -14,5 +14,5 @@ jobs:
           heroku_api_key:  ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "cooking-pro"
           heroku_email: "yuk0.terraf@gmail.com"
-          healthcheck: "https://cooking-pr.herokuapp.com/health"
+          healthcheck: "https://cooking-pro.herokuapp.com/health"
           rollbackonhealthcheckfailed: true
