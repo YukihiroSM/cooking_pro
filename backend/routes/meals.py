@@ -14,10 +14,29 @@ from schemas import Meal, Category, DemoMeal
 router = APIRouter(prefix="/api/meals")
 
 
+class Metadata(BaseModel):
+    total: int
+
+
+class MealsResponse(BaseModel):
+    data: List[Meal]
+    metadata: Metadata
+
+
+def get_meals_response(meals: List[Meal]) -> JSONResponse:
+    metadata = Metadata(total=len(meals))
+    meals_response = jsonable_encoder(
+        MealsResponse(data=meals, metadata=metadata)
+    )
+    return JSONResponse(meals_response)
+
+
 @router.get("/")
 async def getFilteredMealsByCategory(category: str = None, area: str = None):
-    if is_filter_query_valid(category, area):
-        return JSONResponse({"message": "Query is not valid."}, status_code=400)
+    if not is_filter_query_valid(category, area) and category is None:
+        user_ingredients = "garlic,salt"  # FIXME
+        return get_filtered_by_ingredients(user_ingredients)
+        # return JSONResponse({"message": "Query is not valid."}, status_code=400)
     url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
     response = requests.get(url)
     data = response.json().get("meals")
@@ -28,11 +47,11 @@ async def getFilteredMealsByCategory(category: str = None, area: str = None):
             name=item["strMeal"]
         )
         meals.append(jsonable_encoder(meal))
-    return JSONResponse(meals)
+    return get_meals_response(meals)
 
 
 def is_filter_query_valid(category: str, area: str):
-    return category is area
+    return category is not area
 
 
 @router.get("/categories")
@@ -65,7 +84,7 @@ async def get_random_meals():
     for item in data:
         meal = build_meal(item)
         meals.append(meal)
-    return JSONResponse(meals)
+    return get_meals_response(meals)
 
 
 class Message(BaseModel):
@@ -76,6 +95,10 @@ class Message(BaseModel):
 async def get_filtered(ingredients: str):
     if ingredients is None:
         return JSONResponse({"message": "Bad request"}, status_code=400)
+    return get_filtered_by_ingredients(ingredients)
+
+
+def get_filtered_by_ingredients(ingredients: str):
     url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
     response = requests.get(url)
     data = response.json().get("meals")
@@ -88,7 +111,7 @@ async def get_filtered(ingredients: str):
             name=item["strMeal"]
         )
         meals.append(jsonable_encoder(meal))
-    return JSONResponse(meals)
+    return get_meals_response(meals)
 
 
 @router.get("/categories_and_ingredients")
