@@ -16,18 +16,21 @@ app = FastAPI()
 app.include_router(ingredients.router)
 app.include_router(meals.router)
 app.include_router(user.router)
-
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8000",
-    "http://localhost:3000",
-]
+#
+# origins = [
+#     "http://localhost.tiangolo.com",
+#     "https://localhost.tiangolo.com",
+#     "http://localhost",
+#     "http://localhost:8000",
+#     "http://localhost:3000",
+#     "http://127.0.0.1"
+#     "http://127.0.0.1:8000"
+#     "http://127.0.0.1:3000"
+# ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -36,7 +39,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_db_client():
-    app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@127.0.0.1:27017')
+    app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@dkrcomp-mongo:27017')
     app.database = app.mongodb_client.cooking_db
     try:
         app.database.create_collection("users")
