@@ -7,7 +7,7 @@ import jwt_auth
 from schemas import AuthItem
 from routes import meals, ingredients, user
 import utils
-
+import os
 SECRET_KEY = "my_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 800
@@ -39,7 +39,10 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_db_client():
-    app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@dkrcomp-mongo:27017')
+    if os.environ.get("ENVIRONMENT") == "development":
+        app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@dkrcomp-mongo:27017')
+    else:
+        app.mongodb_client = MongoClient('mongodb+srv://cooking-db-admin:lh5zLcAz3HYIOwWD@cookingprocluster.jwyfoeq.mongodb.net/?retryWrites=true&w=majority')
     app.database = app.mongodb_client.cooking_db
     try:
         app.database.create_collection("users")
