@@ -21,13 +21,11 @@ class Metadata(BaseModel):
 
 class MealsResponse(BaseModel):
     data: List[Union[Meal, DemoMeal]]
-    metadata: Metadata
 
 
 def get_meals_response(meals: List[Union[Meal, DemoMeal]]) -> JSONResponse:
-    metadata = Metadata(total=len(meals))
     meals_response = jsonable_encoder(
-        MealsResponse(data=meals, metadata=metadata)
+        MealsResponse(data=meals)
     )
     return JSONResponse(meals_response)
 
@@ -48,7 +46,7 @@ async def getFilteredMealsByCategory(category: str = None, area: str = None):
             name=item["strMeal"],
         )
         meals.append(jsonable_encoder(meal))
-    return get_meals_response(meals)
+    return meals
 
 
 def is_filter_query_valid(category: str, area: str):
@@ -85,7 +83,7 @@ async def get_random_meals():
     for item in data:
         meal = build_meal(item)
         meals.append(meal)
-    return get_meals_response(meals)
+    return meals
 
 
 class Message(BaseModel):
@@ -112,7 +110,7 @@ def get_filtered_by_ingredients(ingredients: str):
             name=item["strMeal"]
         )
         meals.append(jsonable_encoder(meal))
-    return get_meals_response(meals)
+    return meals
 
 
 @router.get("/categories_and_ingredients")
