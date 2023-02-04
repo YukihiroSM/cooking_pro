@@ -2,10 +2,10 @@ from http.client import HTTPException
 from typing import List
 
 import requests
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-
+from utils import collect_ingredients_categories
 from constants import MEAL_API_BASE_URL
 from schemas import Meal, Category, DemoMeal
 
@@ -84,15 +84,15 @@ async def get_random_meals():
     return JSONResponse(meals)
 
 
-@router.get("/{mealID}")
-async def get_meal_by_id(mealID: int):
-    url = f"{MEAL_API_BASE_URL}/lookup.php?i={mealID}"
-    response = requests.get(url)
-    data = response.json().get("meals")
-    if len(data) == 0:
-        raise HTTPException(status_code=404, detail="Item not found")
-    meal = build_meal(data[0])
-    return JSONResponse(meal)
+# @router.get("/{mealID}")
+# async def get_meal_by_id(mealID: int):
+#     url = f"{MEAL_API_BASE_URL}/lookup.php?i={mealID}"
+#     response = requests.get(url)
+#     data = response.json().get("meals")
+#     if len(data) == 0:
+#         raise HTTPException(status_code=404, detail="Item not found")
+#     meal = build_meal(data[0])
+#     return JSONResponse(meal)
 
 
 @router.get("/filtered")
@@ -112,6 +112,23 @@ async def get_filtered(ingredients: str):
         )
         meals.append(jsonable_encoder(meal))
     return JSONResponse(meals)
+
+
+@router.get("/categories_and_ingredients")
+def get_meals_ingredients_categories(request: Request):
+    collection = request.app.database.ingredients
+    ingredients = collect_ingredients_categories(collection)
+    url = f"{MEAL_API_BASE_URL}/categories.php"
+    response = requests.get(url)
+    data = response.json().get("categories")
+    categories = []
+    for category in data:
+        categories.append({"label": category.get("strCategory")})
+    result = [
+        {"label": "Recipes", "children": categories},
+        {"label": "Ingredients", "children": ingredients}
+    ]
+    return JSONResponse(result)
 
 
 # TODO move to MealService
