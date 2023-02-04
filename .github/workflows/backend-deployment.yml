@@ -1,7 +1,6 @@
-name: Backend deploy
+name: Backend deploy PR
 
 on:
-  push
   pull_request
 jobs:
   deploy:
