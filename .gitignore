@@ -102,7 +102,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
@@ -131,8 +130,6 @@ dmypy.json
 # Pycharm config ignore
 .idea/
 
-
-**/*.env
 **/*yarn-error.log*
 
 
