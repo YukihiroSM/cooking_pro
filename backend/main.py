@@ -4,8 +4,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import jwt_auth
-from schemas import LoginItem
-from routes import meals, ingredients
+from schemas import AuthItem
+from routes import meals, ingredients, user
 import utils
 
 SECRET_KEY = "my_secret_key"
@@ -15,6 +15,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 800
 app = FastAPI()
 app.include_router(ingredients.router)
 app.include_router(meals.router)
+app.include_router(user.router)
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -59,18 +60,3 @@ def startup_db_client():
 @app.on_event("shutdown")
 def shutdown_db_client():
     app.mongodb_client.close()
-
-
-@app.options("/login")
-@app.post("/login")
-async def login_user(login_item: LoginItem):
-    user_query = jsonable_encoder(login_item)
-    user = app.database.collection.find_one(user_query)
-    if user:
-
-        encoded_jwt = jwt_auth.get_encoded_jwt(user_query)
-        set_jwt = {"$set": {"token": encoded_jwt}}
-        app.database.collection.update_one(user_query, set_jwt)
-        return {'token': encoded_jwt, "username": user_query["username"]}
-    else:
-        return {'message': 'Login failed. No such user.'}
