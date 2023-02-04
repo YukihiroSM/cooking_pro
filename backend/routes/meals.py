@@ -21,19 +21,23 @@ class Metadata(BaseModel):
 
 class MealsResponse(BaseModel):
     data: List[Union[Meal, DemoMeal]]
-    metadata: Metadata
 
 
 def get_meals_response(meals: List[Union[Meal, DemoMeal]]) -> JSONResponse:
-    metadata = Metadata(total=len(meals))
     meals_response = jsonable_encoder(
-        MealsResponse(data=meals, metadata=metadata)
+        MealsResponse(data=meals)
     )
     return JSONResponse(meals_response)
 
 
 @router.get("/")
 async def getFilteredMealsByCategory(category: str = None, area: str = None):
+    """
+    Test!!!!
+    :param category:
+    :param area:
+    :return:
+    """
     if not is_filter_query_valid(category, area) and category is None:
         user_ingredients = "garlic,salt"  # FIXME
         return get_filtered_by_ingredients(user_ingredients)
