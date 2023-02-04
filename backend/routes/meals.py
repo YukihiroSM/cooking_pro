@@ -5,6 +5,8 @@ import requests
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+
 from utils import collect_ingredients_categories
 from constants import MEAL_API_BASE_URL
 from schemas import Meal, Category, DemoMeal
@@ -12,17 +14,29 @@ from schemas import Meal, Category, DemoMeal
 router = APIRouter(prefix="/api/meals")
 
 
-@router.get("/random")
-async def get_random_meal():
-    url = f"{MEAL_API_BASE_URL}/random.php"
-    response = requests.get(url)
-    data = response.json().get("meals")[0]
-    return JSONResponse(build_meal(data))
+class Metadata(BaseModel):
+    total: int
 
 
+class MealsResponse(BaseModel):
+    data: List[Meal]
+    metadata: Metadata
 
-@router.get("/by_category")
-async def getFilteredMealsByCategory(category: str):
+
+def get_meals_response(meals: List[Meal]) -> JSONResponse:
+    metadata = Metadata(total=len(meals))
+    meals_response = jsonable_encoder(
+        MealsResponse(data=meals, metadata=metadata)
+    )
+    return JSONResponse(meals_response)
+
+
+@router.get("/")
+async def getFilteredMealsByCategory(category: str = None, area: str = None):
+    if not is_filter_query_valid(category, area) and category is None:
+        user_ingredients = "garlic,salt"  # FIXME
+        return get_filtered_by_ingredients(user_ingredients)
+        # return JSONResponse({"message": "Query is not valid."}, status_code=400)
     url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
     response = requests.get(url)
     data = response.json().get("meals")
@@ -33,22 +47,11 @@ async def getFilteredMealsByCategory(category: str):
             name=item["strMeal"]
         )
         meals.append(jsonable_encoder(meal))
-    return JSONResponse(meals)
+    return get_meals_response(meals)
 
 
-@router.get("/by_area")
-async def get_filtered_meals_by_area(area: str):
-    url = f"{MEAL_API_BASE_URL}/filter.php?a={area}"
-    response = requests.get(url)
-    data = response.json().get("meals")
-    meals = []
-    for item in data:
-        meal = DemoMeal(
-            id=item["idMeal"],
-            name=item["strMeal"]
-        )
-        meals.append(jsonable_encoder(meal))
-    return JSONResponse(meals)
+def is_filter_query_valid(category: str, area: str):
+    return category is not area
 
 
 @router.get("/categories")
@@ -81,18 +84,26 @@ async def get_random_meals():
     for item in data:
         meal = build_meal(item)
         meals.append(meal)
-    return JSONResponse(meals)
+    return get_meals_response(meals)
+
+
+class Message(BaseModel):
+    message: str
 
 
 @router.get("/filtered")
 async def get_filtered(ingredients: str):
     if ingredients is None:
-        raise HTTPException(status_code=400, detail="Bad request")
+        return JSONResponse({"message": "Bad request"}, status_code=400)
+    return get_filtered_by_ingredients(ingredients)
+
+
+def get_filtered_by_ingredients(ingredients: str):
     url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
     response = requests.get(url)
     data = response.json().get("meals")
     if data is None:
-        raise HTTPException(status_code=204, detail="Meals were not found")
+        return JSONResponse({"message": "Meals were not found"}, status_code=204)
     meals = []
     for item in data:
         meal = DemoMeal(
@@ -100,7 +111,7 @@ async def get_filtered(ingredients: str):
             name=item["strMeal"]
         )
         meals.append(jsonable_encoder(meal))
-    return JSONResponse(meals)
+    return get_meals_response(meals)
 
 
 @router.get("/categories_and_ingredients")
