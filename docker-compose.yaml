@@ -11,7 +11,7 @@ services:
         - backend
 
     frontend_app:
-      build: ./frontend/
+      build: .
       ports:
         - '80:80'
       restart: always
