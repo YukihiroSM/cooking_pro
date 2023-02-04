@@ -12,6 +12,11 @@ from schemas import Meal, Category, DemoMeal
 router = APIRouter(prefix="/api/meals")
 
 
+@router.get("/")
+def get_root():
+    return True
+
+
 @router.get("/random")
 async def get_random_meal():
     url = f"{MEAL_API_BASE_URL}/random.php"

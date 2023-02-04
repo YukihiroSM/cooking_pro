@@ -1,6 +1,8 @@
-name: Deploy    # Name of the workflow
+name: Backend deploy
 
-on: push, pull_request
+on:
+  push
+  pull_request
 jobs:
   deploy:
     permissions: write-all
