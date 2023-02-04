@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
   Box,
@@ -13,28 +13,26 @@ import {
   PopoverTrigger,
   PopoverContent,
   useToast,
+  Input,
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
 import { NavItem } from '../types';
 import { useEffect, useState } from 'react';
 import { throttle } from '../utils';
-import { useSetSearchParams, useMeal } from '../hooks';
+import { useCategoriesAndIngredients } from '../hooks';
 import { ROUTER_KEYS } from '../consts';
-import { NAV_ITEMS } from '../templateData';
 
 export const HeaderComponent = () => {
-  const { categoriesAndIngredients } = useMeal();
   const location = useLocation();
   const toast = useToast();
 
   const {
-    isLoading,
     isError,
-    isSuccess,
+    isLoading,
     error,
-    data: navItems = NAV_ITEMS,
-  } = categoriesAndIngredients;
+    data: navItems,
+  } = useCategoriesAndIngredients();
 
   const [scrollTop, setScrollTop] = useState<number | null>(0);
 
@@ -69,8 +67,15 @@ export const HeaderComponent = () => {
 
   return (
     <>
-      {/* {isLoading && <Loader />} */}
-      <Box as='header' position='fixed' top={0} w='100%' zIndex={5}>
+      <Box
+        mt={0}
+        pt={0}
+        as='header'
+        position='fixed'
+        top={0}
+        w='100%'
+        zIndex={5}
+      >
         <Flex
           bg={'dark'}
           color={'white'}
@@ -130,6 +135,7 @@ export const HeaderComponent = () => {
             </Button>
           </Stack>
         </Flex>
+
         <Flex
           display={'flex'}
           justify={{ base: 'space-between', md: 'start' }}
@@ -140,14 +146,22 @@ export const HeaderComponent = () => {
           minH={'60px'}
           align={'center'}
         >
-          <DesktopNav navItems={navItems} />
+          {navItems?.length && (
+            <DesktopNav isLoading={isLoading} navItems={navItems} />
+          )}
         </Flex>
       </Box>
     </>
   );
 };
 
-const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
+type DesktopNavProps = {
+  navItems: NavItem[];
+  isLoading: boolean;
+};
+
+const DesktopNav = ({ navItems, isLoading }: DesktopNavProps) => {
+  const [filter, setFilter] = useState<string>('');
   return (
     <>
       <Stack direction={'row'} spacing={4}>
@@ -155,18 +169,24 @@ const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
           <Box key={navItem.label}>
             <Popover trigger={'hover'} placement={'bottom-start'}>
               <PopoverTrigger>
-                <Link
+                <Button
+                  variant={'ghost'}
+                  as={Link}
+                  isDisabled={isLoading}
                   p={2}
                   fontSize={'lg'}
                   fontWeight={500}
                   color={'light'}
+                  _active={{
+                    bg: 'dark',
+                  }}
                   _hover={{
                     textDecoration: 'none',
                     color: 'white',
                   }}
                 >
                   {navItem.label}
-                </Link>
+                </Button>
               </PopoverTrigger>
 
               {navItem.children && (
@@ -179,14 +199,27 @@ const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
                   p={4}
                   rounded={'xl'}
                 >
-                  <Stack>
-                    {navItem.children.map((child) => (
-                      <DesktopSubNav
-                        key={child.label}
-                        parentLabel={navItem.label}
-                        {...child}
-                      />
-                    ))}
+                  <Input
+                    isDisabled={isLoading}
+                    onChange={(e) => setFilter(e.target.value)}
+                    placeholder={`Find ${navItem.label
+                      .toLowerCase()
+                      .substring(0, navItem.label.length - 1)} ${
+                      navItem.children[0].children ? 'by category' : ''
+                    }`}
+                  />
+                  <Stack maxHeight={'50vh'} overflowY={'scroll'} zIndex={1}>
+                    {navItem.children
+                      .filter((child) =>
+                        child.label.toLowerCase().includes(filter.toLowerCase())
+                      )
+                      .map((child) => (
+                        <DesktopSubNav
+                          key={child.label}
+                          parentLabel={navItem.label}
+                          {...child}
+                        />
+                      ))}
                   </Stack>
                 </PopoverContent>
               )}
@@ -239,10 +272,8 @@ const DesktopSubNav = ({
   label,
   children,
 }: NavItem & WithParentLabel) => {
-  const location = useLocation();
-  const { setTrigger } = useMeal();
-  const { params, searchParams, trigger, setParam, resetParams } =
-    useSetSearchParams();
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState<string>('');
 
   const handleFilterUpdate = (
     param: string,
@@ -250,21 +281,22 @@ const DesktopSubNav = ({
     notAFilter: boolean
   ) => {
     if (notAFilter) return;
-    resetParams();
+    let url: string;
     switch (param) {
-      case 'Ingredients':
-        param = 'ingredient';
-        break;
       case 'Recipes':
         param = 'category';
+        url = `${ROUTER_KEYS.MEALS_BY_CATEGORY}/${value}?page=0&perPage=12`;
+        break;
+      case 'Ingredients':
+        param = 'ingredient';
+        url = `${ROUTER_KEYS.MEALS_BY_INGREDIENTS}?page=0&perPage=12&${param}=${value}`;
+        break;
+      default:
+        url = '/';
         break;
     }
-    if (location.pathname !== '/meals/') {
-      window.location.href = `${ROUTER_KEYS.MEALS_BY_FILTER}?${param}=${value}&page=0&perPage=0`;
-    } else {
-      setParam(param, [value]);
-    }
-    setTrigger(trigger);
+
+    navigate(url);
   };
   return (
     <Popover trigger={'hover'} placement={'right-start'}>
@@ -319,14 +351,24 @@ const DesktopSubNav = ({
           p={4}
           rounded={'xl'}
         >
-          <Stack>
-            {children.map((child) => (
-              <DesktopSubNav
-                parentLabel={parentLabel}
-                key={child.label}
-                {...child}
-              />
-            ))}
+          <Input
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder={`Find ${parentLabel
+              .toLowerCase()
+              .substring(0, parentLabel.length - 1)}`}
+          />
+          <Stack zIndex={15} maxHeight={'50vh'} overflowY={'scroll'}>
+            {children
+              .filter((child) =>
+                child.label.toLowerCase().includes(filter.toLowerCase())
+              )
+              .map((child) => (
+                <DesktopSubNav
+                  parentLabel={parentLabel}
+                  key={child.label}
+                  {...child}
+                />
+              ))}
           </Stack>
         </PopoverContent>
       )}

@@ -2,7 +2,7 @@ import { HeaderComponent } from './header.component';
 import { FooterComponent } from './footer.component';
 
 import React from 'react';
-import { Container } from '@chakra-ui/react';
+import { Container, Stack } from '@chakra-ui/react';
 
 interface Props {
   children: React.ReactNode;
@@ -12,7 +12,15 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
   children,
 }: Props) => {
   return (
-    <>
+    <Stack
+      justify={'flex-end'}
+      direction={'column'}
+      minHeight={'100vh'}
+      minWidth={'100vw'}
+      p={0}
+      m={0}
+      spacing={0}
+    >
       <HeaderComponent />
       <Container
         as='main'
@@ -20,15 +28,16 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
         flexDirection={'column'}
         alignItems={'center'}
         bg={'white'}
-        mt={'7.6rem'}
-        mx={0}
-        px={0}
+        m={0}
+        p={0}
+        pt={'7.6rem'}
         maxWidth={'100vw'}
+        height={'full'}
       >
         {children}
       </Container>
       <FooterComponent />
-    </>
+    </Stack>
   );
 };
 

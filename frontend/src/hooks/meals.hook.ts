@@ -1,8 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-confusing-arrow */
-import { useState } from 'react';
-
 import { useQuery } from '@tanstack/react-query';
 
 import { useSearchParams, useParams } from 'react-router-dom';
@@ -10,10 +5,11 @@ import { useSearchParams, useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import {
-  getMealsByFilter,
   getRandomMeals,
   getSingleMeal,
   getCategoriesAndIngredients,
+  getMealsByIngredients,
+  getMealsByCategory,
 } from '../api/meal';
 
 import { REACT_QUERY_KEYS } from '../consts/app-keys.const';
@@ -30,66 +26,68 @@ import {
   Params,
 } from '../types';
 
-const useSingleMeal = () => {
+const error = {
+  isLoading: false,
+  isError: true,
+  isSuccess: false,
+  error: { message: 'Something went wrong...' },
+  data: undefined,
+};
+
+const skip = {
+  isLoading: false,
+  isError: false,
+  isSuccess: true,
+  error: null,
+  data: undefined,
+};
+
+export const useSingleMeal = (): ISingleMealResponse => {
   const { mealID } = useParams<Params>();
-  let singleMeal: ISingleMealResponse;
-  if (!mealID) {
-    singleMeal = {
-      isLoading: false,
-      isError: false,
-      isSuccess: false,
-      error: { message: 'Unknown error' },
-      data: undefined,
-    };
-  } else {
-    singleMeal = useQuery<Meal, AxiosError<AxiosResponse, any> | null>(
-      [REACT_QUERY_KEYS.SINGLE_MEAL],
-      () => getSingleMeal(mealID)
-    );
-  }
-  return singleMeal;
+  return !mealID
+    ? error
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useQuery<Meal, AxiosError<AxiosResponse, any> | null>(
+        [REACT_QUERY_KEYS.SINGLE_MEAL, mealID],
+        () => getSingleMeal(mealID)
+      );
 };
 
-const useAllMeals = () => {
-  const [trigger, setTrigger] = useState<number>(Date.now());
+export const useMealsByIngredients = (): IAllMealsResponse => {
   const [searchParams] = useSearchParams();
-
-  const allMeals: IAllMealsResponse = useQuery<
-    MealsResponseData,
-    AxiosError<AxiosResponse, any> | null
-  >([REACT_QUERY_KEYS.ALL_MEALS, trigger], () =>
-    getMealsByFilter(searchParams)
+  return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
+    [REACT_QUERY_KEYS.MEALS_BY_INGREDIENTS, searchParams.get('ingredients')],
+    () => getMealsByIngredients(searchParams)
   );
-  return { allMeals, setTrigger };
 };
 
-const useRandomMeals = () => {
-  const randomMeals: IRandomMealsResponse = useQuery<
-    Meal[],
-    AxiosError<AxiosResponse, any> | null
-  >([REACT_QUERY_KEYS.RANDOM_MEAL], getRandomMeals);
-  return randomMeals;
+export const useMealsByCategory = (
+  carouselCategory: string | undefined
+): IAllMealsResponse => {
+  const [searchParams] = useSearchParams();
+  const { category } = useParams<Params>();
+  return !carouselCategory
+    ? skip
+    : !category
+    ? error
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
+        [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, category, carouselCategory],
+        () => getMealsByCategory(category || carouselCategory, searchParams)
+      );
 };
 
-const useCategoriesAndIngredients = () => {
-  const categoriesAndIngredients: ICategoriesAndIngredientsResponse = useQuery<
-    NavItem[],
-    AxiosError<AxiosResponse, any> | null
-  >([REACT_QUERY_KEYS.CATEGORIES_AND_INGREDIENTS], getCategoriesAndIngredients);
-  return categoriesAndIngredients;
+export const useRandomMeals = (): IRandomMealsResponse => {
+  return useQuery<Meal[], AxiosError<AxiosResponse, any> | null>(
+    [REACT_QUERY_KEYS.RANDOM_MEAL],
+    getRandomMeals
+  );
 };
 
-export const useMeal = () => {
-  const singleMeal = useSingleMeal();
-  const { allMeals, setTrigger } = useAllMeals();
-  const randomMeals = useRandomMeals();
-  const categoriesAndIngredients = useCategoriesAndIngredients();
-
-  return {
-    singleMeal,
-    allMeals,
-    randomMeals,
-    categoriesAndIngredients,
-    setTrigger,
+export const useCategoriesAndIngredients =
+  (): ICategoriesAndIngredientsResponse => {
+    return useQuery<NavItem[], AxiosError<AxiosResponse, any> | null>(
+      [REACT_QUERY_KEYS.CATEGORIES_AND_INGREDIENTS],
+      getCategoriesAndIngredients
+    );
   };
-};

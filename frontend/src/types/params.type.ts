@@ -1,6 +1,7 @@
 type Params = {
   userID: string;
   mealID: string;
+  category: string;
 };
 
 type SearchParams = {

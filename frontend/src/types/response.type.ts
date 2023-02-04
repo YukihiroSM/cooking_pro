@@ -26,6 +26,10 @@ interface NavItem {
   children?: NavItem[];
 }
 
+interface NavItemFilter extends NavItem {
+  value: string;
+}
+
 type IngredientByCategoryResponse = {
   name: string;
   id: string;
@@ -70,4 +74,5 @@ export type {
   ICategoriesAndIngredientsResponse,
   NavItem,
   IngredientByCategoryResponse,
+  NavItemFilter,
 };
