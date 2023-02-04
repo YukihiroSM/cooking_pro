@@ -1,5 +1,6 @@
 from http.client import HTTPException
-from typing import List
+from typing import List, Union
+
 
 import requests
 from fastapi import APIRouter, Request
@@ -19,11 +20,11 @@ class Metadata(BaseModel):
 
 
 class MealsResponse(BaseModel):
-    data: List[Meal]
+    data: List[Union[Meal, DemoMeal]]
     metadata: Metadata
 
 
-def get_meals_response(meals: List[Meal]) -> JSONResponse:
+def get_meals_response(meals: List[Union[Meal, DemoMeal]]) -> JSONResponse:
     metadata = Metadata(total=len(meals))
     meals_response = jsonable_encoder(
         MealsResponse(data=meals, metadata=metadata)
@@ -44,7 +45,7 @@ async def getFilteredMealsByCategory(category: str = None, area: str = None):
     for item in data:
         meal = DemoMeal(
             id=item["idMeal"],
-            name=item["strMeal"]
+            name=item["strMeal"],
         )
         meals.append(jsonable_encoder(meal))
     return get_meals_response(meals)

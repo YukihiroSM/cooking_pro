@@ -1,0 +1,19 @@
+name: Backend deploy PR
+
+on:
+  push
+jobs:
+  deploy:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Deploying to Heroku
+        uses: akhileshns/heroku-deploy@v3.7.8
+        with:
+          heroku_api_key:  ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "cooking-pro"
+          heroku_email: "yuk0.terraf@gmail.com"
+          healthcheck: "https://cooking-pro.herokuapp.com/health"
+          rollbackonhealthcheckfailed: true
