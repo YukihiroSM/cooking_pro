@@ -84,17 +84,6 @@ async def get_random_meals():
     return JSONResponse(meals)
 
 
-# @router.get("/{mealID}")
-# async def get_meal_by_id(mealID: int):
-#     url = f"{MEAL_API_BASE_URL}/lookup.php?i={mealID}"
-#     response = requests.get(url)
-#     data = response.json().get("meals")
-#     if len(data) == 0:
-#         raise HTTPException(status_code=404, detail="Item not found")
-#     meal = build_meal(data[0])
-#     return JSONResponse(meal)
-
-
 @router.get("/filtered")
 async def get_filtered(ingredients: str):
     if ingredients is None:
@@ -129,6 +118,17 @@ def get_meals_ingredients_categories(request: Request):
         {"label": "Ingredients", "children": ingredients}
     ]
     return JSONResponse(result)
+
+
+@router.get("/{meal_id}")
+async def get_meal_by_id(meal_id: int):
+    url = f"{MEAL_API_BASE_URL}/lookup.php?i={meal_id}"
+    response = requests.get(url)
+    data = response.json().get("meals")
+    if data is None or len(data) == 0:
+        return JSONResponse({"message": "Meal with this ID does not exist!"}, status_code=404)
+    meal = build_meal(data[0])
+    return JSONResponse(meal)
 
 
 # TODO move to MealService
