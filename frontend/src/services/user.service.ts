@@ -18,7 +18,13 @@ class UserService extends HttpService {
   }
 
   getUserIngredients(id: string) {
-    return this.get({ url: `user/${id}${BACKEND_KEYS.GET_USER_INGREDIENTS}` });
+    return this.get({ url: `user/${id}${BACKEND_KEYS.USER_INGREDIENTS}` });
+  }
+
+  getUserPossibleMeals(id: string, params: URLSearchParams) {
+    return this.get({
+      url: `user/${id}${BACKEND_KEYS.USER_POSSIBLE_MEALS}?${params}`,
+    });
   }
 
   createUserIngredient(id: string, ingredient: CreateIngredient) {
@@ -27,14 +33,6 @@ class UserService extends HttpService {
       data: ingredient,
     });
   }
-
-  // --------- additional task --------- //
-  // createUserMeal(id: string, meal: Meal) {
-  //   return this.post({
-  //     url: `${BACKEND_KEYS.CREATE_USER_MEAL}${id}`,
-  //     data: meal,
-  //   });
-  // }
 }
 
 export const userService = new UserService();

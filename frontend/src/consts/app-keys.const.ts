@@ -1,37 +1,35 @@
 const BACKEND_KEYS = {
-  GET_CATEGORIES_AND_INGREDIENTS: 'meals/categories_and_ingredients',
-  GET_MEALS_BY_FILTER: 'meals',
-  GET_RANDOM_MEALS: 'meals/random',
-  GET_SINGLE_MEAL: 'meals/',
-  GET_USER_INGREDIENTS: '/ingredients',
+  MEALS_BY_INGREDIENTS: 'meals/filter',
+  MEALS_BY_CATEGORY: '/meals/category/',
+  CATEGORIES_AND_INGREDIENTS: 'meals/categories_and_ingredients',
+  RANDOM_MEALS: 'meals/random',
+  SINGLE_MEAL: 'meals/',
+  USER_INGREDIENTS: '/ingredients',
+  USER_POSSIBLE_MEALS: '/possible_meals',
   CREATE_USER_INGREDIENT: '/create_ingredient',
   REGISTER_USER: 'user/register',
   LOGIN_USER: 'user/login',
-
-  // ----------- additional tasks ---------- //
-  // GET_USER_MEALS: 'user/meals/', // + userID
-  // CREATE_USER_MEAL: 'user/create_meal/',
 };
 
 const ROUTER_KEYS = {
   MAIN: '/',
-  MEALS_BY_FILTER: '/meals/',
-  SINGLE_MEAL: '/meals/single-meal/:mealID',
+  MEALS_BY_INGREDIENTS: '/meals/filter',
+  MEALS_BY_CATEGORY: '/meals/category/:category',
+  SINGLE_MEAL: '/meals/:mealID',
   CREATE_INGREDIENT: '/meals/create-ingredient/:userID',
-  USER_PROFILE: '/user/profile/:userID',
+  USER_POSSIBLE_MEALS: '/possible_meals',
   USER_LOGIN: '/user/login',
   USER_REGISTER: '/user/register',
   NOT_FOUND: '*',
-  // ----------- additional tasks ---------- //
-  // CREATE_MEAL: '/meal/create-meal',
 };
 
 const REACT_QUERY_KEYS = {
   USER_INGREDIENTS: 'user-ingredients',
   SINGLE_MEAL: 'single-meal',
-  ALL_MEALS: 'all-meals',
+  MEALS_BY_CATEGORY: 'meals-by-category',
+  MEALS_BY_INGREDIENTS: 'meals-by-ingredients',
   RANDOM_MEAL: 'random-meal',
-  USER_MEALS: 'user-meals',
+  USER_POSSIBLE_MEALS: 'user-possible-meals',
   CATEGORIES_AND_INGREDIENTS: 'categories-and-ingredients',
 };
 
@@ -58,4 +56,15 @@ const TEAM = [
   },
 ];
 
-export { BACKEND_KEYS, ROUTER_KEYS, TEAM, REACT_QUERY_KEYS };
+const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegan', 'Dessert'];
+
+const PER_PAGE_VALUES = [10, 20, 30, 40, 50];
+
+export {
+  BACKEND_KEYS,
+  ROUTER_KEYS,
+  TEAM,
+  REACT_QUERY_KEYS,
+  CAROUSEL_CATEGORIES,
+  PER_PAGE_VALUES,
+};

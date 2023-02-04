@@ -6,8 +6,16 @@ const getCategoriesAndIngredients = async () => {
   return data;
 };
 
-const getMealsByFilter = async (params: URLSearchParams) => {
-  const { data } = await mealService.getMealsByFilter(params);
+const getMealsByIngredients = async (params: URLSearchParams) => {
+  const { data } = await mealService.getMealsByIngredients(params);
+  return data;
+};
+
+const getMealsByCategory = async (
+  category: string,
+  params: URLSearchParams
+) => {
+  const { data } = await mealService.getMealsByCategory(category, params);
   return data;
 };
 
@@ -22,7 +30,8 @@ const getSingleMeal = async (id: string) => {
 };
 
 export {
-  getMealsByFilter,
+  getMealsByIngredients,
+  getMealsByCategory,
   getRandomMeals,
   getSingleMeal,
   getCategoriesAndIngredients,

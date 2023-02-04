@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import * as Yup from 'yup';
 
@@ -56,6 +56,7 @@ type Action = {
 };
 
 export const UserFormComponent = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
   const {
@@ -103,6 +104,7 @@ export const UserFormComponent = () => {
         isClosable: true,
         position: 'top-right',
       });
+      navigate('/');
     }
     if (isError) {
       toast({
@@ -224,6 +226,7 @@ export const UserFormComponent = () => {
                     </FormControl>
                   )}
                   <Button
+                    isDisabled={isLoading}
                     type='submit'
                     bg={'attention.dark'}
                     color={'white'}

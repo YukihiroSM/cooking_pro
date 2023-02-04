@@ -12,21 +12,19 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/react';
-import { useMeal } from '../hooks';
-import { Meal } from '../types';
+import { useRandomMeals } from '../hooks';
 import { Loader } from './loader.component';
-import { templateMeals } from '../templateData';
 
 export const HeroComponent = () => {
   const toast = useToast();
-  const { randomMeals } = useMeal();
 
   const {
     isLoading,
+    isSuccess,
     isError,
     error,
-    data: meals = templateMeals,
-  } = randomMeals;
+    data: meals,
+  } = useRandomMeals();
 
   useEffect(() => {
     if (isError) {
@@ -40,52 +38,56 @@ export const HeroComponent = () => {
       });
     }
   }, [isError]);
+
+  console.log(meals);
+
   return (
     <>
-      {/* {isLoading && <Loader />} */}
-      <Grid
-        templateColumns='repeat(2, 1fr)'
-        w={'100vw'}
-        px={20}
-        py={20}
-        gap={10}
-      >
-        <GridItem
-          key={meals && meals[0].id}
-          bottom={0}
-          mt={'auto'}
-          position={'sticky'}
+      {isLoading ? (
+        <Loader />
+      ) : isSuccess ? (
+        <Grid
+          templateColumns='repeat(2, 1fr)'
+          w={'100vw'}
+          px={20}
+          py={20}
+          gap={10}
         >
-          <Stack spacing={4}>
-            <Box
-              rounded={'2xl'}
-              h={'40rem'}
-              boxShadow={'2xl'}
-              overflow={'hidden'}
-              as={Link}
-              href={`/meals/single-meal/${meals && meals[0].id}`}
-            >
-              <Image
-                alt={'Random meal'}
-                align={'center'}
-                fit={'cover'}
-                h={'100%'}
-                src={meals && meals[0].image}
-              />
-            </Box>
-            <Text
-              as={Link}
-              href={`/meals/single-meal/${meals && meals[0].id}`}
-              textStyle={'h1Semi'}
-            >
-              {meals && meals[0].name}
-            </Text>
-          </Stack>
-        </GridItem>
-        <GridItem>
-          <Grid templateRows='repeat(3, 1fr)' gap={5}>
-            {meals &&
-              meals.slice(-3).map((meal) => (
+          <GridItem
+            key={meals && meals[0].id}
+            bottom={0}
+            mt={'auto'}
+            position={'sticky'}
+          >
+            <Stack spacing={4}>
+              <Box
+                rounded={'2xl'}
+                h={'40rem'}
+                boxShadow={'2xl'}
+                overflow={'hidden'}
+                as={Link}
+                href={`/meals/${meals && meals[0].id}`}
+              >
+                <Image
+                  alt={'Random meal'}
+                  align={'center'}
+                  fit={'cover'}
+                  h={'100%'}
+                  src={meals && meals[0].image}
+                />
+              </Box>
+              <Text
+                as={Link}
+                href={`/meals/${meals && meals[0].id}`}
+                textStyle={'h1Semi'}
+              >
+                {meals && meals[0].name}
+              </Text>
+            </Stack>
+          </GridItem>
+          <GridItem>
+            <Grid templateRows='repeat(3, 1fr)' gap={5}>
+              {meals?.slice(-3).map((meal) => (
                 <GridItem key={meal.id}>
                   <Stack direction={'row'} spacing={4}>
                     <Box
@@ -95,7 +97,7 @@ export const HeroComponent = () => {
                       boxShadow={'2xl'}
                       overflow={'hidden'}
                       as={Link}
-                      href={`/meals/single-meal/${meal.id}`}
+                      href={`/meals/${meal.id}`}
                     >
                       <Image
                         alt={'Random meal'}
@@ -108,7 +110,7 @@ export const HeroComponent = () => {
                     <Box>
                       <Text
                         as={Link}
-                        href={`/meals/single-meal/${meal.id}`}
+                        href={`/meals/${meal.id}`}
                         textStyle={'body1Semi'}
                       >
                         {meal.name}
@@ -129,9 +131,12 @@ export const HeroComponent = () => {
                   </Stack>
                 </GridItem>
               ))}
-          </Grid>
-        </GridItem>
-      </Grid>
+            </Grid>
+          </GridItem>
+        </Grid>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

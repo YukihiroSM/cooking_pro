@@ -11,6 +11,7 @@ import {
   registerUser,
   getUserIngredients,
   createUserIngredient,
+  getUserPossibleMeals,
 } from '../api/user';
 import { useLocalStorage } from './localStorage.hook';
 
@@ -23,60 +24,69 @@ import {
   CreateIngredient,
   IUserIngredientsResponse,
   IngredientByCategoryResponse,
+  MealsResponseData,
+  IAllMealsResponse,
 } from '../types';
 
 import { REACT_QUERY_KEYS } from '../consts';
 import { queryClient } from '../App';
+import { useSearchParams } from 'react-router-dom';
 
-const useUserData = (id: string | undefined): IUserIngredientsResponse => {
-  let ingredients: IUserIngredientsResponse;
-
-  if (!id) {
-    ingredients = {
-      isLoading: false,
-      isError: true,
-      isSuccess: false,
-      error: { message: 'Unauthorized' },
-      data: undefined,
-    };
-  } else {
-    ingredients = useQuery<
-      IngredientsByCategory[],
-      AxiosError<AxiosResponse, any> | null
-    >([REACT_QUERY_KEYS.USER_INGREDIENTS], () => getUserIngredients(id));
-  }
-
-  return ingredients;
+const error = {
+  isLoading: false,
+  isError: true,
+  isSuccess: false,
+  error: { message: 'Unauthorized' },
+  data: undefined,
 };
 
-const useCreateIngredient = (id: string | undefined) => {
-  let createIngredient;
-  if (!id) {
-    createIngredient = {
-      isLoading: false,
-      isError: true,
-      isSuccess: false,
-      error: { message: 'Unauthorized' },
-      data: undefined,
-    };
-  } else {
-    createIngredient = useMutation<
-      IngredientByCategoryResponse,
-      AxiosError<AxiosResponse, any> | undefined,
-      CreateIngredient
-    >((ingredient) => createUserIngredient(id, ingredient), {
-      onSuccess: (ingredient: IngredientByCategoryResponse) => {
-        // change this
-        queryClient.setQueryData(
-          [REACT_QUERY_KEYS.USER_INGREDIENTS],
-          (currentIngredients: IngredientsByCategory[] = []) =>
-            [...currentIngredients, ingredient] as IngredientsByCategory[]
-        );
-      },
-    });
-  }
+export const useUserIngredients = (): IUserIngredientsResponse => {
+  const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
+    id: undefined,
+    token: undefined,
+  });
+  return !id
+    ? error
+    : useQuery<IngredientsByCategory[], AxiosError<AxiosResponse, any> | null>(
+        [REACT_QUERY_KEYS.USER_INGREDIENTS],
+        () => getUserIngredients(id)
+      );
+};
 
-  return createIngredient;
+export const useUserPossibleMeals = (): IAllMealsResponse => {
+  const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
+    id: undefined,
+    token: undefined,
+  });
+  const [searchParams] = useSearchParams();
+  return !id
+    ? error
+    : useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
+        [REACT_QUERY_KEYS.USER_POSSIBLE_MEALS],
+        () => getUserPossibleMeals(id, searchParams)
+      );
+};
+
+export const useCreateIngredient = () => {
+  const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
+    id: undefined,
+    token: undefined,
+  });
+  return !id
+    ? error
+    : useMutation<
+        IngredientByCategoryResponse,
+        AxiosError<AxiosResponse, any> | undefined,
+        CreateIngredient
+      >((ingredient) => createUserIngredient(id, ingredient), {
+        onSuccess: (ingredient: IngredientByCategoryResponse) => {
+          queryClient.setQueryData(
+            [REACT_QUERY_KEYS.USER_INGREDIENTS],
+            (currentIngredients: IngredientsByCategory[] = []) =>
+              [...currentIngredients, ingredient] as IngredientsByCategory[]
+          );
+        },
+      });
 };
 
 export const useUser = () => {
@@ -86,18 +96,13 @@ export const useUser = () => {
   const [isError, setIsError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [storageUser, setStorageUser] = useLocalStorage<LocalStorageUser>(
+  const [, setStorageUser] = useLocalStorage<LocalStorageUser>(
     'cooking-app-user',
     {
       id: undefined,
       token: undefined,
     }
   );
-
-  const { id } = storageUser;
-
-  const getUserIngredients: IUserIngredientsResponse = useUserData(id);
-  const createUserIngredient = useCreateIngredient(id);
 
   const register = useMutation<
     Response,
@@ -158,8 +163,6 @@ export const useUser = () => {
   return {
     registerUserMutation,
     loginUserMutation,
-    getUserIngredients,
-    createUserIngredient,
     error,
     isError,
     isLoading,

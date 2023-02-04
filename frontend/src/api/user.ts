@@ -16,6 +16,11 @@ const getUserIngredients = async (id: string) => {
   return data;
 };
 
+const getUserPossibleMeals = async (id: string, params: URLSearchParams) => {
+  const { data } = await userService.getUserPossibleMeals(id, params);
+  return data;
+};
+
 const createUserIngredient = async (
   id: string,
   ingredient: CreateIngredient
@@ -24,17 +29,10 @@ const createUserIngredient = async (
   return data;
 };
 
-// ---- additional task ---- /
-// const createUserMeal = async (id: string, meal: Meal) => {
-//   const { data } = await userService.createUserMeal(id, meal);
-//   return data;
-// };
-
 export {
   registerUser,
   loginUser,
   getUserIngredients,
   createUserIngredient,
-  // ---- additional task ---- /
-  // createUserMeal,
+  getUserPossibleMeals,
 };
