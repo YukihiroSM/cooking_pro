@@ -32,12 +32,6 @@ def get_meals_response(meals: List[Union[Meal, DemoMeal]]) -> JSONResponse:
 
 @router.get("/")
 async def getFilteredMealsByCategory(category: str = None, area: str = None):
-    """
-    Test!!!!
-    :param category:
-    :param area:
-    :return:
-    """
     if not is_filter_query_valid(category, area) and category is None:
         user_ingredients = "garlic,salt"  # FIXME
         return get_filtered_by_ingredients(user_ingredients)
@@ -52,7 +46,7 @@ async def getFilteredMealsByCategory(category: str = None, area: str = None):
             name=item["strMeal"],
         )
         meals.append(jsonable_encoder(meal))
-    return get_meals_response(meals)
+    return meals
 
 
 def is_filter_query_valid(category: str, area: str):
@@ -89,7 +83,7 @@ async def get_random_meals():
     for item in data:
         meal = build_meal(item)
         meals.append(meal)
-    return get_meals_response(meals)
+    return meals
 
 
 class Message(BaseModel):
@@ -116,7 +110,7 @@ def get_filtered_by_ingredients(ingredients: str):
             name=item["strMeal"]
         )
         meals.append(jsonable_encoder(meal))
-    return get_meals_response(meals)
+    return meals
 
 
 @router.get("/categories_and_ingredients")
