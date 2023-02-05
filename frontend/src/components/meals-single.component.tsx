@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Grid,
@@ -15,12 +15,11 @@ import {
 } from '@chakra-ui/react';
 import { useMealsByCategory, useSingleMeal } from '../hooks';
 import { Loader } from './loader.component';
+import { StringParam, useQueryParam } from 'use-query-params';
 
 export const SingleMealComponent = () => {
   const toast = useToast();
-  const [carouselCategory, setCarouselCategory] = useState<string | undefined>(
-    undefined
-  );
+  const [, setCarouselCategory] = useQueryParam('category', StringParam);
 
   const {
     isLoading: isLoadingSingle,
@@ -33,7 +32,7 @@ export const SingleMealComponent = () => {
     isError: isErrorAll,
     error: errorAll,
     data = { data: undefined, metadata: { total: null } },
-  } = useMealsByCategory(carouselCategory);
+  } = useMealsByCategory();
 
   const { data: meals } = data;
 

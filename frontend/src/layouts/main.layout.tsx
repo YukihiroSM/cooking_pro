@@ -13,7 +13,7 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
 }: Props) => {
   return (
     <Stack
-      justify={'flex-end'}
+      justify={'space-between'}
       direction={'column'}
       minHeight={'100vh'}
       minWidth={'100vw'}

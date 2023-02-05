@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import Select, { SingleValue } from 'react-select';
 
@@ -37,7 +37,7 @@ export const MealsByCategoryComponent = () => {
     isError: isErrorAll,
     error: errorAll,
     data: dataAll = { data: undefined, metadata: { total: 0 } },
-  } = useMealsByCategory(undefined);
+  } = useMealsByCategory();
   const { data: meals, metadata } = dataAll;
   const { total } = metadata;
 
@@ -72,6 +72,7 @@ export const MealsByCategoryComponent = () => {
               Choose recipe <strong>by category</strong>
             </FormLabel>
             <Select
+              isSearchable
               isDisabled={isLoadingNav || isLoadingAll}
               name='recipe-by-category'
               options={options}
@@ -84,7 +85,10 @@ export const MealsByCategoryComponent = () => {
                 } as NavItemFilter
               }
               onChange={(newValue: SingleValue<NavItemFilter>) => {
-                navigate(`/meals/category/${newValue?.label}?page=0&perPage=12`, {replace: true});
+                navigate(
+                  `/meals/category/${newValue?.label}?page=0&perPage=12`,
+                  { replace: true }
+                );
               }}
             />
           </Box>

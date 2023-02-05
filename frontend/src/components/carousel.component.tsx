@@ -23,14 +23,16 @@ import { Pagination, Navigation } from 'swiper';
 
 import { Meal } from '../types';
 import { useMealsByCategory, useRandomMeals } from '../hooks';
-import { Loader } from './loader.component';
 import { CAROUSEL_CATEGORIES } from '../consts';
+import { StringParam, useQueryParam } from 'use-query-params';
 
 export const CarouselComponent = () => {
   const toast = useToast();
-  const [carouselCategory, setCarouselCategory] = useState<string | undefined>(
-    undefined
+  const [carouselCategory, setCarouselCategory] = useQueryParam(
+    'category',
+    StringParam
   );
+
   const [meals, setMeals] = useState<Meal[] | undefined>(undefined);
 
   const {
@@ -44,7 +46,7 @@ export const CarouselComponent = () => {
     isError: isErrorAll,
     error: errorAll,
     data = { data: undefined, metadata: { total: null } },
-  } = useMealsByCategory(carouselCategory);
+  } = useMealsByCategory();
   const { data: mealsByCategory } = data;
 
   useEffect(() => {
@@ -67,54 +69,53 @@ export const CarouselComponent = () => {
 
   return (
     <>
-      {isLoadingAll || isLoadingRandom ? (
-        <Loader />
-      ) : (
-        <Container
-          bg={'light'}
-          display={'block'}
-          maxW={'full'}
-          m={0}
-          p={0}
-          py={'5rem'}
+      <Container
+        bg={'light'}
+        display={'block'}
+        maxW={'full'}
+        m={0}
+        p={0}
+        py={'5rem'}
+      >
+        <Stack
+          mx={'auto'}
+          px={20}
+          direction={'column'}
+          alignItems={'center'}
+          w={'full'}
         >
-          <Stack
-            mx={'auto'}
-            px={20}
-            direction={'column'}
-            alignItems={'center'}
-            w={'full'}
+          <Text textStyle={'h1Semi'}>Our recommendations</Text>
+          <Tabs py={{ base: 4 }} variant='soft-rounded' colorScheme='orange'>
+            <TabList>
+              {CAROUSEL_CATEGORIES.map((tab) => (
+                <Tab
+                  key={tab}
+                  onClick={() => {
+                    if (tab === 'All') setCarouselCategory(undefined);
+                    else setCarouselCategory(tab);
+                  }}
+                  value={tab}
+                >
+                  {tab}
+                </Tab>
+              ))}
+            </TabList>
+          </Tabs>
+          <Swiper
+            slidesPerView={5}
+            grabCursor={true}
+            spaceBetween={30}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[Pagination, Navigation]}
+            className='mySwiper'
+            navigation={true}
           >
-            <Text textStyle={'h1Semi'}>Our recommendations</Text>
-            <Tabs py={{ base: 4 }} variant='soft-rounded' colorScheme='orange'>
-              <TabList>
-                {CAROUSEL_CATEGORIES.map((tab) => (
-                  <Tab
-                    key={tab}
-                    onClick={() => {
-                      if (tab === 'All') setCarouselCategory(undefined);
-                      else setCarouselCategory(tab);
-                    }}
-                    value={tab}
-                  >
-                    {tab}
-                  </Tab>
-                ))}
-              </TabList>
-            </Tabs>
-            <Swiper
-              slidesPerView={5}
-              grabCursor={true}
-              spaceBetween={30}
-              pagination={{
-                clickable: true,
-              }}
-              modules={[Pagination, Navigation]}
-              className='mySwiper'
-              navigation={true}
-            >
-              {meals?.map((meal) => (
-                <SwiperSlide>
+            {!isLoadingAll &&
+              !isLoadingRandom &&
+              meals?.map((meal) => (
+                <SwiperSlide key={meal.id}>
                   <Stack bg={'light'} spacing={2}>
                     <Box
                       h={'20rem'}
@@ -144,16 +145,19 @@ export const CarouselComponent = () => {
                       textStyle={'body2'}
                     >
                       {meal.name.split(' ').length > 2
-                        ? meal.name.replace(/\W/g, " ").split(' ').slice(0, 3).join(' ')
+                        ? meal.name
+                            .replace(/\W/g, ' ')
+                            .split(' ')
+                            .slice(0, 3)
+                            .join(' ')
                         : meal.name}
                     </Text>
                   </Stack>
                 </SwiperSlide>
               ))}
-            </Swiper>
-          </Stack>
-        </Container>
-      )}
+          </Swiper>
+        </Stack>
+      </Container>
     </>
   );
 };

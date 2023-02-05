@@ -42,11 +42,12 @@ export const HeroComponent = () => {
       ) : (
         <Container display={'block'} maxW={'full'} m={0} p={0} py={'6.5rem'}>
           <Grid
+            maxW={'1600px'}
             templateColumns='repeat(2, 1fr)'
             gap={10}
             my={0}
             mx={'auto'}
-            px={40}
+            px={20}
             position={'relative'}
           >
             <GridItem
@@ -78,9 +79,12 @@ export const HeroComponent = () => {
                   href={`/meals/${meals && meals[0].id}`}
                   textStyle={'h1Semi'}
                 >
-                  {meals &&
-                  meals[0].name.replace(/\W/g, ' ').split(' ').length > 2
-                    ? meals[0].name.split(' ').slice(0, 3).join(' ')
+                  {meals && meals[0].name.split(' ').length > 2
+                    ? meals[0].name
+                        .replace(/\W/g, ' ')
+                        .split(' ')
+                        .slice(0, 3)
+                        .join(' ')
                     : meals && meals[0].name}
                 </Text>
               </Stack>
