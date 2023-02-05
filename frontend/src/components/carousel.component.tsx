@@ -10,6 +10,7 @@ import {
   Tab,
   Link,
   useToast,
+  Container,
 } from '@chakra-ui/react';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -69,77 +70,89 @@ export const CarouselComponent = () => {
       {isLoadingAll || isLoadingRandom ? (
         <Loader />
       ) : (
-        <Stack
+        <Container
           bg={'light'}
-          px={{ base: 20 }}
-          py={{ base: 14 }}
-          h={'full'}
-          direction={'column'}
-          alignItems={'center'}
-          w={'full'}
+          display={'block'}
+          maxW={'full'}
+          m={0}
+          p={0}
+          py={'5rem'}
         >
-          <Text textStyle={'h1Semi'}>Our recommendations</Text>
-          <Tabs py={{ base: 4 }} variant='soft-rounded' colorScheme='orange'>
-            <TabList>
-              {CAROUSEL_CATEGORIES.map((tab) => (
-                <Tab
-                  key={tab}
-                  onClick={() => {
-                    if (tab === 'All') setCarouselCategory(undefined);
-                    else setCarouselCategory(tab);
-                  }}
-                  value={tab}
-                >
-                  {tab}
-                </Tab>
-              ))}
-            </TabList>
-          </Tabs>
-          <Swiper
-            slidesPerView={4}
-            grabCursor={true}
-            spaceBetween={30}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Pagination, Navigation]}
-            className='mySwiper'
-            navigation={true}
+          <Stack
+            mx={'auto'}
+            px={20}
+            direction={'column'}
+            alignItems={'center'}
+            w={'full'}
           >
-            {meals?.map((meal) => (
-              <SwiperSlide>
-                <Stack bg={'light'} spacing={2}>
-                  <Box
-                    rounded={'2xl'}
-                    h={'25rem'}
-                    boxShadow={'lg'}
-                    overflow={'hidden'}
-                    as={Link}
-                    href={`/meals/${meal.id}`}
-                    textDecoration={'none'}
+            <Text textStyle={'h1Semi'}>Our recommendations</Text>
+            <Tabs py={{ base: 4 }} variant='soft-rounded' colorScheme='orange'>
+              <TabList>
+                {CAROUSEL_CATEGORIES.map((tab) => (
+                  <Tab
+                    key={tab}
+                    onClick={() => {
+                      if (tab === 'All') setCarouselCategory(undefined);
+                      else setCarouselCategory(tab);
+                    }}
+                    value={tab}
                   >
-                    <Image
-                      alt={'Random meal'}
-                      align={'center'}
-                      fit={'cover'}
-                      h={'100%'}
-                      src={meal.image}
-                    />
-                  </Box>
-                  <Text
-                    as={Link}
-                    href={`/meals/${meal.id}`}
-                    textDecoration={'none'}
-                    h={'6rem'}
-                    textStyle={'body2'}
-                  >
-                    {meal.name}
-                  </Text>
-                </Stack>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </Stack>
+                    {tab}
+                  </Tab>
+                ))}
+              </TabList>
+            </Tabs>
+            <Swiper
+              slidesPerView={5}
+              grabCursor={true}
+              spaceBetween={30}
+              pagination={{
+                clickable: true,
+              }}
+              modules={[Pagination, Navigation]}
+              className='mySwiper'
+              navigation={true}
+            >
+              {meals?.map((meal) => (
+                <SwiperSlide>
+                  <Stack bg={'light'} spacing={2}>
+                    <Box
+                      h={'20rem'}
+                      rounded={'2xl'}
+                      boxShadow={'lg'}
+                      overflow={'hidden'}
+                      as={Link}
+                      href={`/meals/${meal.id}`}
+                      textDecoration={'none'}
+                    >
+                      <Image
+                        transition={'.5s ease all'}
+                        _hover={{
+                          transform: 'scale(1.1)',
+                        }}
+                        alt={'Random meal'}
+                        fit={'cover'}
+                        h={'100%'}
+                        src={meal.image}
+                      />
+                    </Box>
+                    <Text
+                      as={Link}
+                      href={`/meals/${meal.id}`}
+                      textDecoration={'none'}
+                      h={'6rem'}
+                      textStyle={'body2'}
+                    >
+                      {meal.name.split(' ').length > 2
+                        ? meal.name.replace(/\W/g, " ").split(' ').slice(0, 3).join(' ')
+                        : meal.name}
+                    </Text>
+                  </Stack>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </Stack>
+        </Container>
       )}
     </>
   );

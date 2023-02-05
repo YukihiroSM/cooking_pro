@@ -17,7 +17,7 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
       direction={'column'}
       minHeight={'100vh'}
       minWidth={'100vw'}
-      p={0}
+      pt={'7.5rem'}
       m={0}
       spacing={0}
     >
@@ -30,12 +30,12 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
         bg={'white'}
         m={0}
         p={0}
-        pt={'7.6rem'}
         maxWidth={'100vw'}
         height={'full'}
       >
         {children}
       </Container>
+
       <FooterComponent />
     </Stack>
   );

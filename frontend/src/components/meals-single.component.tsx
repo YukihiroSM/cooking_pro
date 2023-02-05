@@ -105,6 +105,7 @@ export const SingleMealComponent = () => {
               </Stack>
             </GridItem>
             <GridItem
+              my={'2rem'}
               px={10}
               as={Flex}
               justifyContent={'center'}
@@ -200,7 +201,13 @@ export const SingleMealComponent = () => {
                       color={'light'}
                       textStyle={'h1Semi'}
                     >
-                      {meal.name}
+                      {meal.name.split(' ').length > 2
+                        ? meal.name
+                            .replace(/\W/g, ' ')
+                            .split(' ')
+                            .slice(0, 3)
+                            .join(' ')
+                        : meal.name}
                     </Text>
                   </GridItem>
                 ))}

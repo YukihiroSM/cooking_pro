@@ -14,13 +14,19 @@ import {
   PopoverContent,
   useToast,
   Input,
+  Menu,
+  MenuButton,
+  Avatar,
+  MenuList,
+  MenuItem,
+  MenuDivider,
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
-import { NavItem } from '../types';
+import { LocalStorageUser, NavItem } from '../types';
 import { useEffect, useState } from 'react';
 import { throttle } from '../utils';
-import { useCategoriesAndIngredients } from '../hooks';
+import { useCategoriesAndIngredients, useLocalStorage } from '../hooks';
 import { ROUTER_KEYS } from '../consts';
 
 export const HeaderComponent = () => {
@@ -34,12 +40,12 @@ export const HeaderComponent = () => {
     data: navItems,
   } = useCategoriesAndIngredients();
 
-  const [scrollTop, setScrollTop] = useState<number | null>(0);
+  const [huge, setHuge] = useState<boolean>(true);
 
   useEffect(() => {
     if (location.pathname === '/') {
       const handleScroll = (event: Event) => {
-        setScrollTop(window.scrollY);
+        setHuge(!window.scrollY);
       };
 
       window.addEventListener('scroll', throttle(handleScroll, 100));
@@ -48,7 +54,7 @@ export const HeaderComponent = () => {
         window.removeEventListener('scroll', throttle(handleScroll, 100));
       };
     } else {
-      setScrollTop(null);
+      setHuge(false);
     }
   }, []);
 
@@ -65,6 +71,10 @@ export const HeaderComponent = () => {
     }
   }, [isError]);
 
+  useEffect(() => {
+    console.log(huge);
+  }, [huge]);
+
   return (
     <>
       <Box
@@ -77,22 +87,20 @@ export const HeaderComponent = () => {
         zIndex={5}
       >
         <Flex
+          w={'full'}
           bg={'dark'}
           color={'white'}
-          transition={'font-size 0.5s'}
+          transition={'.5s ease all'}
           textStyle={{
             base: 'display2',
-            md:
-              scrollTop === null || (scrollTop && scrollTop > 0)
-                ? 'body1Semi'
-                : 'display1',
+            md: huge ? 'display1' : 'body1Semi',
           }}
           py={{ base: 2 }}
           px={{ base: 4 }}
           borderBottom={1}
+          align={'center'}
           borderStyle={'solid'}
           borderColor={'gray.200'}
-          align={'center'}
           position={'relative'}
           justifyContent={'center'}
         >
@@ -101,38 +109,15 @@ export const HeaderComponent = () => {
           </Text>
           <Stack
             position={'absolute'}
-            right={'2rem'}
+            right={0}
+            mr={4}
             flex={{ base: 1, md: 0 }}
             justify={'flex-end'}
-            justifySelf={'flex-end'}
             direction={'row'}
             spacing={6}
             display={{ base: 'none', md: 'flex' }}
           >
-            <Button
-              as={'a'}
-              fontSize={'lg'}
-              fontWeight={400}
-              variant={'link'}
-              href={'/user/login'}
-              color={'white'}
-            >
-              Sign In
-            </Button>
-            <Button
-              display={{ base: 'none', md: 'inline-flex' }}
-              fontSize={'lg'}
-              fontWeight={600}
-              color={'white'}
-              bg={'attention.dark'}
-              as='a'
-              href={'/user/register'}
-              _hover={{
-                bg: 'attention.light',
-              }}
-            >
-              Sign Up
-            </Button>
+            <User />
           </Stack>
         </Flex>
 
@@ -234,30 +219,7 @@ const DesktopNav = ({ navItems, isLoading }: DesktopNavProps) => {
         spacing={6}
         display={{ base: 'flex', md: 'none' }}
       >
-        <Button
-          as={'a'}
-          fontSize={'sm'}
-          fontWeight={400}
-          variant={'link'}
-          href={'/user/login'}
-          color={'white'}
-        >
-          Sign In
-        </Button>
-        <Button
-          display={'inline-flex'}
-          fontSize={'sm'}
-          fontWeight={600}
-          color={'white'}
-          bg={'attention.dark'}
-          as='a'
-          href={'/user/register'}
-          _hover={{
-            bg: 'attention.light',
-          }}
-        >
-          Sign Up
-        </Button>
+        <User />
       </Stack>
     </>
   );
@@ -285,10 +247,10 @@ const DesktopSubNav = ({
     switch (param) {
       case 'Recipes':
         param = 'category';
-        url = `${ROUTER_KEYS.MEALS_BY_CATEGORY}/${value}?page=0&perPage=12`;
+        url = `meals/category/${value}?page=0&perPage=12`;
         break;
       case 'Ingredients':
-        param = 'ingredient';
+        param = 'ingredients';
         url = `${ROUTER_KEYS.MEALS_BY_INGREDIENTS}?page=0&perPage=12&${param}=${value}`;
         break;
       default:
@@ -373,5 +335,70 @@ const DesktopSubNav = ({
         </PopoverContent>
       )}
     </Popover>
+  );
+};
+
+const User = () => {
+  const [{ id, token }] = useLocalStorage<LocalStorageUser>(
+    'cooking-app-user',
+    {
+      id: undefined,
+      token: 'TEST TOKEN STRING', // replace this
+    }
+  );
+  return (
+    <>
+      {id && token ? (
+        <Menu>
+          <MenuButton
+            as={Button}
+            rounded={'full'}
+            variant={'link'}
+            cursor={'pointer'}
+            minW={0}
+          >
+            <Avatar
+              size={'sm'}
+              src={
+                'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+              }
+            />
+          </MenuButton>
+          <MenuList>
+            <MenuItem>Link 1</MenuItem>
+            <MenuItem>Link 2</MenuItem>
+            <MenuDivider />
+            <MenuItem>Link 3</MenuItem>
+          </MenuList>
+        </Menu>
+      ) : (
+        <>
+          <Button
+            as={'a'}
+            fontSize={'sm'}
+            fontWeight={400}
+            variant={'link'}
+            href={'/user/login'}
+            color={'white'}
+          >
+            Sign In
+          </Button>
+          <Button
+            display={'inline-flex'}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'attention.dark'}
+            as='a'
+            href={'/user/register'}
+            _hover={{
+              bg: 'attention.light',
+            }}
+          >
+            Sign Up
+          </Button>
+        </>
+      )}
+    </>
   );
 };

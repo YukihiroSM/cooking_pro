@@ -12,6 +12,7 @@ import {
   Box,
   FormControl,
   Button,
+  Container,
 } from '@chakra-ui/react';
 
 import { useCategoriesAndIngredients, useMealsByIngredients } from '../hooks';
@@ -73,69 +74,63 @@ export const MealsByIngredientsComponent = () => {
 
   return (
     <>
-      {(isLoadingNav || isLoadingAll) && <Loader />}
-      <FormControl>
-        <Stack w={'full'} direction={'row'}>
-          <Box w={'full'}>
-            <FormLabel>
-              Choose <strong>ingredient</strong> by category
-            </FormLabel>
-            <Select
+      <Container maxW={'full'} px={20} py={10}>
+        {(isLoadingNav || isLoadingAll) && <Loader />}
+        <FormControl>
+          <Stack w={'full'} direction={'row'} align={'flex-end'}>
+            <Box w={'full'}>
+              <FormLabel>
+                Choose ingredient <strong>by category</strong>
+              </FormLabel>
+              <Select
+                isDisabled={isLoadingNav || isLoadingAll}
+                name='ingredients-by-category'
+                options={optionsCategories}
+                placeholder='Select ingredients category...'
+                closeMenuOnSelect={true}
+                onChange={(newValue: SingleValue<NavItemFilter>) =>
+                  setIngredientsCategory(newValue as NavItemFilter)
+                }
+              />
+            </Box>
+            <Box w={'full'}>
+              <FormLabel>Choose ingredients</FormLabel>
+              <Select
+                isDisabled={isLoadingNav || isLoadingAll}
+                isMulti
+                name='ingredients'
+                options={ingredientsCategory?.children?.map((item) => ({
+                  ...item,
+                  value: item.label,
+                }))}
+                placeholder='Select some ingredients...'
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                defaultValue={
+                  {
+                    label: ingredients[0],
+                    value: ingredients[0],
+                  } as NavItemFilter
+                }
+                onChange={(newValue: MultiValue<NavItem>) => {
+                  setIngredients(newValue.map((item: NavItem) => item.label));
+                }}
+              />
+            </Box>
+            <Button
               isDisabled={isLoadingNav || isLoadingAll}
-              name='ingredients-by-category'
-              options={optionsCategories}
-              placeholder='Select ingredients category...'
-              closeMenuOnSelect={true}
-              defaultValue={
-                optionsCategories
-                  ? ({
-                      label: optionsCategories[0].label,
-                      value: optionsCategories[0].label,
-                    } as NavItemFilter)
-                  : undefined
-              }
-              onChange={(newValue: SingleValue<NavItemFilter>) =>
-                setIngredientsCategory(newValue as NavItemFilter)
-              }
-            />
-          </Box>
-          <Box w={'full'}>
-            <FormLabel>Choose ingredient</FormLabel>
-            <Select
-              isDisabled={isLoadingNav || isLoadingAll}
-              isMulti
-              name='ingredients'
-              options={ingredientsCategory?.children?.map((item) => ({
-                ...item,
-                value: item.label,
-              }))}
-              placeholder='Select some ingredients...'
-              closeMenuOnSelect={false}
-              components={animatedComponents}
-              defaultValue={
-                {
-                  label: ingredients[0],
-                  value: ingredients[0],
-                } as NavItemFilter
-              }
-              onChange={(newValue: MultiValue<NavItem>) => {
-                setIngredients(newValue.map((item: NavItem) => item.label));
+              onClick={() => {
+                setIngredients([ingredients[0]]);
               }}
-            />
-          </Box>
-          <Button
-            isDisabled={isLoadingNav || isLoadingAll}
-            onClick={() => {
-              setIngredients([ingredients[0]]);
-            }}
-            colorScheme={'red'}
-            w={20}
-          >
-            Reset
-          </Button>
-        </Stack>
-      </FormControl>
-      {meals && <FilteredMealsComponent total={total} meals={meals} />}
+              colorScheme={'red'}
+              w={20}
+            >
+              Reset
+            </Button>
+          </Stack>
+        </FormControl>
+        {meals && <FilteredMealsComponent total={total} meals={meals} />}
+      </Container>
     </>
   );
 };
