@@ -24,10 +24,6 @@ body {
 
 .swiper-slide {
     text-align: center;
-    font-size: 18px;
-    background: #fff;
-
-    /* Center slide text vertically */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,7 +37,6 @@ body {
 }
 
 .swiper-button-next,
-
 .swiper-container-rtl .swiper-button-prev,
 .swiper-button-prev,
 .swiper-container-rtl .swiper-button-next {

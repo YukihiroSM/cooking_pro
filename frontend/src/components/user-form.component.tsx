@@ -122,13 +122,19 @@ export const UserFormComponent = () => {
     <>
       {isLoading && <Loader />}
       <Flex
-        bg='white'
+        w={'full'}
+        bg='light'
         align='center'
         justify='center'
         h={action.type === 'register' ? '72vh' : '60vh'}
       >
-        <Box bg='light' p={6} rounded='md' w={'lg'}>
-          <Tabs defaultIndex={action.index} isFitted variant='enclosed'>
+        <Box bg='white' p={6} rounded='md' w={'lg'} boxShadow={'md'}>
+          <Tabs
+            textStyle={'body2Semi'}
+            defaultIndex={action.index}
+            isFitted
+            variant='enclosed'
+          >
             <TabList mb='1em'>
               <Tab
                 as={Link}
