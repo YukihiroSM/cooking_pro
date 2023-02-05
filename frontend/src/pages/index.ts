@@ -5,3 +5,4 @@ export * from './NotFound.page';
 export * from './MealsByCategory.page';
 export * from './MealsByIngredients.page';
 export * from './UserPossibleMeals.page';
+export * from './UserIngredients.page';

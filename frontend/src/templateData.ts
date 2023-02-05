@@ -54,4 +54,37 @@ export const templateMeal: Meal = {
   measures: ['400g', '3 tbs', '1 chopped', '2 chopped'],
 };
 
+export const ingredients = [
+  {
+    id: `${Math.random()}`,
+    label: 'b',
+    category: 'd',
+    measure: `${Math.random()}`,
+  },
+  {
+    id: `${Math.random()}`,
+    label: 'a',
+    category: 'q',
+    measure: `${Math.random()}`,
+  },
+  {
+    id: `${Math.random()}`,
+    label: 'd',
+    category: 'a',
+    measure: `${Math.random()}`,
+  },
+  {
+    id: `${Math.random()}`,
+    label: 'c',
+    category: 'c',
+    measure: `${Math.random()}`,
+  },
+  {
+    id: `${Math.random()}`,
+    label: 'q',
+    category: 'b',
+    measure: `${Math.random()}`,
+  },
+];
+
 export const templateMeals: Meal[] = Array(12).fill(templateMeal);

@@ -17,7 +17,8 @@ const ROUTER_KEYS = {
   MEALS_BY_CATEGORY: '/meals/category/:category',
   SINGLE_MEAL: '/meals/:mealID',
   CREATE_INGREDIENT: '/meals/create-ingredient/:userID',
-  USER_POSSIBLE_MEALS: '/possible_meals',
+  USER_POSSIBLE_MEALS: 'user/:userID/possible-meals',
+  USER_INGREDIENTS: 'user/:userID/ingredients',
   USER_LOGIN: '/user/login',
   USER_REGISTER: '/user/register',
   NOT_FOUND: '*',
@@ -41,17 +42,17 @@ const TEAM = [
   },
   {
     name: 'Ruslan Kotliarenko',
-    linkedIn: 'https://linkedin.com/in/ruslan-kotliarenko',
+    linkedIn: 'https://www.linkedin.com/in/ruslan-kotliarenko-3605b8252',
     gitHub: 'https://github.com/ruslankotliar',
   },
   {
     name: 'Dmytro Omelian',
-    linkedIn: 'https://linkedin.com/in/dichik',
+    linkedIn: 'https://www.linkedin.com/in/dichik',
     gitHub: 'https://github.com/Dichik',
   },
   {
     name: 'Sofiia Shaposhnikova',
-    linkedIn: 'https://linkedin.com/in/sofiia-shaposhnikova',
+    linkedIn: 'https://www.linkedin.com/in/sofiia-shaposhnikova-9854931b7',
     gitHub: 'https://github.com/Teasotea',
   },
 ];
@@ -60,6 +61,11 @@ const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegan', 'Dessert'];
 
 const PER_PAGE_VALUES = [10, 20, 30, 40, 50];
 
+const USER_INGREDIENTS_PARAMS = ['Label', 'Category', 'Measure'];
+
+// string to prevent react hook order bug
+const PREVENT_BUG = 'Goat';
+
 export {
   BACKEND_KEYS,
   ROUTER_KEYS,
@@ -67,4 +73,6 @@ export {
   REACT_QUERY_KEYS,
   CAROUSEL_CATEGORIES,
   PER_PAGE_VALUES,
+  PREVENT_BUG,
+  USER_INGREDIENTS_PARAMS,
 };

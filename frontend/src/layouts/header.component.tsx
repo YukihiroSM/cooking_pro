@@ -20,6 +20,15 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  ButtonGroup,
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
@@ -110,14 +119,14 @@ export const HeaderComponent = () => {
           <Stack
             position={'absolute'}
             right={0}
-            mr={4}
+            mr={20}
             flex={{ base: 1, md: 0 }}
             justify={'flex-end'}
             direction={'row'}
             spacing={6}
             display={{ base: 'none', md: 'flex' }}
           >
-            <User />
+            <User huge={huge} />
           </Stack>
         </Flex>
 
@@ -132,7 +141,7 @@ export const HeaderComponent = () => {
           align={'center'}
         >
           {navItems?.length && (
-            <DesktopNav isLoading={isLoading} navItems={navItems} />
+            <DesktopNav huge={huge} isLoading={isLoading} navItems={navItems} />
           )}
         </Flex>
       </Box>
@@ -143,9 +152,10 @@ export const HeaderComponent = () => {
 type DesktopNavProps = {
   navItems: NavItem[];
   isLoading: boolean;
+  huge: boolean;
 };
 
-const DesktopNav = ({ navItems, isLoading }: DesktopNavProps) => {
+const DesktopNav = ({ navItems, isLoading, huge }: DesktopNavProps) => {
   const [filter, setFilter] = useState<string>('');
   return (
     <>
@@ -219,7 +229,7 @@ const DesktopNav = ({ navItems, isLoading }: DesktopNavProps) => {
         spacing={6}
         display={{ base: 'flex', md: 'none' }}
       >
-        <User />
+        <User huge={huge} />
       </Stack>
     </>
   );
@@ -338,44 +348,92 @@ const DesktopSubNav = ({
   );
 };
 
-const User = () => {
-  const [{ id, token }] = useLocalStorage<LocalStorageUser>(
-    'cooking-app-user',
-    {
-      id: undefined,
+type UserProps = {
+  huge: boolean;
+};
+
+const User = ({ huge }: UserProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [{ id, token }, setLocalStorageUser] =
+    useLocalStorage<LocalStorageUser>('cooking-app-user', {
+      id: 'undefined',
       token: 'TEST TOKEN STRING', // replace this
-    }
-  );
+    });
   return (
     <>
       {id && token ? (
-        <Menu>
-          <MenuButton
-            as={Button}
-            rounded={'full'}
-            variant={'link'}
-            cursor={'pointer'}
-            minW={0}
-          >
-            <Avatar
-              size={'sm'}
-              src={
-                'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-              }
-            />
-          </MenuButton>
-          <MenuList>
-            <MenuItem>Link 1</MenuItem>
-            <MenuItem>Link 2</MenuItem>
-            <MenuDivider />
-            <MenuItem>Link 3</MenuItem>
-          </MenuList>
-        </Menu>
+        <>
+          <ModalLogOut
+            isOpen={isOpen}
+            onClose={onClose}
+            setLocalStorageUser={setLocalStorageUser}
+          />
+          <Menu>
+            <MenuButton
+              as={Button}
+              rounded={'full'}
+              variant={'link'}
+              cursor={'pointer'}
+              minW={0}
+            >
+              <Avatar
+                transition={'.5s ease all'}
+                size={huge ? 'md' : 'sm'}
+                src={'https://i.pravatar.cc/300'}
+              />
+            </MenuButton>
+            <MenuList
+              borderColor={'attention.light'}
+              bg={'black'}
+              fontSize={huge ? 'lg' : 'md'}
+              lineHeight={2}
+              color={'white'}
+            >
+              <MenuItem
+                as={Link}
+                href={`/user/${id}/ingredients`}
+                _hover={{
+                  textDecoration: 'none',
+                  color: 'attention.light',
+                }}
+                fontWeight={400}
+                bg={'black'}
+              >
+                My ingredients
+              </MenuItem>
+              <MenuItem
+                as={Link}
+                href={`/user/${id}/possible-meals`}
+                _hover={{
+                  textDecoration: 'none',
+                  color: 'attention.light',
+                }}
+                fontWeight={400}
+                bg={'black'}
+              >
+                What can I cook?
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem
+                _hover={{
+                  textDecoration: 'none',
+                  color: 'attention.light',
+                }}
+                bg={'black'}
+                fontWeight={600}
+                onClick={() => onOpen()}
+              >
+                Log out
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </>
       ) : (
         <>
           <Button
             as={'a'}
-            fontSize={'sm'}
+            transition={'.5s ease all'}
+            fontSize={huge ? 'md' : 'sm'}
             fontWeight={400}
             variant={'link'}
             href={'/user/login'}
@@ -384,8 +442,9 @@ const User = () => {
             Sign In
           </Button>
           <Button
+            transition={'.5s ease all'}
             display={'inline-flex'}
-            fontSize={'sm'}
+            fontSize={huge ? 'md' : 'sm'}
             fontWeight={600}
             color={'white'}
             bg={'attention.dark'}
@@ -399,6 +458,58 @@ const User = () => {
           </Button>
         </>
       )}
+    </>
+  );
+};
+
+const ModalLogOut = ({ isOpen, onClose, setLocalStorageUser }: any) => {
+  return (
+    <>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay
+          bg='blackAlpha.300'
+          backdropFilter='blur(10px) hue-rotate(90deg)'
+        />
+        <ModalContent bg={'black'} color={'white'}>
+          <ModalHeader fontSize={'2rem'}>Sure want to log out?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text fontSize={'1rem'}>
+              Some functionality will be limited after you log out.
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <ButtonGroup fontSize={'lg'}>
+              <Button
+                color={'attention.light'}
+                bg={'none'}
+                _hover={{
+                  color: 'orange',
+                  bg: 'dark',
+                  textDecoration: 'none',
+                }}
+                as={Link}
+                href={`/user/login`}
+                onClick={() =>
+                  setLocalStorageUser({ id: undefined, token: undefined })
+                }
+              >
+                Log out
+              </Button>
+              <Button
+                _hover={{
+                  bg: 'attention.light',
+                  textDecoration: 'none',
+                }}
+                bg={'attention.dark'}
+                onClick={onClose}
+              >
+                Close
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

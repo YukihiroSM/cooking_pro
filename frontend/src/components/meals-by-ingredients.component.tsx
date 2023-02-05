@@ -11,7 +11,6 @@ import {
   FormLabel,
   Box,
   FormControl,
-  Button,
   Container,
 } from '@chakra-ui/react';
 
@@ -29,6 +28,9 @@ export const MealsByIngredientsComponent = () => {
     MyIngredientsParam
   );
   const [optionsCategories, setOptionsCategories] = useState<
+    NavItemFilter[] | undefined
+  >(undefined);
+  const [optionsIngredients, setOptionsIngredients] = useState<
     NavItemFilter[] | undefined
   >(undefined);
   const [ingredientsCategory, setIngredientsCategory] =
@@ -54,10 +56,19 @@ export const MealsByIngredientsComponent = () => {
   useEffect(() => {
     setOptionsCategories(
       navItems
-        ?.find((item) => item.label === 'Recipes')
+        ?.find((item) => item.label === 'Ingredients')
         ?.children?.map((item) => ({ ...item, value: item.label }))
     );
   }, [navItems]);
+
+  useEffect(() => {
+    setOptionsIngredients(
+      ingredientsCategory?.children?.map((item) => ({
+        ...item,
+        value: item.label,
+      }))
+    );
+  }, [ingredientsCategory]);
 
   useEffect(() => {
     if (isErrorNav || isErrorAll) {
@@ -83,11 +94,12 @@ export const MealsByIngredientsComponent = () => {
                 Choose ingredient <strong>by category</strong>
               </FormLabel>
               <Select
+                isSearchable
                 isDisabled={isLoadingNav || isLoadingAll}
                 name='ingredients-by-category'
                 options={optionsCategories}
                 placeholder='Select ingredients category...'
-                closeMenuOnSelect={true}
+                closeMenuOnSelect
                 onChange={(newValue: SingleValue<NavItemFilter>) =>
                   setIngredientsCategory(newValue as NavItemFilter)
                 }
@@ -96,13 +108,11 @@ export const MealsByIngredientsComponent = () => {
             <Box w={'full'}>
               <FormLabel>Choose ingredients</FormLabel>
               <Select
+                isSearchable
                 isDisabled={isLoadingNav || isLoadingAll}
                 isMulti
                 name='ingredients'
-                options={ingredientsCategory?.children?.map((item) => ({
-                  ...item,
-                  value: item.label,
-                }))}
+                options={optionsIngredients}
                 placeholder='Select some ingredients...'
                 closeMenuOnSelect={false}
                 components={animatedComponents}
@@ -112,21 +122,16 @@ export const MealsByIngredientsComponent = () => {
                     value: ingredients[0],
                   } as NavItemFilter
                 }
-                onChange={(newValue: MultiValue<NavItem>) => {
-                  setIngredients(newValue.map((item: NavItem) => item.label));
+                onChange={(newValue: MultiValue<NavItem>, { action }) => {
+                  if (action === 'clear') {
+                    setIngredients([ingredients[0]]);
+                  }
+                  if (action === 'select-option') {
+                    setIngredients(newValue.map((item: NavItem) => item.label));
+                  }
                 }}
               />
             </Box>
-            <Button
-              isDisabled={isLoadingNav || isLoadingAll}
-              onClick={() => {
-                setIngredients([ingredients[0]]);
-              }}
-              colorScheme={'red'}
-              w={20}
-            >
-              Reset
-            </Button>
           </Stack>
         </FormControl>
         {meals && <FilteredMealsComponent total={total} meals={meals} />}

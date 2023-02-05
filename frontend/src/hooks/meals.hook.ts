@@ -12,7 +12,7 @@ import {
   getMealsByCategory,
 } from '../api/meal';
 
-import { REACT_QUERY_KEYS } from '../consts/app-keys.const';
+import { PREVENT_BUG, REACT_QUERY_KEYS } from '../consts/app-keys.const';
 
 import {
   AxiosResponse,
@@ -25,32 +25,14 @@ import {
   MealsResponseData,
   Params,
 } from '../types';
-
-const error = {
-  isLoading: false,
-  isError: true,
-  isSuccess: false,
-  error: { message: 'Something went wrong...' },
-  data: undefined,
-};
-
-const skip = {
-  isLoading: false,
-  isError: false,
-  isSuccess: true,
-  error: null,
-  data: undefined,
-};
+import { StringParam, useQueryParam } from 'use-query-params';
 
 export const useSingleMeal = (): ISingleMealResponse => {
   const { mealID } = useParams<Params>();
-  return !mealID
-    ? error
-    : // eslint-disable-next-line react-hooks/rules-of-hooks
-      useQuery<Meal, AxiosError<AxiosResponse, any> | null>(
-        [REACT_QUERY_KEYS.SINGLE_MEAL, mealID],
-        () => getSingleMeal(mealID)
-      );
+  return useQuery<Meal, AxiosError<AxiosResponse, any> | null>(
+    [REACT_QUERY_KEYS.SINGLE_MEAL, mealID],
+    () => getSingleMeal(mealID || PREVENT_BUG)
+  );
 };
 
 export const useMealsByIngredients = (): IAllMealsResponse => {
@@ -61,20 +43,19 @@ export const useMealsByIngredients = (): IAllMealsResponse => {
   );
 };
 
-export const useMealsByCategory = (
-  carouselCategory: string | undefined
-): IAllMealsResponse => {
+export const useMealsByCategory = (): IAllMealsResponse => {
   const [searchParams] = useSearchParams();
+  const [carouselCategory] = useQueryParam('category', StringParam);
   const { category } = useParams<Params>();
-  return !carouselCategory
-    ? skip
-    : !category
-    ? error
-    : // eslint-disable-next-line react-hooks/rules-of-hooks
-      useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
-        [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, category, carouselCategory],
-        () => getMealsByCategory(category || carouselCategory, searchParams)
-      );
+  // const value = carouselCategory || category || PREVENT_BUG;
+  return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
+    [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, category, carouselCategory],
+    () =>
+      getMealsByCategory(
+        carouselCategory || category || PREVENT_BUG,
+        searchParams
+      )
+  );
 };
 
 export const useRandomMeals = (): IRandomMealsResponse => {

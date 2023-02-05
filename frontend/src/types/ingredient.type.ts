@@ -1,15 +1,13 @@
 type CreateIngredient = {
   id: string;
+  measure: string;
 };
 
 type Ingredient = {
-  name: string;
   id: string;
-};
-
-type IngredientsByCategory = {
+  label: string;
   category: string;
-  ingredient: Ingredient[];
+  measure: string;
 };
 
-export type { CreateIngredient, Ingredient, IngredientsByCategory };
+export type { CreateIngredient, Ingredient };
