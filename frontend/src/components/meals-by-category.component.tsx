@@ -10,12 +10,14 @@ import {
   Box,
   FormControl,
   Container,
+  Stack,
 } from '@chakra-ui/react';
 
 import { useCategoriesAndIngredients, useMealsByCategory } from '../hooks';
 import { NavItemFilter } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
+import { PaginationComponent } from './pagination.component';
 
 export const MealsByCategoryComponent = () => {
   const navigate = useNavigate();
@@ -64,44 +66,55 @@ export const MealsByCategoryComponent = () => {
 
   return (
     <>
-      <Container maxW={'full'} px={20} py={10}>
+      <Container bg={'light'} maxW={'full'} px={20} py={10}>
         {(isLoadingNav || isLoadingAll) && <Loader />}
-        <FormControl>
-          <Box w={'full'}>
-            <FormLabel>
-              Choose recipe <strong>by category</strong>
-            </FormLabel>
-            <Select
-              theme={(theme) => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  primary25: 'silver',
-                  primary: 'orange',
-                },
-              })}
-              isSearchable
-              isDisabled={isLoadingNav || isLoadingAll}
-              name='recipe-by-category'
-              options={options}
-              placeholder='Select recipes category...'
-              closeMenuOnSelect={true}
-              defaultValue={
-                {
-                  label: category,
-                  value: category,
-                } as NavItemFilter
-              }
-              onChange={(newValue: SingleValue<NavItemFilter>) => {
-                navigate(
-                  `/meals/category/${newValue?.label}?page=0&perPage=12`,
-                  { replace: true }
-                );
-              }}
-            />
-          </Box>
-        </FormControl>
-        {meals && <FilteredMealsComponent total={total} meals={meals} />}
+        <Stack
+          direction={'column'}
+          spacing={10}
+          maxWidth={'100wv'}
+          w={'full'}
+          px={20}
+          py={10}
+          m={0}
+        >
+          <FormControl>
+            <Box w={'full'}>
+              <FormLabel>
+                Choose recipe <strong>by category</strong>
+              </FormLabel>
+              <Select
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary25: 'silver',
+                    primary: 'orange',
+                  },
+                })}
+                isSearchable
+                isDisabled={isLoadingNav || isLoadingAll}
+                name='recipe-by-category'
+                options={options}
+                placeholder='Select recipes category...'
+                closeMenuOnSelect={true}
+                defaultValue={
+                  {
+                    label: category,
+                    value: category,
+                  } as NavItemFilter
+                }
+                onChange={(newValue: SingleValue<NavItemFilter>) => {
+                  navigate(
+                    `/meals/category/${newValue?.label}?page=0&perPage=12`,
+                    { replace: true }
+                  );
+                }}
+              />
+            </Box>
+          </FormControl>
+          {meals && <FilteredMealsComponent meals={meals} />}
+          {total && <PaginationComponent total={total} />}
+        </Stack>
       </Container>
     </>
   );
