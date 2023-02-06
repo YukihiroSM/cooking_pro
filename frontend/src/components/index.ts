@@ -11,3 +11,4 @@ export * from './user-possible-meals.component';
 export * from './meals-by-category.component';
 export * from './meals-by-ingredients.component';
 export * from './user-ingredients.component';
+export * from './error.component';

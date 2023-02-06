@@ -37,6 +37,7 @@ export const SingleMealComponent = () => {
   const { data: meals } = data;
 
   useEffect(() => {
+    console.log(meal);
     meal && setCarouselCategory(meal.category);
   }, [meal]);
 
@@ -97,26 +98,25 @@ export const SingleMealComponent = () => {
             w={'100vw'}
           >
             <GridItem>
-              <Stack ml={'5rem'} my={'2rem'}>
+              <Stack ml={'5rem'} my={'5rem'}>
                 <Text textStyle={'body1Semi'}>Instructions</Text>
                 <Divider />
-                <Text textStyle={'body2'}>{meal?.instructions}</Text>
+                <Text overflow={'scroll'} h={'20rem'} textStyle={'body2'}>
+                  {meal?.instructions}
+                </Text>
               </Stack>
             </GridItem>
             <GridItem
-              my={'2rem'}
+              my={'5rem'}
               px={10}
               as={Flex}
               justifyContent={'center'}
-              alignItems={'center'}
+              alignItems={'flex-end'}
             >
               <Box
                 title='Video tutorial'
                 as='iframe'
-                src={`${meal?.video.replace(
-                  'watch?v=',
-                  'embed/'
-                )}?autoplay=1&mute=1`}
+                src={meal?.video}
                 width='100%'
                 sx={{
                   aspectRatio: '16/9',
