@@ -1,6 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-confusing-arrow */
 import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
@@ -12,6 +9,7 @@ import {
   getUserIngredients,
   createUserIngredient,
   getUserPossibleMeals,
+  deleteUserIngredient,
 } from '../api/user';
 import { useLocalStorage } from './localStorage.hook';
 
@@ -31,14 +29,6 @@ import {
 import { PREVENT_BUG, REACT_QUERY_KEYS } from '../consts';
 import { queryClient } from '../App';
 import { useSearchParams } from 'react-router-dom';
-
-const error = {
-  isLoading: false,
-  isError: true,
-  isSuccess: false,
-  error: { message: 'Unauthorized' },
-  data: undefined,
-};
 
 export const useUserIngredients = (): IUserIngredientsResponse => {
   const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
@@ -65,12 +55,20 @@ export const useUserPossibleMeals = (): IAllMealsResponse => {
   );
 };
 
-export const useCreateIngredient = () => {
+export const useUserIngredient = () => {
+  const [error, setError] = useState<
+    AxiosError<AxiosResponse, any> | undefined
+  >();
+  const [action, setAction] = useState<string>('');
+  const [isError, setIsError] = useState<Boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
     id: undefined,
     token: undefined,
   });
-  return useMutation<
+
+  const createIngredient = useMutation<
     Ingredient,
     AxiosError<AxiosResponse, any> | undefined,
     CreateIngredient
@@ -78,12 +76,134 @@ export const useCreateIngredient = () => {
     onSuccess: (ingredient: Ingredient) => {
       queryClient.setQueryData(
         [REACT_QUERY_KEYS.USER_INGREDIENTS],
-        (currentIngredients: Ingredient[] = []) =>
-          [...currentIngredients, ingredient] as Ingredient[]
+        (
+          { data, metadata }: IngredientByCategoryResponse = {
+            data: [],
+            metadata: { total: 0 },
+          }
+        ) =>
+          ({
+            data: [...(data as Ingredient[]), ingredient],
+            metadata: { total: metadata.total + 1 },
+          } as IngredientByCategoryResponse)
       );
     },
   });
+
+  const deleteIngredient = useMutation<
+    Ingredient,
+    AxiosError<AxiosResponse, any> | undefined,
+    string
+  >((ingredientID) => deleteUserIngredient(id || PREVENT_BUG, ingredientID), {
+    onSuccess: ({ id }: Ingredient) => {
+      queryClient.setQueryData(
+        [REACT_QUERY_KEYS.USER_INGREDIENTS],
+        (
+          { data, metadata }: IngredientByCategoryResponse = {
+            data: [],
+            metadata: { total: 0 },
+          }
+        ) =>
+          ({
+            data: data?.filter(
+              (ingredient: Ingredient) => ingredient.id !== id
+            ),
+            metadata: { total: metadata.total - 1 },
+          } as IngredientByCategoryResponse)
+      );
+    },
+  });
+
+  const {
+    mutate: mutateDelete,
+    isError: isErrorDelete,
+    isSuccess: isSuccessDelete,
+    error: errorDelete,
+    isLoading: isLoadingDelete,
+  } = deleteIngredient;
+  const {
+    mutate: mutateCreate,
+    isSuccess: isSuccessCreate,
+    isError: isErrorCreate,
+    error: errorCreate,
+    isLoading: isLoadingCreate,
+  } = createIngredient;
+
+  const deleteIngredientMutation = (ingredientID: string) => {
+    mutateDelete(ingredientID);
+  };
+
+  const createIngredientMutation = (ingredient: CreateIngredient) => {
+    mutateCreate(ingredient);
+  };
+
+  useEffect(() => {
+    setIsError(isErrorCreate || isErrorDelete);
+    setError(errorCreate || errorDelete || undefined);
+  }, [isErrorCreate, isErrorDelete]);
+
+  useEffect(() => {
+    setIsSuccess(isSuccessDelete || isSuccessCreate);
+    setAction(isSuccessCreate ? 'create' : 'delete');
+  }, [isSuccessCreate, isSuccessDelete]);
+
+  useEffect(() => {
+    setIsLoading(isLoadingCreate || isLoadingDelete);
+  }, [isLoadingCreate, isLoadingDelete]);
+
+  return {
+    deleteIngredientMutation,
+    createIngredientMutation,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    action,
+  };
 };
+
+// export const useCreateIngredient = () => {
+//   const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
+//     id: undefined,
+//     token: undefined,
+//   });
+
+//   return useMutation<
+//     Ingredient,
+//     AxiosError<AxiosResponse, any> | undefined,
+//     CreateIngredient
+//   >((ingredient) => createUserIngredient(id || PREVENT_BUG, ingredient), {
+//     onSuccess: (ingredient: Ingredient) => {
+//       queryClient.setQueryData(
+//         [REACT_QUERY_KEYS.USER_INGREDIENTS],
+//         (currentIngredients: Ingredient[] = []) =>
+//           [...currentIngredients, ingredient] as Ingredient[]
+//       );
+//     },
+//   });
+// };
+
+// export const useDeleteIngredient = () => {
+//   const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
+//     id: undefined,
+//     token: undefined,
+//   });
+//   return useMutation<
+//     Ingredient,
+//     AxiosError<AxiosResponse, any> | undefined,
+//     string
+//   >((ingredientID) => deleteUserIngredient(id || PREVENT_BUG, ingredientID), {
+//     onSuccess: ({ id }: Ingredient) => {
+//       queryClient.setQueryData(
+//         [REACT_QUERY_KEYS.USER_INGREDIENTS],
+//         (currentIngredients: Ingredient[] = []) =>
+//           currentIngredients.filter(
+//             (ingredient: Ingredient) => ingredient.id !== id
+//           ) as Ingredient[]
+//       );
+//     },
+//   });
+// };
 
 export const useUser = () => {
   const [error, setError] = useState<

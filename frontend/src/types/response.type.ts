@@ -21,6 +21,7 @@ type MealsResponseData = {
 
 interface NavItem {
   label: string;
+  measure?: string;
   id?: string;
   children?: NavItem[];
 }
@@ -38,7 +39,7 @@ interface IMutationResponse {
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
-  error: AxiosError<AxiosResponse, any> | null | undefined | AxiosResponse;
+  error: AxiosError<AxiosResponse, any> | null | undefined;
 }
 
 interface IUserIngredientsResponse extends IMutationResponse {

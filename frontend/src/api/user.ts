@@ -29,10 +29,16 @@ const createUserIngredient = async (
   return data;
 };
 
+const deleteUserIngredient = async (userID: string, ingredientID: string) => {
+  const { data } = await userService.deleteUserIngredient(userID, ingredientID);
+  return data;
+};
+
 export {
   registerUser,
   loginUser,
   getUserIngredients,
   createUserIngredient,
   getUserPossibleMeals,
+  deleteUserIngredient,
 };

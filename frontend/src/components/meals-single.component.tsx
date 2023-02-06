@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   Grid,
@@ -13,10 +13,17 @@ import {
   useToast,
   Link,
   Container,
+  Progress,
 } from '@chakra-ui/react';
-import { useMealsByCategory, useSingleMeal } from '../hooks';
+import {
+  useMealsByCategory,
+  useSingleMeal,
+  useUserIngredients,
+} from '../hooks';
 import { Loader } from './loader.component';
 import { StringParam, useQueryParam } from 'use-query-params';
+import { templateIngredients } from '../templateData';
+import { formatNumber, formatString, storeRequiredIngredients } from '../utils';
 
 export const SingleMealComponent = () => {
   const instructionsSection = useRef<HTMLDivElement>(
@@ -24,6 +31,7 @@ export const SingleMealComponent = () => {
   ) as React.MutableRefObject<HTMLDivElement>;
   const toast = useToast();
   const [, setCarouselCategory] = useQueryParam('category', StringParam);
+  const [availableIngredients, setAvailableIngredients] = useState<any>();
 
   const {
     isLoading: isLoadingSingle,
@@ -35,10 +43,16 @@ export const SingleMealComponent = () => {
     isLoading: isLoadingAll,
     isError: isErrorAll,
     error: errorAll,
-    data = { data: undefined, metadata: { total: null } },
+    data: dataMealsBeCategory = { data: undefined, metadata: { total: null } },
   } = useMealsByCategory();
-
-  const { data: meals } = data;
+  const {
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+    error: errorUser,
+    data: dataUser = { data: templateIngredients, metadata: { total: 0 } },
+  } = useUserIngredients();
+  const { data: userIngredients } = dataUser;
+  const { data: meals } = dataMealsBeCategory;
 
   const scrollDown = () => {
     window.scrollTo({
@@ -52,22 +66,29 @@ export const SingleMealComponent = () => {
   }, [meal]);
 
   useEffect(() => {
-    if (isErrorSingle || isErrorAll) {
+    userIngredients &&
+      setAvailableIngredients(storeRequiredIngredients(templateIngredients));
+  }, [userIngredients]);
+
+  useEffect(() => {
+    if (isErrorSingle || isErrorAll || isErrorUser) {
       toast({
         title: 'Something went wrong...',
-        description: errorSingle?.message || errorAll?.message,
+        description:
+          errorSingle?.response?.data?.message ||
+          errorAll?.response?.data?.message ||
+          errorUser?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
         position: 'top-right',
       });
     }
-  }, [isErrorSingle, isErrorAll]);
+  }, [isErrorSingle, isErrorAll, isErrorUser]);
 
   return (
     <>
-      {/* {isLoadingSingle || isLoadingAll ? ( */}
-      {false ? (
+      {isLoadingSingle ? (
         <Loader />
       ) : (
         <Container m={0} p={0} maxW={'100vw'}>
@@ -135,7 +156,6 @@ export const SingleMealComponent = () => {
               ref={instructionsSection}
               bg={'light'}
               templateColumns={'repeat(2, 1fr)'}
-              templateRows={'2fr, 1fr'}
               w={'100vw'}
             >
               <GridItem>
@@ -146,7 +166,8 @@ export const SingleMealComponent = () => {
                     {meal?.instructions}
                   </Text>
                   <Text fontWeight={'thin'} fontSize={'sm'} as={'span'}>
-                    * Scroll instructions text to read more
+                    * You might need to scroll the instructions text to read
+                    more.
                   </Text>
                 </Stack>
               </GridItem>
@@ -167,11 +188,23 @@ export const SingleMealComponent = () => {
                   }}
                 />
               </GridItem>
+            </Grid>
+            <Grid
+              px={20}
+              bg={'light'}
+              templateColumns={
+                userIngredients ? '1fr 2fr 1fr' : 'repeat(2, 1fr)'
+              }
+              w={'100vw'}
+            >
               <GridItem>
-                <Stack ml={'5rem'} my={'2rem'}>
-                  <Text textStyle={'body1Semi'}>Ingredients</Text>
+                <Stack my={'2rem'}>
+                  <Text textAlign={'left'} textStyle={'body1Semi'}>
+                    Ingredients
+                  </Text>
                   {meal?.ingredients.map((ingredient, index) => (
                     <Text
+                      key={`${index}-${ingredient}`}
                       borderBottom={0.5}
                       borderColor={'orange'}
                       borderStyle={'solid'}
@@ -182,19 +215,57 @@ export const SingleMealComponent = () => {
                   ))}
                 </Stack>
               </GridItem>
+              {availableIngredients && (
+                <GridItem>
+                  <Stack my={'2rem'}>
+                    <Text textStyle={'body1Semi'}>Available</Text>
+                    {meal?.ingredients.map((ingredient, index) => {
+                      const availableValue: string =
+                        availableIngredients[ingredient] || '0';
+                      const requiredValue: string = formatNumber(
+                        meal?.measures[index]
+                      );
+                      return (
+                        <Grid
+                          key={`${index}-${ingredient}`}
+                          templateColumns={'3fr 1fr'}
+                          borderBottom={0.5}
+                          borderColor={'orange'}
+                          borderStyle={'solid'}
+                        >
+                          <Progress
+                            alignSelf={'center'}
+                            m={0}
+                            p={0}
+                            colorScheme='orange'
+                            borderRadius={'md'}
+                            mr={5}
+                            size='md'
+                            max={Number(requiredValue)}
+                            value={Number(availableValue)}
+                          />
+                          <Text textStyle={'body2'}>
+                            {`${availableValue} / ${requiredValue}`}
+                          </Text>
+                        </Grid>
+                      );
+                    })}
+                  </Stack>
+                </GridItem>
+              )}
               <GridItem>
-                <Stack mr={'5rem'} my={'2rem'}>
-                  <Text px={10} textStyle={'body1Semi'}>
-                    Measures
-                  </Text>
+                <Stack my={'2rem'}>
+                  <Text textStyle={'body1Semi'}>Measures</Text>
                   {meal?.measures.map((measure, index) => (
                     <Text
-                      px={10}
+                      key={`${index}-${measure}`}
                       borderBottom={0.5}
                       borderColor={'orange'}
                       borderStyle={'solid'}
                       textStyle={'body2'}
-                    >{`${index + 1}) ${measure}`}</Text>
+                    >
+                      {formatString(measure)}
+                    </Text>
                   ))}
                 </Stack>
               </GridItem>
@@ -209,7 +280,7 @@ export const SingleMealComponent = () => {
               >
                 {meals &&
                   meals.slice(0, 8).map((meal) => (
-                    <GridItem position={'relative'}>
+                    <GridItem key={meal.id} position={'relative'}>
                       <Box w={'full'} h={'auto'}>
                         <Box
                           position={'absolute'}

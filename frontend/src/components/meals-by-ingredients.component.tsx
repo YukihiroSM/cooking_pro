@@ -19,22 +19,7 @@ import { NavItem, NavItemFilter } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 import { PaginationComponent } from './pagination.component';
-
-const decode = (
-  arrayStr: (string | null)[] | undefined | null | string
-): string[] | undefined => {
-  if (typeof arrayStr === 'string') return arrayStr.split(',');
-  else return undefined;
-};
-
-const MyIngredientsParam = {
-  encode: (array: string[] | undefined): string | undefined =>
-    array ? array.join(',') : undefined,
-
-  decode: (
-    arrayStr: (string | null)[] | undefined | null | string
-  ): string[] | undefined => decode(arrayStr),
-};
+import { MyIngredientsParam } from '../utils';
 
 const animatedComponents = makeAnimated();
 
@@ -90,7 +75,9 @@ export const MealsByIngredientsComponent = () => {
     if (isErrorNav || isErrorAll) {
       toast({
         title: 'Something went wrong...',
-        description: errorAll?.message || errorNav?.message,
+        description:
+          errorAll?.response?.data?.message ||
+          errorNav?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -123,7 +110,7 @@ export const MealsByIngredientsComponent = () => {
                   colors: {
                     ...theme.colors,
                     primary25: 'silver',
-                    primary: 'orange',
+                    primary: '#DD6B20',
                   },
                 })}
                 isSearchable
@@ -145,7 +132,7 @@ export const MealsByIngredientsComponent = () => {
                   colors: {
                     ...theme.colors,
                     primary25: 'silver',
-                    primary: 'orange',
+                    primary: '#DD6B20',
                   },
                 })}
                 isSearchable
