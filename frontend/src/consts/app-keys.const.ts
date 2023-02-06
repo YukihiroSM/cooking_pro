@@ -1,6 +1,6 @@
 const BACKEND_KEYS = {
   MEALS_BY_INGREDIENTS: 'meals/filter',
-  MEALS_BY_CATEGORY: '/meals/category/',
+  MEALS_BY_CATEGORY: 'meals/category/',
   CATEGORIES_AND_INGREDIENTS: 'meals/categories_and_ingredients',
   RANDOM_MEALS: 'meals/random',
   SINGLE_MEAL: 'meals/',

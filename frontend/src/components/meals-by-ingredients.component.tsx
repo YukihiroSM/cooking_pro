@@ -18,6 +18,7 @@ import { useCategoriesAndIngredients, useMealsByIngredients } from '../hooks';
 import { NavItem, NavItemFilter } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
+import { PaginationComponent } from './pagination.component';
 
 const decode = (
   arrayStr: (string | null)[] | undefined | null | string
@@ -99,9 +100,17 @@ export const MealsByIngredientsComponent = () => {
   }, [isErrorNav, isErrorAll]);
 
   return (
-    <>
-      <Container maxW={'full'} px={20} py={10}>
-        {(isLoadingNav || isLoadingAll) && <Loader />}
+    <Container bg={'light'} maxW={'full'} px={20} py={10}>
+      {(isLoadingNav || isLoadingAll) && <Loader />}
+      <Stack
+        direction={'column'}
+        spacing={10}
+        maxWidth={'100wv'}
+        w={'full'}
+        px={20}
+        py={10}
+        m={0}
+      >
         <FormControl>
           <Stack w={'full'} direction={'row'} align={'flex-end'}>
             <Box w={'full'}>
@@ -177,8 +186,9 @@ export const MealsByIngredientsComponent = () => {
             </Box>
           </Stack>
         </FormControl>
-        {meals && <FilteredMealsComponent total={total} meals={meals} />}
-      </Container>
-    </>
+        {meals && <FilteredMealsComponent meals={meals} />}
+        {total && <PaginationComponent total={total} />}
+      </Stack>
+    </Container>
   );
 };

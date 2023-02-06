@@ -12,3 +12,4 @@ export * from './meals-by-category.component';
 export * from './meals-by-ingredients.component';
 export * from './user-ingredients.component';
 export * from './error.component';
+export * from './pagination.component';
