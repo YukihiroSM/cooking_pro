@@ -27,7 +27,7 @@ async def login_user(login_data: AuthItem, request: Request):
             encoded_jwt = jwt_auth.get_encoded_jwt(user_query)
             set_jwt = {"$set": {"token": encoded_jwt}}
             request.app.database.users.update_one(user_query, set_jwt)
-            return JSONResponse({'token': encoded_jwt, "username": user_query["username"], "id": str(user["_id"])},
+            return JSONResponse({'token': encoded_jwt, "id": str(user["_id"])},
                                 status_code=200)
         else:
             return JSONResponse({'message': 'Login failed. Wrong password.'}, status_code=400)
@@ -53,7 +53,7 @@ async def register_user(register_data: AuthItem, request: Request):
 
     request.app.database.users.insert_one(user_query)
     user = request.app.database.users.find_one(user_query)
-    return {'token': encoded_jwt, "username": user_query["username"], "user_id": str(user.get("_id"))}
+    return {'token': encoded_jwt, "id": str(user.get("_id"))}
 
 
 @router.post("/logout")
