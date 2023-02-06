@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ArrayParam, useQueryParam, withDefault } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 
 import Select, { MultiValue, SingleValue } from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -19,7 +19,22 @@ import { NavItem, NavItemFilter } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 
-const MyIngredientsParam = withDefault(ArrayParam, []);
+const decode = (
+  arrayStr: (string | null)[] | undefined | null | string
+): string[] | undefined => {
+  if (typeof arrayStr === 'string') return arrayStr.split(',');
+  else return undefined;
+};
+
+const MyIngredientsParam = {
+  encode: (array: string[] | undefined): string | undefined =>
+    array ? array.join(',') : undefined,
+
+  decode: (
+    arrayStr: (string | null)[] | undefined | null | string
+  ): string[] | undefined => decode(arrayStr),
+};
+
 const animatedComponents = makeAnimated();
 
 export const MealsByIngredientsComponent = () => {
@@ -94,6 +109,14 @@ export const MealsByIngredientsComponent = () => {
                 Choose ingredient <strong>by category</strong>
               </FormLabel>
               <Select
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary25: 'silver',
+                    primary: 'orange',
+                  },
+                })}
                 isSearchable
                 isDisabled={isLoadingNav || isLoadingAll}
                 name='ingredients-by-category'
@@ -108,6 +131,14 @@ export const MealsByIngredientsComponent = () => {
             <Box w={'full'}>
               <FormLabel>Choose ingredients</FormLabel>
               <Select
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary25: 'silver',
+                    primary: 'orange',
+                  },
+                })}
                 isSearchable
                 isDisabled={isLoadingNav || isLoadingAll}
                 isMulti
@@ -118,13 +149,25 @@ export const MealsByIngredientsComponent = () => {
                 components={animatedComponents}
                 defaultValue={
                   {
-                    label: ingredients[0],
-                    value: ingredients[0],
+                    label: ingredients && ingredients[0],
+                    value: ingredients && ingredients[0],
                   } as NavItemFilter
                 }
-                onChange={(newValue: MultiValue<NavItem>, { action }) => {
+                onChange={(
+                  newValue: MultiValue<NavItem>,
+                  { action, removedValue }: any
+                ) => {
+                  if ('remove-value') {
+                    ingredients &&
+                      ingredients.length > 1 &&
+                      setIngredients(
+                        ingredients?.filter(
+                          (ingredient) => ingredient !== removedValue.label
+                        )
+                      );
+                  }
                   if (action === 'clear') {
-                    setIngredients([ingredients[0]]);
+                    setIngredients(ingredients?.slice(0, 1));
                   }
                   if (action === 'select-option') {
                     setIngredients(newValue.map((item: NavItem) => item.label));

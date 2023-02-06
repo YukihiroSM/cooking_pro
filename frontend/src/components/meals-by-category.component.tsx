@@ -72,6 +72,14 @@ export const MealsByCategoryComponent = () => {
               Choose recipe <strong>by category</strong>
             </FormLabel>
             <Select
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  primary25: 'silver',
+                  primary: 'orange',
+                },
+              })}
               isSearchable
               isDisabled={isLoadingNav || isLoadingAll}
               name='recipe-by-category'

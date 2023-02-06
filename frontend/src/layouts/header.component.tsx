@@ -80,10 +80,6 @@ export const HeaderComponent = () => {
     }
   }, [isError]);
 
-  useEffect(() => {
-    console.log(huge);
-  }, [huge]);
-
   return (
     <>
       <Box
@@ -257,7 +253,7 @@ const DesktopSubNav = ({
     switch (param) {
       case 'Recipes':
         param = 'category';
-        url = `meals/category/${value}?page=0&perPage=12`;
+        url = `/meals/category/${value}?page=0&perPage=12`;
         break;
       case 'Ingredients':
         param = 'ingredients';
@@ -268,7 +264,7 @@ const DesktopSubNav = ({
         break;
     }
 
-    navigate(url);
+    window.location.href = url;
   };
   return (
     <Popover trigger={'hover'} placement={'right-start'}>
@@ -470,7 +466,7 @@ const ModalLogOut = ({ isOpen, onClose, setLocalStorageUser }: any) => {
           bg='blackAlpha.300'
           backdropFilter='blur(10px) hue-rotate(90deg)'
         />
-        <ModalContent bg={'black'} color={'white'}>
+        <ModalContent py={4} bg={'black'} color={'white'}>
           <ModalHeader fontSize={'2rem'}>Sure want to log out?</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
