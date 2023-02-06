@@ -1,6 +1,6 @@
 from http.client import HTTPException
 from typing import List
-
+from fastapi.responses import JSONResponse
 import requests
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
@@ -14,6 +14,7 @@ import pickle
 import constants
 
 router = APIRouter(prefix="/api/user")
+
 
 @router.post("/login")
 @router.options("/login")
