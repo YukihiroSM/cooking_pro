@@ -4,7 +4,6 @@ from typing import List
 import requests
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 from utils import collect_ingredients_categories
 from constants import MEAL_API_BASE_URL
 from bson.objectid import ObjectId
@@ -15,7 +14,6 @@ import pickle
 import constants
 
 router = APIRouter(prefix="/api/user")
-
 
 @router.post("/login")
 @router.options("/login")
@@ -150,4 +148,3 @@ def delete_user_ingredient(request: Request, user_id: str, ingredient_id: str):
 #
 #     ingredients = pickle.loads(user.get("ingredients"))
 #     ingredients_names = ",".join([ingredient.get("label") for ingredient in ingredients])
-

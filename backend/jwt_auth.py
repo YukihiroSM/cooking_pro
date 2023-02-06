@@ -9,7 +9,7 @@ ALGORITHM = "HS256"
 def get_encoded_jwt(data: Dict) -> str:
     encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
-
+    
 
 def decode_jwt(token: str) -> Dict:
     decoded_jwt = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

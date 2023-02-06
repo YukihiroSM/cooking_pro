@@ -22,6 +22,25 @@ def get_meals_response(meals: List[Union[schemas.Meal, schemas.DemoMeal]]) -> JS
     return JSONResponse(meals_response)
 
 
+
+@router.get("/")
+async def getFilteredMealsByCategory(category: str = None, area: str = None):
+    if not is_filter_query_valid(category, area) and category is None:
+        user_ingredients = "garlic,salt"  # FIXME
+        return get_filtered_by_ingredients(user_ingredients)
+        # return JSONResponse({"message": "Query is not valid."}, status_code=400)
+    url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
+    response = requests.get(url)
+    data = response.json().get("meals")
+    meals = []
+    for item in data:
+        meal = DemoMeal(
+            id=item["idMeal"],
+            name=item["strMeal"],
+        )
+        meals.append(jsonable_encoder(meal))
+    return meals
+
 def is_filter_query_valid(category: str, area: str):
     return category is not area
 

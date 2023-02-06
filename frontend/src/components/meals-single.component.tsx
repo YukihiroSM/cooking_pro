@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Grid,
@@ -15,12 +15,11 @@ import {
 } from '@chakra-ui/react';
 import { useMealsByCategory, useSingleMeal } from '../hooks';
 import { Loader } from './loader.component';
+import { StringParam, useQueryParam } from 'use-query-params';
 
 export const SingleMealComponent = () => {
   const toast = useToast();
-  const [carouselCategory, setCarouselCategory] = useState<string | undefined>(
-    undefined
-  );
+  const [, setCarouselCategory] = useQueryParam('category', StringParam);
 
   const {
     isLoading: isLoadingSingle,
@@ -33,11 +32,12 @@ export const SingleMealComponent = () => {
     isError: isErrorAll,
     error: errorAll,
     data = { data: undefined, metadata: { total: null } },
-  } = useMealsByCategory(carouselCategory);
+  } = useMealsByCategory();
 
   const { data: meals } = data;
 
   useEffect(() => {
+    console.log(meal);
     meal && setCarouselCategory(meal.category);
   }, [meal]);
 
@@ -98,25 +98,25 @@ export const SingleMealComponent = () => {
             w={'100vw'}
           >
             <GridItem>
-              <Stack ml={'5rem'} my={'2rem'}>
+              <Stack ml={'5rem'} my={'5rem'}>
                 <Text textStyle={'body1Semi'}>Instructions</Text>
                 <Divider />
-                <Text textStyle={'body2'}>{meal?.instructions}</Text>
+                <Text overflow={'scroll'} h={'20rem'} textStyle={'body2'}>
+                  {meal?.instructions}
+                </Text>
               </Stack>
             </GridItem>
             <GridItem
+              my={'5rem'}
               px={10}
               as={Flex}
               justifyContent={'center'}
-              alignItems={'center'}
+              alignItems={'flex-end'}
             >
               <Box
                 title='Video tutorial'
                 as='iframe'
-                src={`${meal?.video.replace(
-                  'watch?v=',
-                  'embed/'
-                )}?autoplay=1&mute=1`}
+                src={meal?.video}
                 width='100%'
                 sx={{
                   aspectRatio: '16/9',
@@ -200,7 +200,13 @@ export const SingleMealComponent = () => {
                       color={'light'}
                       textStyle={'h1Semi'}
                     >
-                      {meal.name}
+                      {meal.name.split(' ').length > 2
+                        ? meal.name
+                            .replace(/\W/g, ' ')
+                            .split(' ')
+                            .slice(0, 3)
+                            .join(' ')
+                        : meal.name}
                     </Text>
                   </GridItem>
                 ))}

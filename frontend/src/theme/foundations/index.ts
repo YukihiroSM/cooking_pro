@@ -4,6 +4,12 @@ import { textStyles } from './textStyles.const';
 import { borders } from './borders.const';
 import { shadows } from './shadows.const';
 
-const foundations = { spaces, colors, textStyles, borders, shadows };
+const foundations = {
+  spaces,
+  colors,
+  textStyles,
+  borders,
+  shadows,
+};
 
 export default foundations;

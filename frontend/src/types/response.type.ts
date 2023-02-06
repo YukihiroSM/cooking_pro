@@ -1,8 +1,7 @@
-import { CreateIngredient, IngredientsByCategory } from './ingredient.type';
+import { Ingredient } from './ingredient.type';
 
 import { AxiosError } from 'axios';
 import { Meal } from './meal.type';
-import { Category } from './category.type';
 
 type AxiosResponse = {
   message: string;
@@ -31,9 +30,8 @@ interface NavItemFilter extends NavItem {
 }
 
 type IngredientByCategoryResponse = {
-  name: string;
-  id: string;
-  category: string;
+  data: Ingredient[] | undefined;
+  metadata: { total: number };
 };
 
 interface IMutationResponse {
@@ -44,7 +42,7 @@ interface IMutationResponse {
 }
 
 interface IUserIngredientsResponse extends IMutationResponse {
-  data: IngredientsByCategory[] | undefined;
+  data: IngredientByCategoryResponse | undefined;
 }
 
 interface ISingleMealResponse extends IMutationResponse {

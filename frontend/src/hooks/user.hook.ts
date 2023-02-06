@@ -20,15 +20,15 @@ import {
   AxiosResponse,
   LocalStorageUser,
   Response,
-  IngredientsByCategory,
-  CreateIngredient,
   IUserIngredientsResponse,
-  IngredientByCategoryResponse,
   MealsResponseData,
   IAllMealsResponse,
+  CreateIngredient,
+  Ingredient,
+  IngredientByCategoryResponse,
 } from '../types';
 
-import { REACT_QUERY_KEYS } from '../consts';
+import { PREVENT_BUG, REACT_QUERY_KEYS } from '../consts';
 import { queryClient } from '../App';
 import { useSearchParams } from 'react-router-dom';
 
@@ -45,12 +45,12 @@ export const useUserIngredients = (): IUserIngredientsResponse => {
     id: undefined,
     token: undefined,
   });
-  return !id
-    ? error
-    : useQuery<IngredientsByCategory[], AxiosError<AxiosResponse, any> | null>(
-        [REACT_QUERY_KEYS.USER_INGREDIENTS],
-        () => getUserIngredients(id)
-      );
+  return useQuery<
+    IngredientByCategoryResponse,
+    AxiosError<AxiosResponse, any> | null
+  >([REACT_QUERY_KEYS.USER_INGREDIENTS], () =>
+    getUserIngredients(id || PREVENT_BUG)
+  );
 };
 
 export const useUserPossibleMeals = (): IAllMealsResponse => {
@@ -59,12 +59,10 @@ export const useUserPossibleMeals = (): IAllMealsResponse => {
     token: undefined,
   });
   const [searchParams] = useSearchParams();
-  return !id
-    ? error
-    : useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
-        [REACT_QUERY_KEYS.USER_POSSIBLE_MEALS],
-        () => getUserPossibleMeals(id, searchParams)
-      );
+  return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
+    [REACT_QUERY_KEYS.USER_POSSIBLE_MEALS],
+    () => getUserPossibleMeals(id || PREVENT_BUG, searchParams)
+  );
 };
 
 export const useCreateIngredient = () => {
@@ -72,21 +70,19 @@ export const useCreateIngredient = () => {
     id: undefined,
     token: undefined,
   });
-  return !id
-    ? error
-    : useMutation<
-        IngredientByCategoryResponse,
-        AxiosError<AxiosResponse, any> | undefined,
-        CreateIngredient
-      >((ingredient) => createUserIngredient(id, ingredient), {
-        onSuccess: (ingredient: IngredientByCategoryResponse) => {
-          queryClient.setQueryData(
-            [REACT_QUERY_KEYS.USER_INGREDIENTS],
-            (currentIngredients: IngredientsByCategory[] = []) =>
-              [...currentIngredients, ingredient] as IngredientsByCategory[]
-          );
-        },
-      });
+  return useMutation<
+    Ingredient,
+    AxiosError<AxiosResponse, any> | undefined,
+    CreateIngredient
+  >((ingredient) => createUserIngredient(id || PREVENT_BUG, ingredient), {
+    onSuccess: (ingredient: Ingredient) => {
+      queryClient.setQueryData(
+        [REACT_QUERY_KEYS.USER_INGREDIENTS],
+        (currentIngredients: Ingredient[] = []) =>
+          [...currentIngredients, ingredient] as Ingredient[]
+      );
+    },
+  });
 };
 
 export const useUser = () => {

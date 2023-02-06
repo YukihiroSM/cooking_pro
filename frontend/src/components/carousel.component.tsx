@@ -10,6 +10,7 @@ import {
   Tab,
   Link,
   useToast,
+  Container,
 } from '@chakra-ui/react';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,14 +23,16 @@ import { Pagination, Navigation } from 'swiper';
 
 import { Meal } from '../types';
 import { useMealsByCategory, useRandomMeals } from '../hooks';
-import { Loader } from './loader.component';
 import { CAROUSEL_CATEGORIES } from '../consts';
+import { StringParam, useQueryParam } from 'use-query-params';
 
 export const CarouselComponent = () => {
   const toast = useToast();
-  const [carouselCategory, setCarouselCategory] = useState<string | undefined>(
-    undefined
+  const [carouselCategory, setCarouselCategory] = useQueryParam(
+    'category',
+    StringParam
   );
+
   const [meals, setMeals] = useState<Meal[] | undefined>(undefined);
 
   const {
@@ -43,7 +46,7 @@ export const CarouselComponent = () => {
     isError: isErrorAll,
     error: errorAll,
     data = { data: undefined, metadata: { total: null } },
-  } = useMealsByCategory(carouselCategory);
+  } = useMealsByCategory();
   const { data: mealsByCategory } = data;
 
   useEffect(() => {
@@ -66,14 +69,17 @@ export const CarouselComponent = () => {
 
   return (
     <>
-      {isLoadingAll || isLoadingRandom ? (
-        <Loader />
-      ) : (
+      <Container
+        bg={'light'}
+        display={'block'}
+        maxW={'full'}
+        m={0}
+        p={0}
+        py={'5rem'}
+      >
         <Stack
-          bg={'light'}
-          px={{ base: 20 }}
-          py={{ base: 14 }}
-          h={'full'}
+          mx={'auto'}
+          px={20}
           direction={'column'}
           alignItems={'center'}
           w={'full'}
@@ -96,7 +102,7 @@ export const CarouselComponent = () => {
             </TabList>
           </Tabs>
           <Swiper
-            slidesPerView={4}
+            slidesPerView={5}
             grabCursor={true}
             spaceBetween={30}
             pagination={{
@@ -106,41 +112,52 @@ export const CarouselComponent = () => {
             className='mySwiper'
             navigation={true}
           >
-            {meals?.map((meal) => (
-              <SwiperSlide>
-                <Stack bg={'light'} spacing={2}>
-                  <Box
-                    rounded={'2xl'}
-                    h={'25rem'}
-                    boxShadow={'lg'}
-                    overflow={'hidden'}
-                    as={Link}
-                    href={`/meals/${meal.id}`}
-                    textDecoration={'none'}
-                  >
-                    <Image
-                      alt={'Random meal'}
-                      align={'center'}
-                      fit={'cover'}
-                      h={'100%'}
-                      src={meal.image}
-                    />
-                  </Box>
-                  <Text
-                    as={Link}
-                    href={`/meals/${meal.id}`}
-                    textDecoration={'none'}
-                    h={'6rem'}
-                    textStyle={'body2'}
-                  >
-                    {meal.name}
-                  </Text>
-                </Stack>
-              </SwiperSlide>
-            ))}
+            {!isLoadingAll &&
+              !isLoadingRandom &&
+              meals?.map((meal) => (
+                <SwiperSlide key={meal.id}>
+                  <Stack bg={'light'} spacing={2}>
+                    <Box
+                      h={'20rem'}
+                      rounded={'2xl'}
+                      boxShadow={'lg'}
+                      overflow={'hidden'}
+                      as={Link}
+                      href={`/meals/${meal.id}`}
+                      textDecoration={'none'}
+                    >
+                      <Image
+                        transition={'.5s ease all'}
+                        _hover={{
+                          transform: 'scale(1.1)',
+                        }}
+                        alt={'Random meal'}
+                        fit={'cover'}
+                        h={'100%'}
+                        src={meal.image}
+                      />
+                    </Box>
+                    <Text
+                      as={Link}
+                      href={`/meals/${meal.id}`}
+                      textDecoration={'none'}
+                      h={'6rem'}
+                      textStyle={'body2'}
+                    >
+                      {meal.name.split(' ').length > 2
+                        ? meal.name
+                            .replace(/\W/g, ' ')
+                            .split(' ')
+                            .slice(0, 3)
+                            .join(' ')
+                        : meal.name}
+                    </Text>
+                  </Stack>
+                </SwiperSlide>
+              ))}
           </Swiper>
         </Stack>
-      )}
+      </Container>
     </>
   );
 };
