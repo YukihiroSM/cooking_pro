@@ -1,4 +1,6 @@
 import csv
+from fastapi.encoders import jsonable_encoder
+import schemas
 
 
 def initialise_ingredients(collection):
@@ -33,3 +35,37 @@ def collect_ingredients_categories(collection):
         ingredients_by_categories.append(category_obj)
     return ingredients_by_categories
 
+
+def build_meal(data):
+    ingredients = []
+    measures = []
+    for key in data.keys():
+        if key.startswith("strIngredient") and data[key]:
+            ingredients.append(data[key])
+            measures.append(data["strMeasure" + key.replace("strIngredient", "")])
+    meal = schemas.Meal(
+        id=data["idMeal"],
+        name=data["strMeal"],
+        category=data["strCategory"],
+        area=data["strArea"],
+        instructions=data["strInstructions"],
+        image=data["strMealThumb"],
+        video=parse_video(data["strYoutube"]),
+        ingredients=ingredients,
+        measures=measures
+    )
+    return jsonable_encoder(meal)
+
+
+def parse_video(link: str):
+    key = link[link.find("=") + 1:]
+    return f"https://www.youtube.com/embed/{key}?autoplay=1&mute=1"
+
+
+def build_category(category):
+    category = schemas.Category(
+        id=category["idCategory"],
+        name=category["strCategory"],
+        description=category["strCategoryDescription"]
+    )
+    return jsonable_encoder(category)

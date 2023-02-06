@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import jwt_auth
 from schemas import AuthItem
-from routes import meals, ingredients, user
+from routes import meals, user
 import utils
 import os
 import certifi
@@ -17,7 +17,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 800
 
 app = FastAPI()
-app.include_router(ingredients.router)
 app.include_router(meals.router)
 app.include_router(user.router)
 #
@@ -44,7 +43,7 @@ app.add_middleware(
 @app.on_event("startup")
 def startup_db_client():
     if os.environ.get("ENVIRONMENT") == "development":
-        app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@dkrcomp-mongo:27017')
+        app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@127.0.0.1:27017')
     else:
         app.mongodb_client = MongoClient(
             'mongodb+srv://cooking-db-admin:lh5zLcAz3HYIOwWD@cookingprocluster.jwyfoeq.mongodb.net/?retryWrites=true&w=majority',
