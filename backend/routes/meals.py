@@ -8,47 +8,18 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from utils import collect_ingredients_categories
+import utils
 from constants import MEAL_API_BASE_URL
-from schemas import Meal, Category, DemoMeal
+import schemas
 
 router = APIRouter(prefix="/api/meals")
 
 
-class Metadata(BaseModel):
-    total: int
-
-
-class MealsResponse(BaseModel):
-    data: List[Union[Meal, DemoMeal]]
-    metadata: Metadata
-
-
-def get_meals_response(meals: List[Union[Meal, DemoMeal]]) -> JSONResponse:
-    metadata = Metadata(total=len(meals))
+def get_meals_response(meals: List[Union[schemas.Meal, schemas.DemoMeal]]) -> JSONResponse:
     meals_response = jsonable_encoder(
-        MealsResponse(data=meals, metadata=metadata)
+        schemas.MealsResponse(data=meals)
     )
     return JSONResponse(meals_response)
-
-
-@router.get("/")
-async def getFilteredMealsByCategory(category: str = None, area: str = None):
-    if not is_filter_query_valid(category, area) and category is None:
-        user_ingredients = "garlic,salt"  # FIXME
-        return get_filtered_by_ingredients(user_ingredients)
-        # return JSONResponse({"message": "Query is not valid."}, status_code=400)
-    url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
-    response = requests.get(url)
-    data = response.json().get("meals")
-    meals = []
-    for item in data:
-        meal = DemoMeal(
-            id=item["idMeal"],
-            name=item["strMeal"],
-        )
-        meals.append(jsonable_encoder(meal))
-    return get_meals_response(meals)
 
 
 def is_filter_query_valid(category: str, area: str):
@@ -62,18 +33,9 @@ async def get_all_categories():
     data = response.json().get("categories")
     categories = []
     for item in data:
-        category = build_category(item)
+        category = utils.build_category(item)
         categories.append(category)
     return JSONResponse(categories)
-
-
-def build_category(category):
-    category = Category(
-        id=category["idCategory"],
-        name=category["strCategory"],
-        description=category["strCategoryDescription"]
-    )
-    return jsonable_encoder(category)
 
 
 @router.get("/random")
@@ -83,13 +45,9 @@ async def get_random_meals():
     data = response.json().get("meals")
     meals = []
     for item in data:
-        meal = build_meal(item)
+        meal = utils.build_meal(item)
         meals.append(meal)
-    return get_meals_response(meals)
-
-
-class Message(BaseModel):
-    message: str
+    return JSONResponse(meals, status_code=200)
 
 
 @router.get("/filtered")
@@ -107,18 +65,18 @@ def get_filtered_by_ingredients(ingredients: str):
         return JSONResponse({"message": "Meals were not found"}, status_code=204)
     meals = []
     for item in data:
-        meal = DemoMeal(
+        meal = schemas.DemoMeal(
             id=item["idMeal"],
             name=item["strMeal"]
         )
         meals.append(jsonable_encoder(meal))
-    return get_meals_response(meals)
+    return JSONResponse(meals, status_code=200)
 
 
 @router.get("/categories_and_ingredients")
 def get_meals_ingredients_categories(request: Request):
     collection = request.app.database.ingredients
-    ingredients = collect_ingredients_categories(collection)
+    ingredients = utils.collect_ingredients_categories(collection)
     url = f"{MEAL_API_BASE_URL}/categories.php"
     response = requests.get(url)
     data = response.json().get("categories")
@@ -139,32 +97,5 @@ async def get_meal_by_id(meal_id: int):
     data = response.json().get("meals")
     if data is None or len(data) == 0:
         return JSONResponse({"message": "Meal with this ID does not exist!"}, status_code=404)
-    meal = build_meal(data[0])
+    meal = utils.build_meal(data[0])
     return JSONResponse(meal)
-
-
-# TODO move to MealService
-def build_meal(data):
-    ingredients = []
-    measures = []
-    for key in data.keys():
-        if key.startswith("strIngredient") and data[key]:
-            ingredients.append(data[key])
-            measures.append(data["strMeasure" + key.replace("strIngredient", "")])
-    meal = Meal(
-        id=data["idMeal"],
-        name=data["strMeal"],
-        category=data["strCategory"],
-        area=data["strArea"],
-        instructions=data["strInstructions"],
-        image=data["strMealThumb"],
-        video=parse_video(data["strYoutube"]),
-        ingredients=ingredients,
-        measures=measures
-    )
-    return jsonable_encoder(meal)
-
-
-def parse_video(link: str):
-    key = link[link.find("=") + 1:]
-    return f"https://www.youtube.com/embed/{key}?autoplay=1&mute=1"
