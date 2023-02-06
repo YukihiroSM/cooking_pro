@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Union
 
 
 class AuthItem(BaseModel):
@@ -37,3 +37,27 @@ class Category(BaseModel):
 class DemoMeal(BaseModel):
     id: str
     name: str
+
+
+class MealsResponse(BaseModel):
+    data: List[Union[Meal, DemoMeal]]
+
+
+class UserIngredientCreation(BaseModel):
+    id: str
+    measure: str
+
+
+class UserIngredient(BaseModel):
+    id: str
+    label: str
+    category: str
+    measure: str
+
+    def __dict__(self):
+        return {
+            "id": self.id,
+            "label": self.label,
+            "category": self.category,
+            "measure": self.measure
+        }
