@@ -1,10 +1,12 @@
 from typing import List, Union
 
 import requests
+from bson import ObjectId
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
+import jwt_auth
 import schemas
 import utils
 from constants import MEAL_API_BASE_URL
@@ -13,18 +15,34 @@ from schemas import Meal, DemoMeal
 router = APIRouter(prefix="/api/meals")
 
 
-@router.post("/create")
-async def create_meal(meal: Meal, request: Request):
+@router.post("/{user_id}/create")
+async def create_meal(user_id: str, meal: Meal, request: Request):
+    token = jwt_auth.get_authorisation(request)
+    if token is None:
+        return JSONResponse({"message": "User not authorised!"}, status_code=401)
+
+    user = request.app.database.users.find_one({"_id": ObjectId(user_id)})
+    if user is None:
+        return JSONResponse({"message": "User not found!"}, status_code=404)
+
+    meal.user_id = user_id
     meal_query = jsonable_encoder(meal)
 
     meal = request.app.database.meals.insert_one(meal_query)
-    print(meal.inserted_id)
-    return JSONResponse({"message": "Meal was created successfully."}, 201)
+    return JSONResponse({"message": "Meal was created successfully.", "meal": meal}, 201)
 
 
-@router.get("/mine")
-async def find_my_meals(request: Request):
-    meals = list(request.app.database.meals.find())
+@router.get("/{user_id}/mine")
+async def find_my_meals(user_id: str, request: Request):
+    token = jwt_auth.get_authorisation(request)
+    if token is None:
+        return JSONResponse({"message": "User not authorised!"}, status_code=401)
+
+    user = request.app.database.users.find_one({"_id": ObjectId(user_id)})
+    if user is None:
+        return JSONResponse({"message": "User not found!"}, status_code=404)
+
+    meals = list(request.app.database.meals.find({"user_id": user_id}))
     return JSONResponse({
         "message": "Meals were created successfully.",
         "meals": meals
