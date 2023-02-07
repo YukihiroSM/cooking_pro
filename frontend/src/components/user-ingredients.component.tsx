@@ -174,7 +174,14 @@ export const UserIngredientsComponent = () => {
     );
 
   return (
-    <Container bg={'white'} maxW={'100vw'} m={0} px={{ sm: 5, md: 10 }} py={10}>
+    <Container
+      minW={'none'}
+      bg={'white'}
+      maxW={'100vw'}
+      m={0}
+      px={{ sm: 5, md: 10 }}
+      py={10}
+    >
       {notification && <NotificationComponent notification={notification} />}
       {isLoading && <Loader />}
       <CreateIngredientComponent

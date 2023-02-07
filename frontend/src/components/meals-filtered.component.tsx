@@ -32,7 +32,7 @@ type Props = {
 
 export const FilteredMealsComponent = ({ meals }: Props) => {
   return (
-    <Container bg={'light'} maxW={'none'} m={0} p={0} my={5}>
+    <Container minW={'none'} bg={'light'} maxW={'none'} m={0} p={0} my={5}>
       <Flex
         direction={{ sm: 'column', md: 'row' }}
         justifyContent={'space-around'}

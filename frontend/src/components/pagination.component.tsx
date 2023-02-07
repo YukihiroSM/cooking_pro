@@ -50,6 +50,7 @@ export const PaginationComponent = ({ total }: Props) => {
 
   return (
     <Container
+      minW={'none'}
       fontSize={{ sm: 'sm', md: 'lg' }}
       p={0}
       m={0}

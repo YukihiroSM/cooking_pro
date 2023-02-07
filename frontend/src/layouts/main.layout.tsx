@@ -16,7 +16,7 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
       justify={'space-between'}
       direction={'column'}
       minHeight={'100vh'}
-      minWidth={'100vw'}
+      minW={'none'}
       pt={'7.5rem'}
       m={0}
       spacing={0}
@@ -32,6 +32,7 @@ const LayoutComponent: React.FunctionComponent<Props> = ({
         p={0}
         maxWidth={'100vw'}
         height={'full'}
+        minW={'none'}
       >
         {children}
       </Container>

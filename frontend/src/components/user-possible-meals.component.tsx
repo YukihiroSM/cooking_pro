@@ -68,7 +68,13 @@ export const UserPossibleMealsComponent = () => {
   }, [isError]);
 
   return (
-    <Container bg={'light'} maxW={'full'} px={{ sm: 5, md: 10 }} py={10}>
+    <Container
+      minW={'none'}
+      bg={'light'}
+      maxW={'full'}
+      px={{ sm: 5, md: 10 }}
+      py={10}
+    >
       {notification && <NotificationComponent notification={notification} />}
       {isLoading && <Loader />}
       <Container maxW={'none'} m={0} p={0}>

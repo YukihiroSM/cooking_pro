@@ -92,6 +92,7 @@ export const HeaderComponent = () => {
       zIndex={50}
     >
       <Flex
+        minW={'none'}
         w={'full'}
         bg={'dark'}
         color={'white'}

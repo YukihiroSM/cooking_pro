@@ -80,7 +80,7 @@ export const SingleMealComponent = () => {
       {isLoadingSingle ? (
         <Loader />
       ) : (
-        <Container m={0} p={0} maxW={'100vw'}>
+        <Container minW={'none'} m={0} p={0} maxW={'100vw'}>
           <Box
             zIndex={49}
             position={'absolute'}

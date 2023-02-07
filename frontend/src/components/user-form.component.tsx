@@ -120,6 +120,7 @@ export const UserFormComponent = () => {
       {notification && <NotificationComponent notification={notification} />}
       {isLoading && <Loader />}
       <Flex
+        minW={'none'}
         w={'full'}
         bg='light'
         align='center'
