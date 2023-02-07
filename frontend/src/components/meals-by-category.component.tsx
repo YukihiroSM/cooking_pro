@@ -167,7 +167,7 @@ export const MealsByCategoryComponent = () => {
         </FormControl>
       </Container>
       {filtered && <FilteredMealsComponent meals={filtered} />}
-      <PaginationComponent total={metadata?.total || 0} />
+      {metadata?.total && <PaginationComponent total={metadata?.total || 0} />}
     </Container>
   );
 };
