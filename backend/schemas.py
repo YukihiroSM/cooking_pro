@@ -18,7 +18,7 @@ class AddUserIngredient(BaseModel):
 
 
 class Meal(BaseModel):
-    id: str
+    id: Union[str] = None
     name: str
     category: Union[str, None]
     area: Union[str, None]
@@ -27,6 +27,12 @@ class Meal(BaseModel):
     video: Union[str, None]
     ingredients: Union[List[str], None]
     measures: Union[List[str], None]
+
+
+class RecipeItem(BaseModel):
+    instructions: str
+    ingredients: List[str]
+    measures: List[str]
 
 
 class Category(BaseModel):

@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 
 import utils
-from routes import meals, user
+from routes import meals, user, recipes
 
 ca = certifi.where()
 
@@ -18,6 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 800
 app = FastAPI()
 app.include_router(meals.router)
 app.include_router(user.router)
+app.include_router(recipes.router)
 #
 # origins = [
 #     "http://localhost.tiangolo.com",
