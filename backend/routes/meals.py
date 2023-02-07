@@ -5,14 +5,33 @@ from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-import schemas
 import utils
 from constants import MEAL_API_BASE_URL
+import schemas
+from schemas import Meal, DemoMeal
 
 router = APIRouter(prefix="/api/meals")
 
 
-def get_meals_response(meals: List[Union[schemas.Meal, schemas.DemoMeal]]) -> JSONResponse:
+@router.post("/create")
+async def create_meal(meal: Meal, request: Request):
+    meal_query = jsonable_encoder(meal)
+
+    meal = request.app.database.meals.insert_one(meal_query)
+    print(meal.inserted_id)
+    return JSONResponse({"message": "Meal was created successfully."}, 201)
+
+
+@router.get("/mine")
+async def find_my_meals(request: Request):
+    meals = list(request.app.database.meals.find())
+    return JSONResponse({
+        "message": "Meals were created successfully.",
+        "meals": meals
+    }, 200)
+
+
+def get_meals_response(meals: List[Union[Meal, DemoMeal]]) -> JSONResponse:
     meals_response = jsonable_encoder(
         schemas.MealsResponse(data=meals)
     )
@@ -20,17 +39,16 @@ def get_meals_response(meals: List[Union[schemas.Meal, schemas.DemoMeal]]) -> JS
 
 
 @router.get("/")
-async def get_filtered_meals_by_category(category: str = None, area: str = None):
+async def getFilteredMealsByCategory(category: str = None, area: str = None):
     if not is_filter_query_valid(category, area) and category is None:
         user_ingredients = "garlic,salt"  # FIXME
         return get_filtered_by_ingredients(user_ingredients)
-        # return JSONResponse({"message": "Query is not valid."}, status_code=400)
     url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
     response = requests.get(url)
     data = response.json().get("meals")
     meals = []
     for item in data:
-        meal = schemas.DemoMeal(
+        meal = DemoMeal(
             id=item["idMeal"],
             name=item["strMeal"],
         )
@@ -90,7 +108,7 @@ def get_filtered_by_ingredients(ingredients: str):
 
 
 @router.get("/categories_and_ingredients")
-async def get_meals_ingredients_categories(request: Request):
+def get_meals_ingredients_categories(request: Request):
     collection = request.app.database.ingredients
     ingredients = utils.collect_ingredients_categories(collection)
     url = f"{MEAL_API_BASE_URL}/categories.php"
@@ -104,52 +122,6 @@ async def get_meals_ingredients_categories(request: Request):
         {"label": "Ingredients", "children": ingredients}
     ]
     return JSONResponse(result)
-
-
-@router.get("/category/{category_title}")
-async def get_meals_by_category(request: Request, category_title: str, page: int = 0, perPage: int = 10):
-    url = f"{MEAL_API_BASE_URL}/filter.php?c={category_title}"
-    response = requests.get(url)
-    data = response.json().get("meals")
-    if data is None:
-        return JSONResponse({"message": "Meals were not found"}, status_code=204)
-
-    data_to_process = data[page * perPage: (page + 1) * perPage]
-    meals = []
-    for item in data_to_process:
-        meal_url = f"{MEAL_API_BASE_URL}/lookup.php?i={item.get('idMeal')}"
-        meal_resp = requests.get(meal_url)
-        meal = meal_resp.json().get("meals")
-        formatted_meal = utils.build_meal(meal[0])
-        meals.append(formatted_meal)
-    resp = {
-        "data": meals,
-        "metadata": {"total": len(data)}
-    }
-    return JSONResponse(resp, status_code=200)
-
-
-@router.get("/filter")
-async def get_meals_by_ingredients(request: Request, ingredients: str, page: int = 0, perPage: int = 10):
-    url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
-    response = requests.get(url)
-    data = response.json().get("meals")
-    if data is None:
-        return JSONResponse({"message": "Meals were not found"}, status_code=204)
-
-    data_to_process = data[page * perPage: (page + 1) * perPage]
-    meals = []
-    for item in data_to_process:
-        meal_url = f"{MEAL_API_BASE_URL}/lookup.php?i={item.get('idMeal')}"
-        meal_resp = requests.get(meal_url)
-        meal = meal_resp.json().get("meals")
-        formatted_meal = utils.build_meal(meal[0])
-        meals.append(formatted_meal)
-    resp = {
-        "data": meals,
-        "metadata": {"total": len(data)}
-    }
-    return JSONResponse(resp, status_code=200)
 
 
 @router.get("/{meal_id}")
