@@ -1,12 +1,15 @@
 import hashlib
 import pickle
 
+import requests
 from bson.objectid import ObjectId
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 import jwt_auth
+import utils
+from constants import MEAL_API_BASE_URL
 from schemas import AuthItem, UserIngredientCreation
 
 router = APIRouter(prefix="/api/user")
@@ -132,15 +135,39 @@ async def delete_user_ingredient(request: Request, user_id: str, ingredient_id: 
 
     return JSONResponse({"message": "Ingredient not found!"}, status_code=404)
 
-# @router.get("/{user_id}/meals")
-# def get_possible_meals(request: Request, user_id: str, page: int=0, perPage: int=12):
-#     token = jwt_auth.get_authorisation(request)
-#     if token is None:
-#         return JSONResponse({"message": "User not authorised!"}, status_code=401)
-#
-#     user = request.app.database.users.find_one({"_id": ObjectId(user_id)})
-#     if user is None:
-#         return JSONResponse({"message": "User not found!"}, status_code=404)
-#
-#     ingredients = pickle.loads(user.get("ingredients"))
-#     ingredients_names = ",".join([ingredient.get("label") for ingredient in ingredients])
+
+@router.get("/{user_id}/possible_meals")
+def get_possible_meals(request: Request, user_id: str, page: int = 0, perPage: int = 12):
+    token = jwt_auth.get_authorisation(request)
+    if token is None:
+        return JSONResponse({"message": "User not authorised!"}, status_code=401)
+
+    user = request.app.database.users.find_one({"_id": ObjectId(user_id)})
+    if user is None:
+        return JSONResponse({"message": "User not found!"}, status_code=404)
+
+    ingredients = pickle.loads(user.get("ingredients"))
+    user_ingredients_names = [ingredient.get("label") for ingredient in ingredients]
+    suitable_meals = []
+    for user_ingredient in user_ingredients_names:
+        url = f"{MEAL_API_BASE_URL}/filter.php?i={user_ingredient}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            meals = response.json().get("meals")
+            if meals is not None:
+                for short_meal in meals:
+                    meal_url = f"{MEAL_API_BASE_URL}/lookup.php?i={short_meal.get('idMeal')}"
+                    meal_response = requests.get(meal_url)
+                    if meal_response.status_code == 200:
+                        meal = meal_response.json().get("meals")[0]
+                        meal_ingredients = []
+                        for i in range(1, 21):
+                            ingredient = meal.get(f"strIngredient{i}")
+                            if ingredient is not None:
+                                meal_ingredients.append(ingredient)
+                        if sum(item.lower() in meal_ingredients for item in user_ingredients_names) >= 2:
+                            if utils.build_meal(meal) not in suitable_meals:
+                                suitable_meals.append(utils.build_meal(meal))
+                        else:
+                            continue
+    return JSONResponse({"data": suitable_meals[page * perPage: (page + 1) * perPage], "metadata": {"total": len(suitable_meals)}})
