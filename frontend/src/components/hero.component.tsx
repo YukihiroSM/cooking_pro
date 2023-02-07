@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Box,
@@ -10,27 +10,25 @@ import {
   SimpleGrid,
   Divider,
   Link,
-  useToast,
   Container,
   Flex,
 } from '@chakra-ui/react';
 import { useRandomMeals } from '../hooks';
 import { Loader } from './loader.component';
+import { NotificationComponent } from './notification.component';
+import { Notification } from '../types';
 
 export const HeroComponent = () => {
-  const toast = useToast();
-
+  const [notification, setNotification] = useState<Notification | undefined>(
+    undefined
+  );
   const { isLoading, isError, error, data: meals } = useRandomMeals();
 
   useEffect(() => {
     if (isError) {
-      toast({
-        title: 'Something went wrong...',
-        description: error?.response?.data?.message,
+      setNotification({
         status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
+        error: error || undefined,
       });
     }
   }, [isError]);
@@ -113,6 +111,9 @@ export const HeroComponent = () => {
           px={{ sm: 10, md: 40 }}
           py={{ sm: '5rem', md: '7rem' }}
         >
+          {notification && (
+            <NotificationComponent notification={notification} />
+          )}
           <Grid
             display={{ md: 'none', sm: 'grid' }}
             templateRows={'repeat(3, 1fr)'}
@@ -130,7 +131,7 @@ export const HeroComponent = () => {
             position={'relative'}
           >
             <GridItem
-              key={meals && meals[0].id}
+              key={meals && meals[4].id}
               bottom={0}
               mt={'auto'}
               position={'sticky'}
@@ -145,7 +146,7 @@ export const HeroComponent = () => {
                     boxShadow: 'xl',
                   }}
                   as={Link}
-                  href={`/meals/${meals && meals[0].id}`}
+                  href={`/meals/${meals && meals[4].id}`}
                 >
                   <Image
                     alt={'Random meal'}
@@ -153,21 +154,21 @@ export const HeroComponent = () => {
                     fit={'cover'}
                     w={'full'}
                     h={'full'}
-                    src={meals && meals[0].image}
+                    src={meals && meals[4].image}
                   />
                 </Box>
                 <Text
                   as={Link}
-                  href={`/meals/${meals && meals[0].id}`}
+                  href={`/meals/${meals && meals[4].id}`}
                   textStyle={'h1Semi'}
                 >
-                  {meals && meals[0].name.split(' ').length > 2
-                    ? meals[0].name
+                  {meals && meals[4].name.split(' ').length > 2
+                    ? meals[4].name
                         .replace(/\W/g, ' ')
                         .split(' ')
                         .slice(0, 3)
                         .join(' ')
-                    : meals && meals[0].name}
+                    : meals && meals[4].name}
                 </Text>
               </Stack>
             </GridItem>

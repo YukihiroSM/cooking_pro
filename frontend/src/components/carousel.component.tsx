@@ -9,7 +9,6 @@ import {
   TabList,
   Tab,
   Link,
-  useToast,
   Container,
 } from '@chakra-ui/react';
 
@@ -21,14 +20,17 @@ import 'swiper/css/navigation';
 
 import { Pagination, Navigation } from 'swiper';
 
-import { Meal } from '../types';
+import { Meal, Notification } from '../types';
 import { useMealsByFilter, useRandomMeals } from '../hooks';
 import { CAROUSEL_CATEGORIES } from '../consts';
 import { StringParam, useQueryParam } from 'use-query-params';
 import { Loader } from './loader.component';
+import { NotificationComponent } from './notification.component';
 
 export const CarouselComponent = () => {
-  const toast = useToast();
+  const [notification, setNotification] = useState<Notification | undefined>(
+    undefined
+  );
   const [carouselCategory, setCarouselCategory] = useQueryParam(
     'category',
     StringParam
@@ -56,15 +58,9 @@ export const CarouselComponent = () => {
 
   useEffect(() => {
     if (isErrorAll || isErrorRandom) {
-      toast({
-        title: 'Something went wrong...',
-        description:
-          errorAll?.response?.data?.message ||
-          errorRandom?.response?.data?.message,
+      setNotification({
         status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
+        error: errorRandom || errorAll || undefined,
       });
     }
   }, [isErrorAll, isErrorRandom]);
@@ -127,6 +123,9 @@ export const CarouselComponent = () => {
           py={{ sm: 5, md: 10 }}
           px={{ sm: 5, md: 10 }}
         >
+          {notification && (
+            <NotificationComponent notification={notification} />
+          )}
           <Stack
             mx={'auto'}
             direction={'column'}

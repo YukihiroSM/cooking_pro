@@ -6,3 +6,4 @@ export * from './encodeUrl.util';
 export * from './formatNumber.util';
 export * from './hashMap.util';
 export * from './formatString.util';
+export * from './getErrorMessage.util';

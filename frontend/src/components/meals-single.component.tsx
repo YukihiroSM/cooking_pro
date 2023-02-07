@@ -15,11 +15,7 @@ import {
   Container,
   Progress,
 } from '@chakra-ui/react';
-import {
-  useMealsByFilter,
-  useSingleMeal,
-  useUserIngredients,
-} from '../hooks';
+import { useMealsByFilter, useSingleMeal, useUserIngredients } from '../hooks';
 import { Loader } from './loader.component';
 import { StringParam, useQueryParam } from 'use-query-params';
 import { formatNumber, formatString, storeRequiredIngredients } from '../utils';
@@ -49,8 +45,9 @@ export const SingleMealComponent = () => {
   const { data: meals } = dataMealsBeCategory;
 
   const scrollDown = () => {
+    console.log(instructionsSection.current.offsetWidth);
     window.scrollTo({
-      top: instructionsSection.current.offsetTop - 100,
+      top: instructionsSection.current.offsetTop - 125,
       behavior: 'smooth',
     });
   };

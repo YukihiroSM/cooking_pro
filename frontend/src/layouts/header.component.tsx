@@ -389,18 +389,6 @@ const User = ({ huge }: UserProps) => {
             >
               <MenuItem
                 as={Link}
-                href={`/user/${id}/meals?page=0&perPage=10`}
-                _hover={{
-                  textDecoration: 'none',
-                  color: 'attention.light',
-                }}
-                fontWeight={400}
-                bg={'black'}
-              >
-                My meals
-              </MenuItem>
-              <MenuItem
-                as={Link}
                 href={`/user/${id}/ingredients?page=0&perPage=10`}
                 _hover={{
                   textDecoration: 'none',

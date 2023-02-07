@@ -2,24 +2,21 @@ import { useEffect, useState } from 'react';
 
 import Select, { SingleValue } from 'react-select';
 
-import {
-  useToast,
-  Container,
-  Box,
-  FormControl,
-  FormLabel,
-} from '@chakra-ui/react';
+import { Container, Box, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { useUserPossibleMeals } from '../hooks';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 import { PaginationComponent } from './pagination.component';
 import { SORT_BY_OPTIONS } from '../consts';
-import { Meal, SortBy } from '../types';
+import { Meal, Notification, SortBy } from '../types';
 import { sortByComplexity } from '../utils';
+import { NotificationComponent } from './notification.component';
 
 export const UserPossibleMealsComponent = () => {
-  const toast = useToast();
+  const [notification, setNotification] = useState<Notification | undefined>(
+    undefined
+  );
   const [filtered, setFiltered] = useState<Meal[] | undefined>();
 
   const {
@@ -50,39 +47,29 @@ export const UserPossibleMealsComponent = () => {
   };
 
   useEffect(() => {
-    console.log(meals);
     setFiltered(meals);
   }, [meals]);
 
   useEffect(() => {
     if (!isLoading && !filtered?.length && !meals?.length) {
-      toast({
-        title: 'Nothing found',
-        description:
-          'Available ingredients do not match any of the existing recipes.',
+      setNotification({
         status: 'info',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
       });
     }
   }, [filtered]);
 
   useEffect(() => {
     if (isError) {
-      toast({
-        title: 'Something went wrong...',
-        description: error?.response?.data?.message,
+      setNotification({
         status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
+        error: error || undefined,
       });
     }
   }, [isError]);
 
   return (
     <Container bg={'light'} maxW={'full'} px={{ sm: 5, md: 10 }} py={10}>
+      {notification && <NotificationComponent notification={notification} />}
       {isLoading && <Loader />}
       <Container maxW={'none'} m={0} p={0}>
         <FormControl>

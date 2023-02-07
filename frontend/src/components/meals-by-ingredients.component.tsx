@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useCategoriesAndIngredients, useMealsByFilter } from '../hooks';
-import { Meal, NavItem, NavItemFilter, SortBy } from '../types';
+import { Meal, NavItem, NavItemFilter, Notification, SortBy } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 import { PaginationComponent } from './pagination.component';
@@ -25,10 +25,14 @@ import { SORT_BY_OPTIONS } from '../consts';
 import { sortByComplexity } from '../utils';
 
 import { MyIngredientsParam } from '../utils';
+import { NotificationComponent } from './notification.component';
 
 const animatedComponents = makeAnimated();
 
 export const MealsByIngredientsComponent = () => {
+  const [notification, setNotification] = useState<Notification | undefined>(
+    undefined
+  );
   const [filtered, setFiltered] = useState<Meal[] | undefined>([]);
   const [ingredients, setIngredients] = useQueryParam(
     'ingredients',
@@ -42,7 +46,6 @@ export const MealsByIngredientsComponent = () => {
   >(undefined);
   const [ingredientsCategory, setIngredientsCategory] =
     useState<NavItemFilter>();
-  const toast = useToast();
 
   const {
     isLoading: isLoadingNav,
@@ -101,35 +104,24 @@ export const MealsByIngredientsComponent = () => {
 
   useEffect(() => {
     if (!isLoadingNav && !isLoadingAll && !filtered?.length && !meals?.length) {
-      toast({
-        title: 'Nothing found',
-        description:
-          'Chosen ingredients do not match any of the existing recipes.',
+      setNotification({
         status: 'info',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
       });
     }
   }, [filtered, isLoadingAll, meals]);
 
   useEffect(() => {
     if (isErrorNav || isErrorAll) {
-      toast({
-        title: 'Something went wrong...',
-        description:
-          errorAll?.response?.data?.message ||
-          errorNav?.response?.data?.message,
+      setNotification({
         status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
+        error: errorNav || errorAll || undefined,
       });
     }
   }, [isErrorNav, isErrorAll]);
 
   return (
     <Container bg={'light'} maxW={'full'} px={{ sm: 5, md: 10 }} py={10}>
+      {notification && <NotificationComponent notification={notification} />}
       {(isLoadingNav || isLoadingAll) && <Loader />}
       <Container maxW={'none'} m={0} p={0}>
         <FormControl>

@@ -3,6 +3,12 @@ import { Ingredient } from './ingredient.type';
 import { AxiosError } from 'axios';
 import { Meal } from './meal.type';
 
+type Notification = {
+  status: 'info' | 'warning' | 'success' | 'error' | 'loading' | undefined;
+  error?: AxiosError<AxiosResponse, any> | undefined;
+  success?: string;
+};
+
 type AxiosResponse = {
   message: string;
 };
@@ -74,4 +80,5 @@ export type {
   NavItem,
   IngredientByCategoryResponse,
   NavItemFilter,
+  Notification,
 };
