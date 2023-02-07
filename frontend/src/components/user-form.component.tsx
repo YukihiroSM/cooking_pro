@@ -16,11 +16,12 @@ import {
   Tabs,
   VStack,
   Link,
-  useToast,
 } from '@chakra-ui/react';
 import { Field, Formik } from 'formik';
 import { useUser } from '../hooks';
 import { Loader } from './loader.component';
+import { Notification } from '../types';
+import { NotificationComponent } from './notification.component';
 
 const registerSchema = Yup.object({
   username: Yup.string()
@@ -56,9 +57,11 @@ type Action = {
 };
 
 export const UserFormComponent = () => {
+  const [notification, setNotification] = useState<Notification | undefined>(
+    undefined
+  );
   const navigate = useNavigate();
   const location = useLocation();
-  const toast = useToast();
   const {
     loginUserMutation,
     registerUserMutation,
@@ -94,33 +97,27 @@ export const UserFormComponent = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast({
-        title:
+      setNotification({
+        status: 'success',
+        success:
           action.type === 'register'
             ? 'Account created!'
             : 'Logged in successfully!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
       });
       window.location.href = '/';
       navigate('/');
     }
     if (isError) {
-      toast({
-        title: 'Something went wrong...',
-        description: error?.response?.data?.message,
+      setNotification({
         status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
+        error: error || undefined,
       });
     }
   }, [isError, isSuccess]);
 
   return (
     <>
+      {notification && <NotificationComponent notification={notification} />}
       {isLoading && <Loader />}
       <Flex
         w={'full'}

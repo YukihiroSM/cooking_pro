@@ -37,7 +37,13 @@ import {
   useUserIngredients,
 } from '../hooks';
 import { Loader } from './loader.component';
-import { Ingredient, NavItemFilter, CreateIngredient, NavItem } from '../types';
+import {
+  Ingredient,
+  NavItemFilter,
+  CreateIngredient,
+  NavItem,
+  Notification,
+} from '../types';
 import {
   ChevronDownIcon,
   ChevronUpIcon,
@@ -47,6 +53,7 @@ import {
 import { USER_INGREDIENTS_PARAMS } from '../consts';
 import { sortByLabel } from '../utils';
 import { PaginationComponent } from './pagination.component';
+import { NotificationComponent } from './notification.component';
 
 type TableSort = {
   value: number;
@@ -61,6 +68,9 @@ type ChosenIngredient = CreateIngredient & MeasureQuantity;
 
 export const UserIngredientsComponent = () => {
   const toast = useToast();
+  const [notification, setNotification] = useState<Notification | undefined>(
+    undefined
+  );
   const [filtered, setFiltered] = useState<Ingredient[]>();
   const [sort, setSort] = useState<TableSort>({
     param: 'label',
@@ -127,36 +137,32 @@ export const UserIngredientsComponent = () => {
   }, [sort]);
 
   useEffect(() => {
-    console.log(ingredients);
     ingredients && setFiltered(ingredients);
   }, [ingredients]);
 
   useEffect(() => {
-    if (isError || isErrorNav || isErrorMutation) {
-      toast({
-        title: 'Something went wrong...',
-        description:
-          error?.response?.data?.message ||
-          errorNav?.response?.data?.message ||
-          errorMutation?.response?.data?.message,
+    (isError || isErrorNav || isErrorMutation) &&
+      setNotification({
         status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
+        error: error || errorNav || errorMutation || undefined,
       });
-    }
-    if (isSuccessCreate || isSuccessDelete) {
-      toast({
-        title: isSuccessCreate
-          ? 'Ingredient added!'
-          : isSuccessDelete && 'Ingredient deleted!',
+  }, [isError, isErrorNav, isErrorMutation]);
+
+  useEffect(() => {
+    isSuccessDelete &&
+      setNotification({
         status: 'success',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
+        success: 'Ingredient deleted!',
       });
-    }
-  }, [isError, isErrorNav, isErrorMutation, isSuccessCreate, isSuccessDelete]);
+  }, [isSuccessDelete]);
+
+  useEffect(() => {
+    isSuccessCreate &&
+      setNotification({
+        status: 'success',
+        success: 'Ingredient added!',
+      });
+  }, [isSuccessCreate]);
 
   const icon =
     sort.value === -1 ? (
@@ -169,6 +175,7 @@ export const UserIngredientsComponent = () => {
 
   return (
     <Container bg={'white'} maxW={'100vw'} m={0} px={{ sm: 5, md: 10 }} py={10}>
+      {notification && <NotificationComponent notification={notification} />}
       {isLoading && <Loader />}
       <CreateIngredientComponent
         isLoadingCreate={isLoadingCreate}
