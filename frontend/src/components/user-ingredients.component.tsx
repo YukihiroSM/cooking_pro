@@ -239,7 +239,7 @@ export const UserIngredientsComponent = () => {
           </Table>
         </TableContainer>
       )}
-      <PaginationComponent total={metadata?.total || 0} />
+      {metadata?.total && <PaginationComponent total={metadata?.total || 0} />}
     </Container>
   );
 };

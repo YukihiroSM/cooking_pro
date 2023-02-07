@@ -41,12 +41,20 @@ export const PaginationComponent = ({ total }: Props) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      scrollTop();
-    }, 300);
+    !page && setPage(0);
+    !perPage && setPerPage(12);
+  }, []);
+
+  useEffect(() => {
     perPage && setCanNextPage(page !== Math.floor(total / perPage));
     setCanPreviousPage(page !== 0);
   }, [page, perPage]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      scrollTop();
+    }, 300);
+  }, [page]);
 
   return (
     <Container
