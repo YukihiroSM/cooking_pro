@@ -45,7 +45,6 @@ export const SingleMealComponent = () => {
   const { data: meals } = dataMealsBeCategory;
 
   const scrollDown = () => {
-    console.log(instructionsSection.current.offsetWidth);
     window.scrollTo({
       top: instructionsSection.current.offsetTop - 125,
       behavior: 'smooth',

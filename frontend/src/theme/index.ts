@@ -11,7 +11,6 @@ export const theme = extendTheme(
     config: defaultTheme.config,
     direction: defaultTheme.direction,
     transition: defaultTheme.transition,
-    // breakpoints,
     zIndices: defaultTheme.zIndices,
     components: {},
     styles: {},
