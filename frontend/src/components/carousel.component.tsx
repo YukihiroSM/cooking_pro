@@ -51,9 +51,13 @@ export const CarouselComponent = () => {
   const { data: mealsByCategory } = data;
 
   useEffect(() => {
-    if (!carouselCategory || carouselCategory === 'All') setMeals(mealsRandom);
+    if (carouselCategory === 'All') setMeals(mealsRandom);
     else setMeals(mealsByCategory);
   }, [carouselCategory, mealsByCategory, mealsRandom]);
+
+  useEffect(() => {
+    setCarouselCategory('All');
+  }, []);
 
   useEffect(() => {
     if (isErrorAll || isErrorRandom) {
@@ -69,10 +73,6 @@ export const CarouselComponent = () => {
       });
     }
   }, [isErrorAll, isErrorRandom]);
-
-  useEffect(() => {
-    setCarouselCategory('All');
-  }, []);
 
   const SwiperSlides = meals?.map((meal) => (
     <SwiperSlide key={meal.id}>
@@ -120,11 +120,10 @@ export const CarouselComponent = () => {
 
   return (
     <>
-      {isLoadingRandom || isLoadingAll ? (
+      {isLoadingRandom ? (
         <Loader />
       ) : (
         <Container
-          position={'relative'}
           bg={'light'}
           display={'block'}
           maxW={'full'}
@@ -163,7 +162,7 @@ export const CarouselComponent = () => {
                 </TabList>
               </Tabs>
             </Box>
-            <Box w={'full'} display={{ sm: 'none', md: 'block' }}>
+            <Box h={'27.5em'} w={'full'} display={{ sm: 'none', md: 'block' }}>
               <Swiper
                 slidesPerView={5}
                 grabCursor={true}
@@ -178,7 +177,7 @@ export const CarouselComponent = () => {
                 {SwiperSlides}
               </Swiper>
             </Box>
-            <Box w={'full'} display={{ sm: 'block', md: 'none' }}>
+            <Box h={'27.5em'} w={'full'} display={{ sm: 'block', md: 'none' }}>
               <Swiper
                 grabCursor={true}
                 spaceBetween={30}
