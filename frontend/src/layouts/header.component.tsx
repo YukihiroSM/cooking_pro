@@ -381,14 +381,24 @@ const User = ({ huge }: UserProps) => {
               />
             </MenuButton>
             <MenuList
-              minW={{ sm: 40, md: 'none' }}
-              w={{ sm: 40, md: 'full' }}
               borderColor={'attention.light'}
               bg={'black'}
               fontSize={{ sm: 'sm', md: huge ? 'lg' : 'md' }}
               lineHeight={2}
               color={'white'}
             >
+              <MenuItem
+                as={Link}
+                href={`/user/${id}/meals?page=0&perPage=10`}
+                _hover={{
+                  textDecoration: 'none',
+                  color: 'attention.light',
+                }}
+                fontWeight={400}
+                bg={'black'}
+              >
+                My meals
+              </MenuItem>
               <MenuItem
                 as={Link}
                 href={`/user/${id}/ingredients?page=0&perPage=10`}

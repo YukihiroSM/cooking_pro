@@ -19,6 +19,7 @@ const ROUTER_KEYS = {
   CREATE_INGREDIENT: '/meals/create-ingredient/:userID',
   USER_POSSIBLE_MEALS: '/user/:userID/possible-meals',
   USER_INGREDIENTS: '/user/:userID/ingredients',
+  USER_MEALS: '/user/:userID/meals',
   USER_LOGIN: '/user/login',
   USER_REGISTER: '/user/register',
   NOT_FOUND: '*',
