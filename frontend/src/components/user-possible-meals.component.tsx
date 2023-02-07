@@ -1,14 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useToast, Stack, Container } from '@chakra-ui/react';
+import Select, { SingleValue } from 'react-select';
+
+import {
+  useToast,
+  Stack,
+  Container,
+  Box,
+  FormControl,
+  FormLabel,
+} from '@chakra-ui/react';
 
 import { useUserPossibleMeals } from '../hooks';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 import { PaginationComponent } from './pagination.component';
+import { SORT_BY_OPTIONS } from '../consts';
+import { Meal, SortBy } from '../types';
+import { sortByComplexity } from '../utils';
 
 export const UserPossibleMealsComponent = () => {
   const toast = useToast();
+  const [filtered, setFiltered] = useState<Meal[] | undefined>();
 
   const {
     isLoading,
@@ -16,9 +29,31 @@ export const UserPossibleMealsComponent = () => {
     error,
     data = { data: undefined, metadata: { total: 0 } },
   } = useUserPossibleMeals();
-
   const { data: meals, metadata } = data;
   const { total } = metadata;
+
+  const handleSortingMethod = (method: SingleValue<SortBy>) => {
+    const { value } = method as SortBy;
+    switch (value) {
+      case 'random':
+        setFiltered([...(meals as Meal[])]);
+        break;
+      case 'ascending':
+        setFiltered(
+          sortByComplexity<Meal>([...(meals as Meal[])], 'ascending')
+        );
+        break;
+      case 'descending':
+        setFiltered(
+          sortByComplexity<Meal>([...(meals as Meal[])], 'descending')
+        );
+        break;
+    }
+  };
+
+  useEffect(() => {
+    setFiltered(meals);
+  }, [meals]);
 
   useEffect(() => {
     if (isError) {
@@ -45,7 +80,28 @@ export const UserPossibleMealsComponent = () => {
         py={10}
         m={0}
       >
-        {meals && <FilteredMealsComponent meals={meals} />}
+        <FormControl>
+          <Box>
+            <FormLabel>Choose sorting</FormLabel>
+            <Select
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  primary25: 'silver',
+                  primary: 'orange',
+                },
+              })}
+              isDisabled={isLoading}
+              name='ingredients-sorting-method'
+              options={SORT_BY_OPTIONS}
+              placeholder='Sort by...'
+              closeMenuOnSelect
+              onChange={handleSortingMethod}
+            />
+          </Box>
+        </FormControl>
+        {filtered && <FilteredMealsComponent meals={filtered} />}
         {total && <PaginationComponent total={total} />}
       </Stack>
     </Container>

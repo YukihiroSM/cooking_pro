@@ -1,4 +1,3 @@
-
 import {
   Button,
   ButtonGroup,
@@ -34,14 +33,9 @@ export const FilteredMealsComponent = ({ meals }: Props) => {
   const singleMealUrl = `${window.location.hostname}/meals/`;
 
   return (
-    <Flex
-      justify={'space-between'}
-      rowGap={10}
-      align={'center'}
-      flexWrap={'wrap'}
-    >
+    <Flex justifyContent={'flex-start'} gap={5} w={'full'} flexWrap={'wrap'}>
       {meals.map((meal) => (
-        <Card maxW='sm'>
+        <Card key={meal.id} maxW='sm'>
           <CardBody>
             <Image
               src={meal.image}

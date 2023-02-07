@@ -12,18 +12,25 @@ import {
   Box,
   FormControl,
   Container,
+  Grid,
+  GridItem,
 } from '@chakra-ui/react';
 
 import { useCategoriesAndIngredients, useMealsByIngredients } from '../hooks';
-import { NavItem, NavItemFilter } from '../types';
+import { Meal, NavItem, NavItemFilter, SortBy } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 import { PaginationComponent } from './pagination.component';
+
+import { SORT_BY_OPTIONS } from '../consts';
+import { sortByComplexity } from '../utils';
+import { templateMeals } from '../templateData';
 import { MyIngredientsParam } from '../utils';
 
 const animatedComponents = makeAnimated();
 
 export const MealsByIngredientsComponent = () => {
+  const [filtered, setFiltered] = useState<Meal[] | undefined>();
   const [ingredients, setIngredients] = useQueryParam(
     'ingredients',
     MyIngredientsParam
@@ -54,6 +61,25 @@ export const MealsByIngredientsComponent = () => {
   const { data: meals, metadata } = dataAll;
   const { total } = metadata;
 
+  const handleSortingMethod = (method: SingleValue<SortBy>) => {
+    const { value } = method as SortBy;
+    switch (value) {
+      case 'random':
+        setFiltered([...(meals as Meal[])]);
+        break;
+      case 'ascending':
+        setFiltered(
+          sortByComplexity<Meal>([...(meals as Meal[])], 'ascending')
+        );
+        break;
+      case 'descending':
+        setFiltered(
+          sortByComplexity<Meal>([...(meals as Meal[])], 'descending')
+        );
+        break;
+    }
+  };
+
   useEffect(() => {
     setOptionsCategories(
       navItems
@@ -70,6 +96,10 @@ export const MealsByIngredientsComponent = () => {
       }))
     );
   }, [ingredientsCategory]);
+
+  useEffect(() => {
+    setFiltered(meals);
+  }, [meals]);
 
   useEffect(() => {
     if (isErrorNav || isErrorAll) {
@@ -99,81 +129,110 @@ export const MealsByIngredientsComponent = () => {
         m={0}
       >
         <FormControl>
-          <Stack w={'full'} direction={'row'} align={'flex-end'}>
-            <Box w={'full'}>
-              <FormLabel>
-                Choose ingredient <strong>by category</strong>
-              </FormLabel>
-              <Select
-                theme={(theme) => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary25: 'silver',
-                    primary: '#DD6B20',
-                  },
-                })}
-                isSearchable
-                isDisabled={isLoadingNav || isLoadingAll}
-                name='ingredients-by-category'
-                options={optionsCategories}
-                placeholder='Select ingredients category...'
-                closeMenuOnSelect
-                onChange={(newValue: SingleValue<NavItemFilter>) =>
-                  setIngredientsCategory(newValue as NavItemFilter)
-                }
-              />
-            </Box>
-            <Box w={'full'}>
-              <FormLabel>Choose ingredients</FormLabel>
-              <Select
-                theme={(theme) => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary25: 'silver',
-                    primary: '#DD6B20',
-                  },
-                })}
-                isSearchable
-                isDisabled={isLoadingNav || isLoadingAll}
-                isMulti
-                name='ingredients'
-                options={optionsIngredients}
-                placeholder='Select some ingredients...'
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                defaultValue={
-                  {
-                    label: ingredients && ingredients[0],
-                    value: ingredients && ingredients[0],
-                  } as NavItemFilter
-                }
-                onChange={(
-                  newValue: MultiValue<NavItem>,
-                  { action, removedValue }: any
-                ) => {
-                  if ('remove-value') {
-                    ingredients &&
-                      ingredients.length > 1 &&
+          <Grid columnGap={10} templateColumns={'1fr repeat(2, 3fr)'}>
+            <GridItem>
+              <Box>
+                <FormLabel>Choose sorting</FormLabel>
+                <Select
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary25: 'silver',
+                      primary: 'orange',
+                    },
+                  })}
+                  isDisabled={isLoadingNav || isLoadingAll}
+                  name='ingredients-sorting-method'
+                  options={SORT_BY_OPTIONS}
+                  placeholder='Sort by...'
+                  closeMenuOnSelect
+                  onChange={handleSortingMethod}
+                />
+              </Box>
+            </GridItem>
+            <GridItem>
+              <Box>
+                <FormLabel>Choose category</FormLabel>
+                <Select
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary25: 'silver',
+                      primary: 'orange',
+                    },
+                  })}
+                  isSearchable
+                  isDisabled={isLoadingNav || isLoadingAll}
+                  name='ingredients-by-category'
+                  options={optionsCategories}
+                  placeholder='Select ingredients category...'
+                  closeMenuOnSelect
+                  onChange={(newValue: SingleValue<NavItemFilter>) =>
+                    setIngredientsCategory(newValue as NavItemFilter)
+                  }
+                />
+              </Box>
+            </GridItem>
+            <GridItem>
+              <Box>
+                <FormLabel>
+                  Choose recipe <strong>by ingredients</strong>
+                </FormLabel>
+                <Select
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary25: 'silver',
+                      primary: 'orange',
+                    },
+                  })}
+                  isSearchable
+                  isDisabled={
+                    isLoadingNav || isLoadingAll || !ingredientsCategory
+                  }
+                  isMulti
+                  name='ingredients'
+                  options={optionsIngredients}
+                  placeholder='Select some ingredients...'
+                  closeMenuOnSelect={false}
+                  components={animatedComponents}
+                  defaultValue={
+                    {
+                      label: ingredients && ingredients[0],
+                      value: ingredients && ingredients[0],
+                    } as NavItemFilter
+                  }
+                  onChange={(
+                    newValue: MultiValue<NavItem>,
+                    { action, removedValue }: any
+                  ) => {
+                    if ('remove-value') {
+                      ingredients &&
+                        ingredients.length > 1 &&
+                        setIngredients(
+                          ingredients?.filter(
+                            (ingredient) => ingredient !== removedValue.label
+                          )
+                        );
+                    }
+                    if (action === 'clear') {
+                      setIngredients(ingredients?.slice(0, 1));
+                    }
+                    if (action === 'select-option') {
                       setIngredients(
-                        ingredients?.filter(
-                          (ingredient) => ingredient !== removedValue.label
-                        )
+                        newValue.map((item: NavItem) => item.label)
                       );
-                  }
-                  if (action === 'clear') {
-                    setIngredients(ingredients?.slice(0, 1));
-                  }
-                  if (action === 'select-option') {
-                    setIngredients(newValue.map((item: NavItem) => item.label));
-                  }
-                }}
-              />
-            </Box>
-          </Stack>
+                    }
+                  }}
+                />
+              </Box>
+            </GridItem>
+          </Grid>
         </FormControl>
-        {meals && <FilteredMealsComponent meals={meals} />}
+        {filtered && <FilteredMealsComponent meals={filtered} />}
         {total && <PaginationComponent total={total} />}
       </Stack>
     </Container>

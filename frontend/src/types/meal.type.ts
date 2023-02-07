@@ -10,4 +10,9 @@ type Meal = {
   measures: string[];
 };
 
-export type { Meal };
+type SortBy = {
+  value: string;
+  label: string;
+};
+
+export type { Meal, SortBy };
