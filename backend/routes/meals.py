@@ -106,32 +106,21 @@ async def get_meals_ingredients_categories(request: Request):
     return JSONResponse(result)
 
 
-@router.get("/category/{category_title}")
-async def get_meals_by_category(request: Request, category_title: str, page: int = 0, perPage: int = 10):
-    url = f"{MEAL_API_BASE_URL}/filter.php?c={category_title}"
-    response = requests.get(url)
-    data = response.json().get("meals")
-    if data is None:
-        return JSONResponse({"message": "Meals were not found"}, status_code=204)
-
-    data_to_process = data[page * perPage: (page + 1) * perPage]
-    meals = []
-    for item in data_to_process:
-        meal_url = f"{MEAL_API_BASE_URL}/lookup.php?i={item.get('idMeal')}"
-        meal_resp = requests.get(meal_url)
-        meal = meal_resp.json().get("meals")
-        formatted_meal = utils.build_meal(meal[0])
-        meals.append(formatted_meal)
-    resp = {
-        "data": meals,
-        "metadata": {"total": len(data)}
-    }
-    return JSONResponse(resp, status_code=200)
-
-
 @router.get("/filter")
-async def get_meals_by_ingredients(request: Request, ingredients: str, page: int = 0, perPage: int = 10):
-    url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
+async def filter_meals(request: Request, ingredients: Union[str, None] = None, category: Union[str, None] = None,
+                       page: int = 0, perPage: int = 10):
+    if ingredients:
+        url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
+    elif category:
+        url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
+
+    elif category and ingredients:
+        return JSONResponse({"message": "Bad request. Need to specify only one of parameters: [category, ingredients]"},
+                            status_code=400)
+    else:
+        return JSONResponse({"message": "Bad request. Need to specify one of parameters: [category, ingredients]"},
+                            status_code=400)
+
     response = requests.get(url)
     data = response.json().get("meals")
     if data is None:
