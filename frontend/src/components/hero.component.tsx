@@ -26,7 +26,7 @@ export const HeroComponent = () => {
     if (isError) {
       toast({
         title: 'Something went wrong...',
-        description: error?.message,
+        description: error?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -40,7 +40,7 @@ export const HeroComponent = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Container display={'block'} maxW={'full'} m={0} p={0} py={'6.5rem'}>
+        <Container display={'block'} maxW={'full'} m={0} p={0} py={'7rem'}>
           <Grid
             maxW={'1600px'}
             templateColumns='repeat(2, 1fr)'

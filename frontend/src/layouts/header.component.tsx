@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import {
   Box,
@@ -71,7 +71,7 @@ export const HeaderComponent = () => {
     if (isError) {
       toast({
         title: 'Something went wrong...',
-        description: error?.message,
+        description: error?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -240,7 +240,6 @@ const DesktopSubNav = ({
   label,
   children,
 }: NavItem & WithParentLabel) => {
-  const navigate = useNavigate();
   const [filter, setFilter] = useState<string>('');
 
   const handleFilterUpdate = (
@@ -352,8 +351,8 @@ const User = ({ huge }: UserProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [{ id, token }, setLocalStorageUser] =
     useLocalStorage<LocalStorageUser>('cooking-app-user', {
-      id: 'undefined',
-      token: 'TEST TOKEN STRING', // replace this
+      id: undefined,
+      token: undefined,
     });
   return (
     <>
@@ -373,9 +372,9 @@ const User = ({ huge }: UserProps) => {
               minW={0}
             >
               <Avatar
+                bg={'attention.dark'}
                 transition={'.5s ease all'}
                 size={huge ? 'md' : 'sm'}
-                src={'https://i.pravatar.cc/300'}
               />
             </MenuButton>
             <MenuList
@@ -387,7 +386,7 @@ const User = ({ huge }: UserProps) => {
             >
               <MenuItem
                 as={Link}
-                href={`/user/${id}/ingredients`}
+                href={`/user/${id}/ingredients?page=0&perPage=10`}
                 _hover={{
                   textDecoration: 'none',
                   color: 'attention.light',
@@ -399,7 +398,7 @@ const User = ({ huge }: UserProps) => {
               </MenuItem>
               <MenuItem
                 as={Link}
-                href={`/user/${id}/possible-meals`}
+                href={`/user/${id}/possible-meals?page=0&perPage=10`}
                 _hover={{
                   textDecoration: 'none',
                   color: 'attention.light',
@@ -485,7 +484,7 @@ const ModalLogOut = ({ isOpen, onClose, setLocalStorageUser }: any) => {
                   textDecoration: 'none',
                 }}
                 as={Link}
-                href={`/user/login`}
+                href={`/`}
                 onClick={() =>
                   setLocalStorageUser({ id: undefined, token: undefined })
                 }

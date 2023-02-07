@@ -83,7 +83,9 @@ export const MealsByCategoryComponent = () => {
     if (isErrorNav || isErrorAll) {
       toast({
         title: 'Something went wrong...',
-        description: errorAll?.message || errorNav?.message,
+        description:
+          errorAll?.response?.data?.message ||
+          errorNav?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,

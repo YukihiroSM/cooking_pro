@@ -104,12 +104,13 @@ export const UserFormComponent = () => {
         isClosable: true,
         position: 'top-right',
       });
+      window.location.href = '/';
       navigate('/');
     }
     if (isError) {
       toast({
         title: 'Something went wrong...',
-        description: error?.message,
+        description: error?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -232,7 +233,7 @@ export const UserFormComponent = () => {
                     </FormControl>
                   )}
                   <Button
-                    isDisabled={isLoading}
+                    isLoading={isLoading}
                     type='submit'
                     bg={'attention.dark'}
                     color={'white'}

@@ -39,13 +39,8 @@ export const PaginationComponent = ({ total }: Props) => {
   }, [page, perPage]);
 
   return (
-    <Container>
-      <Flex
-        fontSize={'lg'}
-        justifyContent='space-between'
-        mx={20}
-        alignItems='center'
-      >
+    <Container p={0} m={0} mt={5} maxW={'100vw'}>
+      <Flex fontSize={'lg'} justifyContent='space-between' alignItems='center'>
         <Flex>
           <Tooltip label='First Page'>
             <IconButton
@@ -70,7 +65,7 @@ export const PaginationComponent = ({ total }: Props) => {
           <Text flexShrink='0' mr={8}>
             Page{' '}
             <Text fontWeight='bold' as='span'>
-              {(page || 1) + 1}
+              {typeof page === 'number' && +1}
             </Text>{' '}
             of{' '}
             <Text fontWeight='bold' as='span'>
@@ -79,6 +74,7 @@ export const PaginationComponent = ({ total }: Props) => {
           </Text>
           <Text flexShrink='0'>Go to page:</Text>{' '}
           <NumberInput
+            focusBorderColor={'orangeDefault'}
             ml={2}
             mr={8}
             w={28}
@@ -88,7 +84,7 @@ export const PaginationComponent = ({ total }: Props) => {
               const page = value ? Number(value) - 1 : 0;
               setPage(page);
             }}
-            value={(page || 1) + 1}
+            value={typeof page === 'number' ? +1 : 0}
           >
             <NumberInputField fontSize={'lg'} />
             <NumberInputStepper>
@@ -97,6 +93,7 @@ export const PaginationComponent = ({ total }: Props) => {
             </NumberInputStepper>
           </NumberInput>
           <ChakraSelect
+            focusBorderColor={'orangeDefault'}
             fontSize={'lg'}
             w={32}
             value={perPage || 1}

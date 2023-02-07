@@ -7,6 +7,7 @@ const BACKEND_KEYS = {
   USER_INGREDIENTS: '/ingredients',
   USER_POSSIBLE_MEALS: '/possible_meals',
   CREATE_USER_INGREDIENT: '/create_ingredient',
+  DELETE_USER_INGREDIENT: '/delete_ingredient',
   REGISTER_USER: 'user/register',
   LOGIN_USER: 'user/login',
 };
@@ -61,7 +62,7 @@ const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegan', 'Dessert'];
 
 const PER_PAGE_VALUES = [10, 20, 30, 40, 50];
 
-const USER_INGREDIENTS_PARAMS = ['Label', 'Category', 'Measure'];
+const USER_INGREDIENTS_PARAMS = ['Category', 'Label', 'Measure'];
 
 const SORT_BY_OPTIONS = [
   { value: 'random', label: 'Best' },
@@ -77,6 +78,18 @@ const SORTING_COEFFICIENT = {
 // string to prevent react hook order bug
 const PREVENT_BUG = 'Goat';
 
+const BASIC_INGREDIENTS_MEASURES = [
+  'g',
+  'tsp',
+  'ml',
+  'kg',
+  'tbs',
+  'tblsp',
+  'lbs',
+  'lb',
+  'tbsp',
+];
+
 export {
   BACKEND_KEYS,
   ROUTER_KEYS,
@@ -88,4 +101,5 @@ export {
   USER_INGREDIENTS_PARAMS,
   SORT_BY_OPTIONS,
   SORTING_COEFFICIENT,
+  BASIC_INGREDIENTS_MEASURES,
 };

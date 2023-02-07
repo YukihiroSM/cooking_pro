@@ -53,36 +53,36 @@ export const templateMeal: Meal = {
   measures: ['400g', '3 tbs', '1 chopped', '2 chopped'],
 };
 
-export const ingredients = [
+export const templateIngredients = [
   {
     id: `${Math.random()}`,
-    label: 'b',
+    label: 'Red Chilli',
     category: 'd',
-    measure: `${Math.random()}`,
+    measure: '1 large',
   },
   {
     id: `${Math.random()}`,
-    label: 'a',
+    label: 'Ginger',
     category: 'q',
-    measure: `${Math.random()}`,
+    measure: '0.2',
   },
   {
     id: `${Math.random()}`,
-    label: 'd',
+    label: 'Garlic',
     category: 'a',
-    measure: `${Math.random()}`,
+    measure: '2 large',
   },
   {
     id: `${Math.random()}`,
-    label: 'c',
+    label: 'Coriander',
     category: 'c',
-    measure: `${Math.random()}`,
+    measure: 'Bunch',
   },
   {
     id: `${Math.random()}`,
-    label: 'q',
+    label: 'Chicken Stock',
     category: 'b',
-    measure: `${Math.random()}`,
+    measure: '100g',
   },
 ];
 

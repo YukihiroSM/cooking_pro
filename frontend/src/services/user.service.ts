@@ -33,6 +33,12 @@ class UserService extends HttpService {
       data: ingredient,
     });
   }
+
+  deleteUserIngredient(userID: string, ingredientID: string) {
+    return this.delete({
+      url: `user/${userID}${BACKEND_KEYS.DELETE_USER_INGREDIENT}/${ingredientID}`,
+    });
+  }
 }
 
 export const userService = new UserService();
