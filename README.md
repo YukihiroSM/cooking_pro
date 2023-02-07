@@ -1,4 +1,4 @@
-# Cooling Pro Application
+# Cooking Pro Application
 ![CookingProDiagram.png](DocsAssets%2FCookingProDiagram.png)
 ## 1. Introduction
 
@@ -56,17 +56,30 @@ You can install and run the application in several ways:
 
 3. You can run the application in frontend only mode.
     1. Install Node.js on your machine.
-    2. Install the requirements by running the following command: `npm install`.
-    3. Change you current directory to `frontend` and run the following command: `npm start`.
-    4. After successful start you can access the frontend by going to `https://127.0.0.1:3000`.
-    5. To stop the application push `Ctrl+C` in the terminal.
+    2. Change you current directory to `frontend`
+    3. Install the requirements by running the following command: `yarn install`.
+    4. To start the development server run the following command: `yarn start`.
+    5. After successful start you can access the frontend by going to `https://127.0.0.1:3000`.
+    6. To stop the application push `Ctrl+C` in the terminal.
 
 The last two options are not recommended because you will not be able to use the application in full.
+## 3. FrontEnd Overview
 
-## 3. API Documentation
+This application is built with the latest and most powerful JavaScript tools to deliver a seamless and user-friendly experience to users.
+
+### Tools and Libraries Used
+- React: A popular and widely-used JavaScript framework, known for its ability to efficiently render and manage components.
+- TypeScript: A statically typed language that provides typecasting to enhance the overall quality and reliability of the code.
+- React Query: A state management library that helps with caching and managing data received from the server.
+- React Router v6: An implementation of modular routing approach, which helps to navigate between different pages of the application.
+- Axios: A library for connecting to the backend and making HTTP requests.
+- Formik: A library for handling user registration, providing a clean and efficient way to manage form data.
+- Yarn: A package manager used for managing dependencies and packages used in the project.
+
+## 4. API Documentation
 ##  **User API** 
 
-## Login Endpoint (api/user/login)
+### Login Endpoint (api/user/login)
 
 ### POST request
 
