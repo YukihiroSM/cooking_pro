@@ -24,7 +24,7 @@ export const UserPossibleMealsComponent = () => {
     if (isError) {
       toast({
         title: 'Something went wrong...',
-        description: error?.message,
+        description: error?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,

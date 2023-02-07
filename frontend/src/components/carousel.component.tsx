@@ -58,7 +58,9 @@ export const CarouselComponent = () => {
     if (isErrorAll || isErrorRandom) {
       toast({
         title: 'Something went wrong...',
-        description: errorAll?.message || errorRandom?.message,
+        description:
+          errorAll?.response?.data?.message ||
+          errorRandom?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,

@@ -7,6 +7,7 @@ const BACKEND_KEYS = {
   USER_INGREDIENTS: '/ingredients',
   USER_POSSIBLE_MEALS: '/possible_meals',
   CREATE_USER_INGREDIENT: '/create_ingredient',
+  DELETE_USER_INGREDIENT: '/delete_ingredient',
   REGISTER_USER: 'user/register',
   LOGIN_USER: 'user/login',
 };
@@ -61,10 +62,22 @@ const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegan', 'Dessert'];
 
 const PER_PAGE_VALUES = [10, 20, 30, 40, 50];
 
-const USER_INGREDIENTS_PARAMS = ['Label', 'Category', 'Measure'];
+const USER_INGREDIENTS_PARAMS = ['Category', 'Label', 'Measure'];
 
 // string to prevent react hook order bug
 const PREVENT_BUG = 'Goat';
+
+const BASIC_INGREDIENTS_MEASURES = [
+  'g',
+  'tsp',
+  'ml',
+  'kg',
+  'tbs',
+  'tblsp',
+  'lbs',
+  'lb',
+  'tbsp',
+];
 
 export {
   BACKEND_KEYS,
@@ -75,4 +88,5 @@ export {
   PER_PAGE_VALUES,
   PREVENT_BUG,
   USER_INGREDIENTS_PARAMS,
+  BASIC_INGREDIENTS_MEASURES,
 };
