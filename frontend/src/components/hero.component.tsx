@@ -105,6 +105,7 @@ export const HeroComponent = () => {
         <Loader />
       ) : (
         <Container
+          position={'relative'}
           display={'block'}
           maxW={'full'}
           m={0}
