@@ -21,35 +21,37 @@ def initialise_ingredients(collection):
 
 
 def collect_ingredients_measures(collection):
-    ingredients = [ingredient for ingredient in collection.distinct("name")]
-    for ingredient in ingredients:
-        url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredient}"
-        response = requests.get(url)
-        if response.ok:
-            data = response.json().get("meals")
-            if data is None:
-                continue
-            ingr_measure = None
-            for meal_item in data:
-                meal_id = meal_item.get("idMeal")
-                url = f"{MEAL_API_BASE_URL}/lookup.php?i={meal_id}"
-                response = requests.get(url)
-                if response.ok:
-                    meal_data = response.json().get("meals")
-                    if meal_data is None:
-                        continue
-                    item = meal_data[0]
-                    meal = build_meal(item)
-                    try:
-                        ingr_id = meal.get("ingredients").index(ingredient)
-                    except ValueError:
-                        continue
-                    else:
-                        ingr_measure = meal.get("measures")[ingr_id]
-                        break
-            if ingr_measure is None:
-                ingr_measure = "N/A"
-            print(f"{ingredient} - {ingr_measure}")
+    pass
+    # ingredients = [ingredient for ingredient in collection.distinct("name")]
+    # print(len(ingredients))
+    # for ingredient in ingredients:
+    #     ingr_measure = None
+    #     url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredient}"
+    #     response = requests.get(url)
+    #     if response.ok:
+    #         data = response.json().get("meals")
+    #         if data is None:
+    #             continue
+    #         for meal_item in data:
+    #             meal_id = meal_item.get("idMeal")
+    #             url = f"{MEAL_API_BASE_URL}/lookup.php?i={meal_id}"
+    #             response = requests.get(url)
+    #             if response.ok:
+    #                 meal_data = response.json().get("meals")
+    #                 if meal_data is None:
+    #                     continue
+    #                 item = meal_data[0]
+    #                 meal = build_meal(item)
+    #                 try:
+    #                     ingr_id = meal.get("ingredients").index(ingredient)
+    #                 except ValueError:
+    #                     continue
+    #                 else:
+    #                     ingr_measure = meal.get("measures")[ingr_id]
+    #                     break
+    #     if ingr_measure is None:
+    #         ingr_measure = "N/A"
+    #     print(f"{ingredient} - {ingr_measure}")
 
                 # collection.update_one({"name": ingredient}, {"$addToSet": {"measure": measure}})
 
