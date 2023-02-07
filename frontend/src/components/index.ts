@@ -1,5 +1,4 @@
 export * from './hero.component';
-export * from './create-ingredient.component';
 export * from './loader.component';
 export * from './meals-single.component';
 export * from './meals-filtered.component';

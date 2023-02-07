@@ -4,7 +4,7 @@ import { Spinner } from '@chakra-ui/react';
 
 export const Loader = () => (
   <Spinner
-    zIndex={999}
+    zIndex={9999}
     position={'absolute'}
     left={0}
     right={0}

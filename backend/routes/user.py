@@ -126,12 +126,14 @@ async def delete_user_ingredient(request: Request, user_id: str, ingredient_id: 
         return JSONResponse({"message": "User not found!"}, status_code=404)
 
     ingredients = pickle.loads(user.get("ingredients"))
+    ingredient_to_delete = None
     for ingredient in ingredients:
         if ingredient.get("id") == ingredient_id:
+            ingredient_to_delete = ingredient
             ingredients.remove(ingredient)
             set_ingredients = {"$set": {"ingredients": pickle.dumps(ingredients)}}
             request.app.database.users.update_one({"_id": ObjectId(user_id)}, set_ingredients)
-            return JSONResponse({"message": "Ingredient deleted!"}, status_code=200)
+            return JSONResponse(ingredient_to_delete, status_code=200)
     return JSONResponse({"message": "Ingredient not found!"}, status_code=404)
 
 

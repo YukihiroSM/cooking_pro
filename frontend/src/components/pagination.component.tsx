@@ -33,69 +33,95 @@ export const PaginationComponent = ({ total }: Props) => {
   const [canPreviousPage, setCanPreviousPage] = useState<boolean>(false);
   const [canNextPage, setCanNextPage] = useState<boolean>(true);
 
+  const scrollTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   useEffect(() => {
-    setCanNextPage(page !== total);
+    setTimeout(() => {
+      scrollTop();
+    }, 300);
+    perPage && setCanNextPage(page !== Math.floor(total / perPage));
     setCanPreviousPage(page !== 0);
   }, [page, perPage]);
 
   return (
-    <Container p={0} m={0} mt={5} maxW={'100vw'}>
-      <Flex fontSize={'lg'} justifyContent='space-between' alignItems='center'>
+    <Container
+      fontSize={{ sm: 'sm', md: 'lg' }}
+      p={0}
+      m={0}
+      mt={5}
+      maxW={'100vw'}
+    >
+      <Flex justifyContent='space-between' alignItems='center'>
         <Flex>
           <Tooltip label='First Page'>
             <IconButton
+              size={{ sm: 'sm', md: 'md' }}
               aria-label='pagination-first-page'
               onClick={() => setPage(0)}
               isDisabled={!canPreviousPage}
-              icon={<ArrowLeftIcon h={3} w={3} />}
+              icon={<ArrowLeftIcon h={{ sm: 2, md: 3 }} w={{ sm: 2, md: 3 }} />}
               mr={4}
             />
           </Tooltip>
           <Tooltip label='Previous Page'>
             <IconButton
+              size={{ sm: 'sm', md: 'md' }}
               aria-label='pagination-previous-page'
               onClick={() => setPage((page || 1) - 1)}
               isDisabled={!canPreviousPage}
-              icon={<ChevronLeftIcon h={6} w={6} />}
+              icon={
+                <ChevronLeftIcon h={{ sm: 4, md: 6 }} w={{ sm: 4, md: 6 }} />
+              }
             />
           </Tooltip>
         </Flex>
 
         <Flex alignItems='center'>
-          <Text flexShrink='0' mr={8}>
+          <Text flexShrink='0' mr={{ sm: 4, md: 8 }}>
             Page{' '}
             <Text fontWeight='bold' as='span'>
-              {typeof page === 'number' && +1}
+              {typeof page === 'number' && page + 1}
             </Text>{' '}
             of{' '}
             <Text fontWeight='bold' as='span'>
-              {total + 1}
+              {perPage && Math.floor(total / perPage) + 1}
             </Text>
           </Text>
           <Text flexShrink='0'>Go to page:</Text>{' '}
           <NumberInput
+            size={{ sm: 'sm', md: 'md' }}
             focusBorderColor={'orangeDefault'}
-            ml={2}
-            mr={8}
-            w={28}
+            ml={{ sm: 1, md: 2 }}
+            mr={{ sm: 4, md: 8 }}
+            w={{ sm: 20, md: 28 }}
             min={1}
             max={total + 1}
             onChange={(value) => {
               const page = value ? Number(value) - 1 : 0;
               setPage(page);
             }}
-            value={typeof page === 'number' ? +1 : 0}
+            isDisabled={!canNextPage}
+            value={typeof page === 'number' ? page + 1 : 0}
           >
-            <NumberInputField fontSize={'lg'} />
+            <NumberInputField
+              disabled={!canNextPage}
+              fontSize={{ sm: 'sm', md: 'lg' }}
+            />
             <NumberInputStepper>
               <NumberIncrementStepper />
               <NumberDecrementStepper />
             </NumberInputStepper>
           </NumberInput>
           <ChakraSelect
+            size={{ sm: 'sm', md: 'md' }}
             focusBorderColor={'orangeDefault'}
-            fontSize={'lg'}
-            w={32}
+            fontSize={{ sm: 'sm', md: 'lg' }}
+            w={{ sm: 20, md: 32 }}
             value={perPage || 1}
             onChange={(e) => {
               setPerPage(Number(e.target.value));
@@ -112,19 +138,25 @@ export const PaginationComponent = ({ total }: Props) => {
         <Flex>
           <Tooltip label='Next Page'>
             <IconButton
+              size={{ sm: 'sm', md: 'md' }}
               aria-label='pagination-last-page'
-              onClick={() => setPage((page || 1) + 1)}
+              onClick={() => setPage((page || 0) + 1)}
               isDisabled={!canNextPage}
-              icon={<ChevronRightIcon h={6} w={6} />}
+              icon={
+                <ChevronRightIcon h={{ sm: 4, md: 6 }} w={{ sm: 4, md: 6 }} />
+              }
             />
           </Tooltip>
           <Tooltip label='Last Page'>
             <IconButton
+              size={{ sm: 'sm', md: 'md' }}
               aria-label='pagination-next-page'
-              onClick={() => setPage(total)}
+              onClick={() => setPage(perPage && Math.floor(total / perPage))}
               isDisabled={!canNextPage}
-              icon={<ArrowRightIcon h={3} w={3} />}
-              ml={4}
+              icon={
+                <ArrowRightIcon h={{ sm: 2, md: 3 }} w={{ sm: 2, md: 3 }} />
+              }
+              ml={{ sm: 2, md: 4 }}
             />
           </Tooltip>
         </Flex>

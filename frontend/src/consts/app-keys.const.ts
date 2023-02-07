@@ -1,6 +1,5 @@
 const BACKEND_KEYS = {
-  MEALS_BY_INGREDIENTS: 'meals/filter',
-  MEALS_BY_CATEGORY: 'meals/category/',
+  MEALS_BY_FILTER: 'meals/filter',
   CATEGORIES_AND_INGREDIENTS: 'meals/categories_and_ingredients',
   RANDOM_MEALS: 'meals/random',
   SINGLE_MEAL: 'meals/',
@@ -14,8 +13,8 @@ const BACKEND_KEYS = {
 
 const ROUTER_KEYS = {
   MAIN: '/',
-  MEALS_BY_INGREDIENTS: '/meals/filter',
-  MEALS_BY_CATEGORY: '/meals/category/:category',
+  MEALS_BY_INGREDIENTS: '/meals/ingredient/filter',
+  MEALS_BY_CATEGORY: '/meals/category/filter',
   SINGLE_MEAL: '/meals/:mealID',
   CREATE_INGREDIENT: '/meals/create-ingredient/:userID',
   USER_POSSIBLE_MEALS: '/user/:userID/possible-meals',
@@ -58,7 +57,7 @@ const TEAM = [
   },
 ];
 
-const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegan', 'Dessert'];
+const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegetarian', 'Dessert'];
 
 const PER_PAGE_VALUES = [10, 20, 30, 40, 50];
 
@@ -76,7 +75,7 @@ const SORTING_COEFFICIENT = {
 };
 
 // string to prevent react hook order bug
-const PREVENT_BUG = 'Goat';
+const PREVENT_BUG = 'random string to prevent bug';
 
 const BASIC_INGREDIENTS_MEASURES = [
   'g',
