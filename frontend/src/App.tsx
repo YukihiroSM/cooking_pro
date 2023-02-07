@@ -27,9 +27,7 @@ const AppContainer = () => {
   return (
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        
           <MainRouter />
-        
       </QueryClientProvider>
     </ChakraProvider>
   );
