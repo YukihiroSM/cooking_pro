@@ -106,7 +106,7 @@ async def get_meals_ingredients_categories(request: Request):
     return JSONResponse(result)
 
 
-@router.get("/categories/{category_title}")
+@router.get("/category/{category_title}")
 async def get_meals_by_category(request: Request, category_title: str, page: int = 0, perPage: int = 10):
     url = f"{MEAL_API_BASE_URL}/filter.php?c={category_title}"
     response = requests.get(url)
