@@ -24,7 +24,7 @@ import { PaginationComponent } from './pagination.component';
 
 import { SORT_BY_OPTIONS } from '../consts';
 import { sortByComplexity } from '../utils';
-import { templateMeals } from '../templateData';
+
 import { MyIngredientsParam } from '../utils';
 
 const animatedComponents = makeAnimated();
@@ -56,10 +56,9 @@ export const MealsByIngredientsComponent = () => {
     isLoading: isLoadingAll,
     isError: isErrorAll,
     error: errorAll,
-    data: dataAll = { data: undefined, metadata: { total: 0 } },
+    data: dataAll = { data: [], metadata: { total: 0 } },
   } = useMealsByIngredients();
   const { data: meals, metadata } = dataAll;
-  const { total } = metadata;
 
   const handleSortingMethod = (method: SingleValue<SortBy>) => {
     const { value } = method as SortBy;
@@ -100,6 +99,20 @@ export const MealsByIngredientsComponent = () => {
   useEffect(() => {
     setFiltered(meals);
   }, [meals]);
+
+  useEffect(() => {
+    if (!isLoadingNav && !isLoadingAll && !filtered && !meals) {
+      toast({
+        title: 'Nothing found',
+        description:
+          'Chosen ingredients do not match ant of the existing recipes.',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  }, [filtered, meals]);
 
   useEffect(() => {
     if (isErrorNav || isErrorAll) {
@@ -190,9 +203,7 @@ export const MealsByIngredientsComponent = () => {
                     },
                   })}
                   isSearchable
-                  isDisabled={
-                    isLoadingNav || isLoadingAll || !ingredientsCategory
-                  }
+                  isDisabled={isLoadingNav || isLoadingAll}
                   isMulti
                   name='ingredients'
                   options={optionsIngredients}
@@ -209,14 +220,15 @@ export const MealsByIngredientsComponent = () => {
                     newValue: MultiValue<NavItem>,
                     { action, removedValue }: any
                   ) => {
-                    if ('remove-value') {
-                      ingredients &&
-                        ingredients.length > 1 &&
-                        setIngredients(
-                          ingredients?.filter(
-                            (ingredient) => ingredient !== removedValue.label
-                          )
-                        );
+                    if (action === 'remove-value') {
+                      const filtered = ingredients?.filter(
+                        (ingredient) => ingredient !== removedValue.label
+                      );
+                      setIngredients(
+                        filtered && ingredients?.length === 1
+                          ? [...filtered, ...ingredients]
+                          : filtered
+                      );
                     }
                     if (action === 'clear') {
                       setIngredients(ingredients?.slice(0, 1));
@@ -233,7 +245,7 @@ export const MealsByIngredientsComponent = () => {
           </Grid>
         </FormControl>
         {filtered && <FilteredMealsComponent meals={filtered} />}
-        {total && <PaginationComponent total={total} />}
+        {metadata?.total && <PaginationComponent total={metadata?.total} />}
       </Stack>
     </Container>
   );

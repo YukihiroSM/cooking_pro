@@ -22,7 +22,6 @@ import {
 } from '../hooks';
 import { Loader } from './loader.component';
 import { StringParam, useQueryParam } from 'use-query-params';
-import { templateIngredients } from '../templateData';
 import { formatNumber, formatString, storeRequiredIngredients } from '../utils';
 
 export const SingleMealComponent = () => {
@@ -40,17 +39,12 @@ export const SingleMealComponent = () => {
     data: meal,
   } = useSingleMeal();
   const {
-    isLoading: isLoadingAll,
     isError: isErrorAll,
     error: errorAll,
     data: dataMealsBeCategory = { data: undefined, metadata: { total: null } },
   } = useMealsByCategory();
-  const {
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-    error: errorUser,
-    data: dataUser = { data: templateIngredients, metadata: { total: 0 } },
-  } = useUserIngredients();
+  const { data: dataUser = { data: undefined, metadata: { total: 0 } } } =
+    useUserIngredients();
   const { data: userIngredients } = dataUser;
   const { data: meals } = dataMealsBeCategory;
 
@@ -67,24 +61,23 @@ export const SingleMealComponent = () => {
 
   useEffect(() => {
     userIngredients &&
-      setAvailableIngredients(storeRequiredIngredients(templateIngredients));
+      setAvailableIngredients(storeRequiredIngredients(userIngredients));
   }, [userIngredients]);
 
   useEffect(() => {
-    if (isErrorSingle || isErrorAll || isErrorUser) {
+    if (isErrorSingle || isErrorAll) {
       toast({
         title: 'Something went wrong...',
         description:
           errorSingle?.response?.data?.message ||
-          errorAll?.response?.data?.message ||
-          errorUser?.response?.data?.message,
+          errorAll?.response?.data?.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
         position: 'top-right',
       });
     }
-  }, [isErrorSingle, isErrorAll, isErrorUser]);
+  }, [isErrorSingle, isErrorAll]);
 
   return (
     <>
@@ -92,6 +85,23 @@ export const SingleMealComponent = () => {
         <Loader />
       ) : (
         <Container m={0} p={0} maxW={'100vw'}>
+          <Box
+            zIndex={49}
+            position={'absolute'}
+            left={0}
+            bottom={24}
+            right={0}
+            mx={'auto'}
+            id='arrow-scroll-hint'
+            className='demo'
+            cursor={'pointer'}
+          >
+            <Link onClick={() => scrollDown()}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </Link>
+          </Box>
           <Stack direction={'column'} spacing={0}>
             <Grid
               position={'relative'}
@@ -99,35 +109,22 @@ export const SingleMealComponent = () => {
               borderBottom={0.5}
               borderColor={'black'}
               borderStyle={'solid'}
-              templateColumns='repeat(2, 1fr)'
+              templateColumns={{ sm: 'none', md: 'repeat(2, 1fr)' }}
+              templateRows={{ md: 'none', sm: 'repeat(2, 1fr)' }}
               w={'100vw'}
             >
-              <Box
-                position={'absolute'}
-                left={0}
-                bottom={32}
-                right={0}
-                mx={'auto'}
-                id='arrow-scroll-hint'
-                className='demo'
-                cursor={'pointer'}
-              >
-                <Link onClick={() => scrollDown()}>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </Link>
-              </Box>
               <GridItem
                 as={Flex}
                 justifyContent={'center'}
                 alignItems={'center'}
               >
                 <Stack maxWidth={'25rem'}>
-                  <Text textStyle={'display2'}>{meal?.name}</Text>
+                  <Text textStyle={{ sm: 'h1Semi', md: 'display2' }}>
+                    {meal?.name}
+                  </Text>
                   <Divider />
                   <SimpleGrid
-                    fontSize={'1.25rem'}
+                    fontSize={{ sm: 'xl', md: '2xl' }}
                     mt={2}
                     columns={2}
                     spacing={2}
@@ -140,40 +137,52 @@ export const SingleMealComponent = () => {
                 </Stack>
               </GridItem>
               <GridItem justifyContent={'flex-end'} overflow={'hidden'}>
-                <Box>
+                <Box h={'full'}>
                   <Image
                     alt={meal?.name}
                     align={'center'}
                     fit={'cover'}
-                    w={'full'}
                     h={'full'}
+                    w={'full'}
                     src={meal?.image}
                   />
                 </Box>
               </GridItem>
             </Grid>
             <Grid
+              py={{ sm: 5, md: 10 }}
               ref={instructionsSection}
               bg={'light'}
-              templateColumns={'repeat(2, 1fr)'}
+              templateColumns={{ sm: 'none', md: 'repeat(2, 1fr)' }}
+              templateRows={{ md: 'none', sm: 'repeat(2, 1fr)' }}
               w={'100vw'}
+              px={{ sm: 5, md: 20 }}
             >
               <GridItem>
-                <Stack ml={20} my={10}>
-                  <Text textStyle={'body1Semi'}>Instructions </Text>
+                <Stack>
+                  <Text textStyle={{ sm: 'body2Semi', md: 'body1Semi' }}>
+                    Instructions{' '}
+                  </Text>
                   <Divider />
-                  <Text h={'25rem'} overflowY={'scroll'} textStyle={'body2'}>
+                  <Text
+                    h={'15em'}
+                    overflowY={'scroll'}
+                    fontSize={{ sm: 'xl', md: '2xl' }}
+                  >
                     {meal?.instructions}
                   </Text>
-                  <Text fontWeight={'thin'} fontSize={'sm'} as={'span'}>
+                  <Text
+                    fontWeight={'thin'}
+                    fontSize={{ sm: 'sx', md: 'sm' }}
+                    as={'span'}
+                  >
                     * You might need to scroll the instructions text to read
                     more.
                   </Text>
                 </Stack>
               </GridItem>
               <GridItem
-                pr={20}
-                pl={10}
+                pl={{ sm: 'none', md: 20 }}
                 as={Flex}
                 justifyContent={'center'}
                 alignItems={'center'}
@@ -190,16 +199,22 @@ export const SingleMealComponent = () => {
               </GridItem>
             </Grid>
             <Grid
-              px={20}
+              py={{ sm: 5, md: 10 }}
+              pt={{ sm: 'none', md: 10 }}
+              px={{ sm: 5, md: 20 }}
               bg={'light'}
-              templateColumns={
-                userIngredients ? '1fr 2fr 1fr' : 'repeat(2, 1fr)'
-              }
+              templateColumns={{
+                md: userIngredients ? '1fr 2fr 1fr' : 'repeat(2, 1fr)',
+                sm: userIngredients ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)',
+              }}
               w={'100vw'}
             >
               <GridItem>
-                <Stack my={'2rem'}>
-                  <Text textAlign={'left'} textStyle={'body1Semi'}>
+                <Stack>
+                  <Text
+                    textAlign={'left'}
+                    textStyle={{ sm: 'body2Semi', md: 'body1Semi' }}
+                  >
                     Ingredients
                   </Text>
                   {meal?.ingredients.map((ingredient, index) => (
@@ -208,7 +223,7 @@ export const SingleMealComponent = () => {
                       borderBottom={0.5}
                       borderColor={'orange'}
                       borderStyle={'solid'}
-                      textStyle={'body2'}
+                      fontSize={{ sm: 'xl', md: '2xl' }}
                     >
                       {`${index + 1}) ${ingredient}`}
                     </Text>
@@ -217,8 +232,13 @@ export const SingleMealComponent = () => {
               </GridItem>
               {availableIngredients && (
                 <GridItem>
-                  <Stack my={'2rem'}>
-                    <Text textStyle={'body1Semi'}>Available</Text>
+                  <Stack>
+                    <Text
+                      px={{ sm: 2, md: 'none' }}
+                      textStyle={{ sm: 'body2Semi', md: 'body1Semi' }}
+                    >
+                      Available
+                    </Text>
                     {meal?.ingredients.map((ingredient, index) => {
                       const availableValue: string =
                         availableIngredients[ingredient] || '0';
@@ -227,8 +247,9 @@ export const SingleMealComponent = () => {
                       );
                       return (
                         <Grid
+                          px={{ sm: 2, md: 'none' }}
                           key={`${index}-${ingredient}`}
-                          templateColumns={'3fr 1fr'}
+                          templateColumns={{ sm: '2fr 1fr', md: '3fr 1fr' }}
                           borderBottom={0.5}
                           borderColor={'orange'}
                           borderStyle={'solid'}
@@ -239,12 +260,12 @@ export const SingleMealComponent = () => {
                             p={0}
                             colorScheme='orange'
                             borderRadius={'md'}
-                            mr={5}
-                            size='md'
+                            mr={{ sm: 2, md: 5 }}
+                            size={{ sm: 'sm', md: 'md' }}
                             max={Number(requiredValue)}
                             value={Number(availableValue)}
                           />
-                          <Text textStyle={'body2'}>
+                          <Text fontSize={{ sm: 'xl', md: '2xl' }}>
                             {`${availableValue} / ${requiredValue}`}
                           </Text>
                         </Grid>
@@ -254,26 +275,34 @@ export const SingleMealComponent = () => {
                 </GridItem>
               )}
               <GridItem>
-                <Stack my={'2rem'}>
-                  <Text textStyle={'body1Semi'}>Measures</Text>
+                <Stack>
+                  <Text
+                    pl={availableIngredients ? 'none' : 10}
+                    textStyle={{ sm: 'body2Semi', md: 'body1Semi' }}
+                  >
+                    Measures
+                  </Text>
                   {meal?.measures.map((measure, index) => (
                     <Text
+                      pl={availableIngredients ? 'none' : 10}
                       key={`${index}-${measure}`}
                       borderBottom={0.5}
                       borderColor={'orange'}
                       borderStyle={'solid'}
-                      textStyle={'body2'}
+                      fontSize={{ sm: 'xl', md: '2xl' }}
                     >
-                      {formatString(measure)}
+                      {availableIngredients ? formatString(measure) : measure}
                     </Text>
                   ))}
                 </Stack>
               </GridItem>
             </Grid>
-            <Stack py={20} direction={'column'} align={'center'}>
-              <Text textStyle={'h1Semi'}>More of {meal?.category}</Text>
+            <Stack py={{ sm: 5, md: 10 }} direction={'column'} align={'center'}>
+              <Text textStyle={{ sm: 'body1Semi', md: 'h1Semi' }}>
+                More of {meal?.category}
+              </Text>
               <Grid
-                px={20}
+                px={{ sm: 5, md: 20 }}
                 templateColumns={'repeat(2, 1fr)'}
                 templateRows={'repeat(4, 1fr)'}
                 w={'100vw'}
@@ -283,6 +312,7 @@ export const SingleMealComponent = () => {
                     <GridItem key={meal.id} position={'relative'}>
                       <Box w={'full'} h={'auto'}>
                         <Box
+                          transition={'all .5s ease'}
                           position={'absolute'}
                           zIndex={2}
                           shadow={'innerBasic'}
@@ -290,7 +320,7 @@ export const SingleMealComponent = () => {
                             shadow: 'innerHovered',
                           }}
                           w={'full'}
-                          h={'640px'}
+                          h={'full'}
                           as={Link}
                           href={`/meals/${meal.id}`}
                         ></Box>
@@ -313,7 +343,7 @@ export const SingleMealComponent = () => {
                         bottom={8}
                         textAlign={'center'}
                         color={'light'}
-                        textStyle={'h1Semi'}
+                        textStyle={{ sm: 'body1Semi', md: 'h1Semi' }}
                       >
                         {meal.name.split(' ').length > 2
                           ? meal.name

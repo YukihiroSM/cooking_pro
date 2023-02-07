@@ -10,7 +10,6 @@ import {
   Box,
   FormControl,
   Container,
-  Stack,
   Grid,
   GridItem,
 } from '@chakra-ui/react';
@@ -24,7 +23,6 @@ import { sortByComplexity } from '../utils';
 import { SORT_BY_OPTIONS } from '../consts';
 
 export const MealsByCategoryComponent = () => {
-  const navigate = useNavigate();
   const toast = useToast();
   const { category } = useParams();
   const [filtered, setFiltered] = useState<Meal[] | undefined>();
@@ -46,7 +44,6 @@ export const MealsByCategoryComponent = () => {
     data: dataAll = { data: undefined, metadata: { total: 0 } },
   } = useMealsByCategory();
   const { data: meals, metadata } = dataAll;
-  const { total } = metadata;
 
   const handleSortingMethod = (method: SingleValue<SortBy>) => {
     const { value } = method as SortBy;
@@ -95,17 +92,9 @@ export const MealsByCategoryComponent = () => {
   }, [isErrorNav, isErrorAll]);
 
   return (
-    <Container bg={'light'} maxW={'full'} px={20} py={10}>
+    <Container bg={'light'} maxW={'full'} px={{ sm: 5, md: 10 }} py={10}>
       {(isLoadingNav || isLoadingAll) && <Loader />}
-      <Stack
-        direction={'column'}
-        spacing={10}
-        maxWidth={'100wv'}
-        w={'full'}
-        px={20}
-        py={10}
-        m={0}
-      >
+      <Container maxW={'none'} m={0} p={0}>
         <FormControl>
           <Grid columnGap={10} templateColumns={'1fr 5fr'}>
             <GridItem>
@@ -156,19 +145,16 @@ export const MealsByCategoryComponent = () => {
                     } as NavItemFilter
                   }
                   onChange={(newValue: SingleValue<NavItemFilter>) => {
-                    navigate(
-                      `/meals/category/${newValue?.label}?page=0&perPage=12`,
-                      { replace: true }
-                    );
+                    window.location.href = `/meals/category/${newValue?.label}?page=0&perPage=12`;
                   }}
                 />
               </Box>
             </GridItem>
           </Grid>
         </FormControl>
-        {filtered && <FilteredMealsComponent meals={filtered} />}
-        {total && <PaginationComponent total={total} />}
-      </Stack>
+      </Container>
+      {filtered && <FilteredMealsComponent meals={filtered} />}
+      {metadata.total !== 0 && <PaginationComponent total={metadata.total} />}
     </Container>
   );
 };

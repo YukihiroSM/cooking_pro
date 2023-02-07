@@ -348,7 +348,7 @@ export const UserIngredientsComponent = () => {
                     action === 'create' && isLoadingMutation ? true : false
                   }
                   type='submit'
-                  transition={'.5s ease all'}
+                  transition={'all .5s ease'}
                   fontSize={'md'}
                   fontWeight={600}
                   color={'white'}

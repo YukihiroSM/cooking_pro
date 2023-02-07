@@ -39,7 +39,7 @@ export const useUserIngredients = (): IUserIngredientsResponse => {
     IngredientByCategoryResponse,
     AxiosError<AxiosResponse, any> | null
   >([REACT_QUERY_KEYS.USER_INGREDIENTS], () =>
-    getUserIngredients(id || PREVENT_BUG)
+    getUserIngredients(id || 'invalid id to prevent bug')
   );
 };
 
@@ -161,49 +161,6 @@ export const useUserIngredient = () => {
     action,
   };
 };
-
-// export const useCreateIngredient = () => {
-//   const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
-//     id: undefined,
-//     token: undefined,
-//   });
-
-//   return useMutation<
-//     Ingredient,
-//     AxiosError<AxiosResponse, any> | undefined,
-//     CreateIngredient
-//   >((ingredient) => createUserIngredient(id || PREVENT_BUG, ingredient), {
-//     onSuccess: (ingredient: Ingredient) => {
-//       queryClient.setQueryData(
-//         [REACT_QUERY_KEYS.USER_INGREDIENTS],
-//         (currentIngredients: Ingredient[] = []) =>
-//           [...currentIngredients, ingredient] as Ingredient[]
-//       );
-//     },
-//   });
-// };
-
-// export const useDeleteIngredient = () => {
-//   const [{ id }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
-//     id: undefined,
-//     token: undefined,
-//   });
-//   return useMutation<
-//     Ingredient,
-//     AxiosError<AxiosResponse, any> | undefined,
-//     string
-//   >((ingredientID) => deleteUserIngredient(id || PREVENT_BUG, ingredientID), {
-//     onSuccess: ({ id }: Ingredient) => {
-//       queryClient.setQueryData(
-//         [REACT_QUERY_KEYS.USER_INGREDIENTS],
-//         (currentIngredients: Ingredient[] = []) =>
-//           currentIngredients.filter(
-//             (ingredient: Ingredient) => ingredient.id !== id
-//           ) as Ingredient[]
-//       );
-//     },
-//   });
-// };
 
 export const useUser = () => {
   const [error, setError] = useState<

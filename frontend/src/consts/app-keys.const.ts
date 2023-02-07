@@ -58,7 +58,7 @@ const TEAM = [
   },
 ];
 
-const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegan', 'Dessert'];
+const CAROUSEL_CATEGORIES = ['All', 'Breakfast', 'Vegetarian', 'Dessert'];
 
 const PER_PAGE_VALUES = [10, 20, 30, 40, 50];
 
@@ -76,7 +76,7 @@ const SORTING_COEFFICIENT = {
 };
 
 // string to prevent react hook order bug
-const PREVENT_BUG = 'Goat';
+const PREVENT_BUG = 'random string to prevent bug';
 
 const BASIC_INGREDIENTS_MEASURES = [
   'g',
