@@ -1,15 +1,16 @@
-from typing import Dict
-import jwt
 import hashlib
+from typing import Dict
+import os
+import jwt
 
-SECRET_KEY = "my_secret_key"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = "HS256"
 
 
 def get_encoded_jwt(data: Dict) -> str:
     encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
-    
+
 
 def decode_jwt(token: str) -> Dict:
     decoded_jwt = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

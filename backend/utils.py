@@ -1,6 +1,10 @@
 import csv
+
+import requests
 from fastapi.encoders import jsonable_encoder
+
 import schemas
+from constants import MEAL_API_BASE_URL
 
 
 def initialise_ingredients(collection):
@@ -14,6 +18,41 @@ def initialise_ingredients(collection):
             except Exception:
                 return False
     return True
+
+
+def collect_ingredients_measures(collection):
+    ingredients = [ingredient for ingredient in collection.distinct("name")]
+    for ingredient in ingredients:
+        url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredient}"
+        response = requests.get(url)
+        if response.ok:
+            data = response.json().get("meals")
+            if data is None:
+                continue
+            ingr_measure = None
+            for meal_item in data:
+                meal_id = meal_item.get("idMeal")
+                url = f"{MEAL_API_BASE_URL}/lookup.php?i={meal_id}"
+                response = requests.get(url)
+                if response.ok:
+                    meal_data = response.json().get("meals")
+                    if meal_data is None:
+                        continue
+                    item = meal_data[0]
+                    meal = build_meal(item)
+                    try:
+                        ingr_id = meal.get("ingredients").index(ingredient)
+                    except ValueError:
+                        continue
+                    else:
+                        ingr_measure = meal.get("measures")[ingr_id]
+                        break
+            if ingr_measure is None:
+                ingr_measure = "N/A"
+            print(f"{ingredient} - {ingr_measure}")
+
+                # collection.update_one({"name": ingredient}, {"$addToSet": {"measure": measure}})
+
 
 
 def collect_ingredients_categories(collection):
@@ -44,20 +83,23 @@ def build_meal(data):
             ingredients.append(data[key])
             measures.append(data["strMeasure" + key.replace("strIngredient", "")])
     meal = schemas.Meal(
-        id=data["idMeal"],
-        name=data["strMeal"],
-        category=data["strCategory"],
-        area=data["strArea"],
-        instructions=data["strInstructions"],
-        image=data["strMealThumb"],
-        video=parse_video(data["strYoutube"]),
+        id=data.get("idMeal", None),
+        name=data.get("strMeal", None),
+        category=data.get("strCategory", None),
+        area=data.get("strArea", None),
+        instructions=data.get("strInstructions", None),
+        image=data.get("strMealThumb", None),
+        video=parse_video(data.get("strYoutube", None)),
         ingredients=ingredients,
         measures=measures
     )
+
     return jsonable_encoder(meal)
 
 
 def parse_video(link: str):
+    if link is None:
+        return None
     key = link[link.find("=") + 1:]
     return f"https://www.youtube.com/embed/{key}?autoplay=1&mute=1"
 

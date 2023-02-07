@@ -1,14 +1,13 @@
+import os
+
+import certifi
 import pymongo.errors
 from fastapi import FastAPI
-from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
-import jwt_auth
-from schemas import AuthItem
-from routes import meals, user
+
 import utils
-import os
-import certifi
+from routes import meals, user
 
 ca = certifi.where()
 
@@ -65,6 +64,7 @@ def startup_db_client():
     if not ingredient:
         if not utils.initialise_ingredients(app.database.ingredients):
             print("Unable to write Ingredients entities into DB!")
+    utils.collect_ingredients_measures(app.database.ingredients)
 
     print("Connected to the MongoDB database!")
 

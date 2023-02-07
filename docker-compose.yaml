@@ -7,7 +7,9 @@ services:
       ports:
         - '8000:8000'
       restart: always
-
+      environment:
+        - ENVIRONMENT=development
+        - SECRET_KEY=dummy_secret
       depends_on:
         - mongo
       networks:
