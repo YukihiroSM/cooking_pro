@@ -166,4 +166,4 @@ def get_possible_meals(request: Request, user_id: str, page: int = 0, perPage: i
                         suitable_meals.append(single_meal)
                     else:
                         continue
-    print(suitable_meals)
+    return JSONResponse({"data": suitable_meals[page * perPage: (page + 1) * perPage], "metadata": {"total": len(suitable_meals)}})
