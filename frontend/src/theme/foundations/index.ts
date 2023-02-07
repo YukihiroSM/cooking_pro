@@ -3,6 +3,7 @@ import { spaces } from './spaces.const';
 import { textStyles } from './textStyles.const';
 import { borders } from './borders.const';
 import { shadows } from './shadows.const';
+import { breakpoints } from './breakpoints.const';
 
 const foundations = {
   global: {
@@ -15,6 +16,7 @@ const foundations = {
   textStyles,
   borders,
   shadows,
+  breakpoints,
 };
 
 export default foundations;
