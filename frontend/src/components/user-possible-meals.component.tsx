@@ -27,10 +27,9 @@ export const UserPossibleMealsComponent = () => {
     isLoading,
     isError,
     error,
-    data = { data: undefined, metadata: { total: 0 } },
+    data = { data: undefined, metadata: { total: undefined } },
   } = useUserPossibleMeals();
   const { data: meals, metadata } = data;
-  const { total } = metadata;
 
   const handleSortingMethod = (method: SingleValue<SortBy>) => {
     const { value } = method as SortBy;
@@ -52,8 +51,23 @@ export const UserPossibleMealsComponent = () => {
   };
 
   useEffect(() => {
+    console.log(meals);
     setFiltered(meals);
   }, [meals]);
+
+  useEffect(() => {
+    if (!isLoading && !filtered?.length && !meals?.length) {
+      toast({
+        title: 'Nothing found',
+        description:
+          'Available ingredients do not match any of the existing recipes.',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  }, [filtered]);
 
   useEffect(() => {
     if (isError) {
@@ -69,17 +83,9 @@ export const UserPossibleMealsComponent = () => {
   }, [isError]);
 
   return (
-    <Container bg={'light'} maxW={'full'} px={20} py={10}>
+    <Container bg={'light'} maxW={'full'} px={{ sm: 5, md: 10 }} py={10}>
       {isLoading && <Loader />}
-      <Stack
-        direction={'column'}
-        spacing={10}
-        maxWidth={'100wv'}
-        w={'full'}
-        px={20}
-        py={10}
-        m={0}
-      >
+      <Container maxW={'none'} m={0} p={0}>
         <FormControl>
           <Box>
             <FormLabel>Choose sorting</FormLabel>
@@ -101,9 +107,9 @@ export const UserPossibleMealsComponent = () => {
             />
           </Box>
         </FormControl>
-        {filtered && <FilteredMealsComponent meals={filtered} />}
-        {total && <PaginationComponent total={total} />}
-      </Stack>
+      </Container>
+      {filtered && <FilteredMealsComponent meals={filtered} />}
+      <PaginationComponent total={metadata?.total || 0} />
     </Container>
   );
 };

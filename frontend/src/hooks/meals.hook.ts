@@ -8,8 +8,7 @@ import {
   getRandomMeals,
   getSingleMeal,
   getCategoriesAndIngredients,
-  getMealsByIngredients,
-  getMealsByCategory,
+  getMealsByFilter,
 } from '../api/meal';
 
 import { PREVENT_BUG, REACT_QUERY_KEYS } from '../consts/app-keys.const';
@@ -25,7 +24,8 @@ import {
   MealsResponseData,
   Params,
 } from '../types';
-import { StringParam, useQueryParam } from 'use-query-params';
+import { NumberParam, StringParam, useQueryParam } from 'use-query-params';
+import { MyIngredientsParam } from '../utils';
 
 export const useSingleMeal = (): ISingleMealResponse => {
   const { mealID } = useParams<Params>();
@@ -35,26 +35,15 @@ export const useSingleMeal = (): ISingleMealResponse => {
   );
 };
 
-export const useMealsByIngredients = (): IAllMealsResponse => {
+export const useMealsByFilter = (): IAllMealsResponse => {
   const [searchParams] = useSearchParams();
+  const [category] = useQueryParam('category', StringParam);
+  const [ingredients] = useQueryParam('ingredients', MyIngredientsParam);
+  const [page] = useQueryParam('page', NumberParam);
+  const [perPage] = useQueryParam('perPage', NumberParam);
   return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
-    [REACT_QUERY_KEYS.MEALS_BY_INGREDIENTS, searchParams.get('ingredients')],
-    () => getMealsByIngredients(searchParams)
-  );
-};
-
-export const useMealsByCategory = (): IAllMealsResponse => {
-  const [searchParams] = useSearchParams();
-  const [carouselCategory] = useQueryParam('category', StringParam);
-  const { category } = useParams<Params>();
-  // const value = carouselCategory || category || PREVENT_BUG;
-  return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
-    [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, category, carouselCategory],
-    () =>
-      getMealsByCategory(
-        carouselCategory || category || PREVENT_BUG,
-        searchParams
-      )
+    [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, ingredients, category, page, perPage],
+    () => getMealsByFilter(searchParams)
   );
 };
 

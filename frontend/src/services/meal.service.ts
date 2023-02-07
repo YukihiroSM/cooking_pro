@@ -14,19 +14,10 @@ class MealService extends HttpService {
     );
   }
 
-  getMealsByIngredients(params: URLSearchParams) {
+  getMealsByFilter(params: URLSearchParams) {
     return this.get(
       {
-        url: `${BACKEND_KEYS.MEALS_BY_INGREDIENTS}?${params}`,
-      },
-      false
-    );
-  }
-
-  getMealsByCategory(category: string, params: URLSearchParams) {
-    return this.get(
-      {
-        url: `${BACKEND_KEYS.MEALS_BY_CATEGORY}${category}?${params}`,
+        url: `${BACKEND_KEYS.MEALS_BY_FILTER}?${params}`,
       },
       false
     );

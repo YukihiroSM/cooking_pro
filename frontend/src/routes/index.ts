@@ -1,4 +1,3 @@
-import userCreateIngredient from './create-ingredient.route';
 import main from './main.route';
 import mealsSingle from './meals-single.route';
 import mealsByIngredients from './meals-by-ingredients.route';
@@ -18,7 +17,6 @@ const routes = [
   userRegister,
   userIngredients,
   userPossibleMeals,
-  userCreateIngredient,
   notFound,
 ];
 

@@ -39,7 +39,7 @@ import { useCategoriesAndIngredients, useLocalStorage } from '../hooks';
 import { ROUTER_KEYS } from '../consts';
 
 export const HeaderComponent = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const toast = useToast();
 
   const {
@@ -52,7 +52,7 @@ export const HeaderComponent = () => {
   const [huge, setHuge] = useState<boolean>(true);
 
   useEffect(() => {
-    if (location.pathname === '/') {
+    if (pathname === '/') {
       const handleScroll = (event: Event) => {
         setHuge(!window.scrollY);
       };
@@ -81,67 +81,66 @@ export const HeaderComponent = () => {
   }, [isError]);
 
   return (
-    <>
-      <Box
-        mt={0}
-        pt={0}
-        as='header'
-        position='fixed'
-        top={0}
-        w='100%'
-        zIndex={5}
+    <Box
+      mt={0}
+      pt={0}
+      as='header'
+      position='fixed'
+      top={0}
+      w='100%'
+      zIndex={50}
+    >
+      <Flex
+        w={'full'}
+        bg={'dark'}
+        color={'white'}
+        transition={'all .5s ease'}
+        fontSize={{ sm: '2.5rem' }}
+        textStyle={{
+          sm: 'display2',
+          md: huge ? 'display1' : 'body1Semi',
+        }}
+        py={{ md: 2 }}
+        px={{ md: 4 }}
+        borderBottom={1}
+        align={'center'}
+        borderStyle={'solid'}
+        borderColor={'gray.200'}
+        position={'relative'}
+        justifyContent={'center'}
       >
-        <Flex
-          w={'full'}
-          bg={'dark'}
-          color={'white'}
-          transition={'.5s ease all'}
-          textStyle={{
-            base: 'display2',
-            md: huge ? 'display1' : 'body1Semi',
-          }}
-          py={{ base: 2 }}
-          px={{ base: 4 }}
-          borderBottom={1}
-          align={'center'}
-          borderStyle={'solid'}
-          borderColor={'gray.200'}
-          position={'relative'}
-          justifyContent={'center'}
+        <Text as='a' href={'/'}>
+          Cooking Pro
+        </Text>
+        <Stack
+          position={'absolute'}
+          right={0}
+          mr={pathname === '/' ? 40 : 10}
+          flex={{ sm: 1, md: 0 }}
+          justify={'flex-end'}
+          direction={'row'}
+          spacing={6}
+          display={{ sm: 'none', md: 'flex' }}
         >
-          <Text as='a' href={'/'}>
-            Cooking Pro
-          </Text>
-          <Stack
-            position={'absolute'}
-            right={0}
-            mr={20}
-            flex={{ base: 1, md: 0 }}
-            justify={'flex-end'}
-            direction={'row'}
-            spacing={6}
-            display={{ base: 'none', md: 'flex' }}
-          >
-            <User huge={huge} />
-          </Stack>
-        </Flex>
+          <User huge={huge} />
+        </Stack>
+      </Flex>
 
-        <Flex
-          display={'flex'}
-          justify={{ base: 'space-between', md: 'start' }}
-          py={{ base: 2 }}
-          px={{ base: 20 }}
-          bg={'dark'}
-          color={'white'}
-          minH={'60px'}
-          align={'center'}
-        >
-          {navItems?.length && (
-            <DesktopNav huge={huge} isLoading={isLoading} navItems={navItems} />
-          )}
-        </Flex>
-      </Box>
-    </>
+      <Flex
+        display={'flex'}
+        justify={{ sm: 'space-between', md: 'start' }}
+        py={{ sm: 2 }}
+        px={{ sm: 10, md: pathname === '/' ? 40 : 5 }}
+        bg={'dark'}
+        color={'white'}
+        minH={'60px'}
+        align={'center'}
+      >
+        {navItems?.length && (
+          <DesktopNav huge={huge} isLoading={isLoading} navItems={navItems} />
+        )}
+      </Flex>
+    </Box>
   );
 };
 
@@ -155,7 +154,7 @@ const DesktopNav = ({ navItems, isLoading, huge }: DesktopNavProps) => {
   const [filter, setFilter] = useState<string>('');
   return (
     <>
-      <Stack direction={'row'} spacing={4}>
+      <Stack direction={'row'} spacing={{ sm: 2, md: 4 }}>
         {navItems.map((navItem) => (
           <Box key={navItem.label}>
             <Popover trigger={'hover'} placement={'bottom-start'}>
@@ -165,7 +164,7 @@ const DesktopNav = ({ navItems, isLoading, huge }: DesktopNavProps) => {
                   as={Link}
                   isDisabled={isLoading}
                   p={2}
-                  fontSize={'lg'}
+                  fontSize={{ sm: 'md', md: 'lg' }}
                   fontWeight={500}
                   color={'light'}
                   _active={{
@@ -187,10 +186,12 @@ const DesktopNav = ({ navItems, isLoading, huge }: DesktopNavProps) => {
                   borderColor={'attention.light'}
                   boxShadow={'xl'}
                   bg={'black'}
-                  p={4}
+                  p={{ sm: 2, md: 4 }}
                   rounded={'xl'}
+                  w={{ sm: 40, md: 'full' }}
                 >
                   <Input
+                    fontSize={{ sm: 'sm', md: 'md' }}
                     isDisabled={isLoading}
                     onChange={(e) => setFilter(e.target.value)}
                     placeholder={`Find ${navItem.label
@@ -219,11 +220,11 @@ const DesktopNav = ({ navItems, isLoading, huge }: DesktopNavProps) => {
         ))}
       </Stack>
       <Stack
-        flex={{ base: 1, md: 0 }}
+        flex={{ sm: 1, md: 0 }}
         justify={'flex-end'}
         direction={'row'}
         spacing={6}
-        display={{ base: 'flex', md: 'none' }}
+        display={{ sm: 'flex', md: 'none' }}
       >
         <User huge={huge} />
       </Stack>
@@ -252,7 +253,7 @@ const DesktopSubNav = ({
     switch (param) {
       case 'Recipes':
         param = 'category';
-        url = `/meals/category/${value}?page=0&perPage=12`;
+        url = `${ROUTER_KEYS.MEALS_BY_CATEGORY}?page=0&perPage=12&${param}=${value}`;
         break;
       case 'Ingredients':
         param = 'ingredients';
@@ -279,8 +280,8 @@ const DesktopSubNav = ({
           <Stack direction={'row'} align={'center'}>
             <Box>
               <Text
-                fontSize={'md'}
-                transition={'all .3s ease'}
+                fontSize={{ sm: 'sm', md: 'md' }}
+                transition={'all .5s ease'}
                 _groupHover={{ color: 'attention.dark' }}
                 fontWeight={500}
               >
@@ -289,7 +290,7 @@ const DesktopSubNav = ({
             </Box>
             {children && (
               <Flex
-                transition={'all .3s ease'}
+                transition={'all .5s ease'}
                 transform={'translateX(-10px)'}
                 opacity={0}
                 _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
@@ -310,6 +311,7 @@ const DesktopSubNav = ({
       </PopoverTrigger>
       {children && (
         <PopoverContent
+          w={{ sm: 40, md: 'full' }}
           border={1}
           borderStyle={'solid'}
           borderColor={'attention.light'}
@@ -319,6 +321,7 @@ const DesktopSubNav = ({
           rounded={'xl'}
         >
           <Input
+            fontSize={{ sm: 'sm', md: 'md' }}
             onChange={(e) => setFilter(e.target.value)}
             placeholder={`Find ${parentLabel
               .toLowerCase()
@@ -373,14 +376,16 @@ const User = ({ huge }: UserProps) => {
             >
               <Avatar
                 bg={'attention.dark'}
-                transition={'.5s ease all'}
-                size={huge ? 'md' : 'sm'}
+                transition={'all .5s ease'}
+                size={{ sm: 'sm', md: huge ? 'md' : 'sm' }}
               />
             </MenuButton>
             <MenuList
+              minW={{ sm: 40, md: 'none' }}
+              w={{ sm: 40, md: 'full' }}
               borderColor={'attention.light'}
               bg={'black'}
-              fontSize={huge ? 'lg' : 'md'}
+              fontSize={{ sm: 'sm', md: huge ? 'lg' : 'md' }}
               lineHeight={2}
               color={'white'}
             >
@@ -426,9 +431,11 @@ const User = ({ huge }: UserProps) => {
       ) : (
         <>
           <Button
+            h={{ sm: 9, md: 10 }}
+            px={{ sm: 3, md: 4 }}
             as={'a'}
-            transition={'.5s ease all'}
-            fontSize={huge ? 'md' : 'sm'}
+            transition={'all .5s ease'}
+            fontSize={{ sm: 'sm', md: huge ? 'md' : 'sm' }}
             fontWeight={400}
             variant={'link'}
             href={'/user/login'}
@@ -437,9 +444,11 @@ const User = ({ huge }: UserProps) => {
             Sign In
           </Button>
           <Button
-            transition={'.5s ease all'}
+            h={{ sm: 9, md: 10 }}
+            px={{ sm: 3, md: 4 }}
+            transition={'all .5s ease'}
             display={'inline-flex'}
-            fontSize={huge ? 'md' : 'sm'}
+            fontSize={{ sm: 'sm', md: huge ? 'md' : 'sm' }}
             fontWeight={600}
             color={'white'}
             bg={'attention.dark'}
@@ -465,16 +474,18 @@ const ModalLogOut = ({ isOpen, onClose, setLocalStorageUser }: any) => {
           bg='blackAlpha.300'
           backdropFilter='blur(10px) hue-rotate(90deg)'
         />
-        <ModalContent py={4} bg={'black'} color={'white'}>
-          <ModalHeader fontSize={'2rem'}>Sure want to log out?</ModalHeader>
+        <ModalContent py={{ sm: 2, md: 4 }} bg={'black'} color={'white'}>
+          <ModalHeader fontSize={{ sm: '1.5rem', md: '2rem' }}>
+            Sure want to log out?
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text fontSize={'1rem'}>
+            <Text fontSize={{ sm: 'sm', md: 'md' }}>
               Some functionality will be limited after you log out.
             </Text>
           </ModalBody>
           <ModalFooter>
-            <ButtonGroup fontSize={'lg'}>
+            <ButtonGroup fontSize={{ sm: 'md', md: 'lg' }}>
               <Button
                 color={'attention.light'}
                 bg={'none'}
