@@ -118,7 +118,7 @@ export const UserIngredientsComponent = () => {
         bg={'white'}
         maxW={'100vw'}
         m={0}
-        px={40}
+        px={20}
         py={10}
       >
         <TableContainer w={'full'}>

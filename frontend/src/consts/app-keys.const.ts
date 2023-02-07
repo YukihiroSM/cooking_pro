@@ -63,6 +63,17 @@ const PER_PAGE_VALUES = [10, 20, 30, 40, 50];
 
 const USER_INGREDIENTS_PARAMS = ['Label', 'Category', 'Measure'];
 
+const SORT_BY_OPTIONS = [
+  { value: 'random', label: 'Best' },
+  { value: 'ascending', label: 'Easy first' },
+  { value: 'descending', label: 'Hard first' },
+];
+
+const SORTING_COEFFICIENT = {
+  instructions: 0.8,
+  ingredients: 0.5,
+};
+
 // string to prevent react hook order bug
 const PREVENT_BUG = 'Goat';
 
@@ -75,4 +86,6 @@ export {
   PER_PAGE_VALUES,
   PREVENT_BUG,
   USER_INGREDIENTS_PARAMS,
+  SORT_BY_OPTIONS,
+  SORTING_COEFFICIENT,
 };
