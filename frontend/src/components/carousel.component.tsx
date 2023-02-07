@@ -50,13 +50,9 @@ export const CarouselComponent = () => {
   const { data: mealsByCategory } = data;
 
   useEffect(() => {
-    if (carouselCategory === 'All') setMeals(mealsRandom);
+    if (!carouselCategory || carouselCategory === 'All') setMeals(mealsRandom);
     else setMeals(mealsByCategory);
   }, [carouselCategory, mealsByCategory, mealsRandom]);
-
-  useEffect(() => {
-    setCarouselCategory('All');
-  }, []);
 
   useEffect(() => {
     if (isErrorAll || isErrorRandom) {

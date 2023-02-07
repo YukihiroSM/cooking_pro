@@ -4,7 +4,6 @@ import Select, { SingleValue } from 'react-select';
 
 import {
   useToast,
-  Stack,
   Container,
   Box,
   FormControl,

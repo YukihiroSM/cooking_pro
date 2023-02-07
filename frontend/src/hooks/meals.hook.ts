@@ -43,7 +43,10 @@ export const useMealsByFilter = (): IAllMealsResponse => {
   const [perPage] = useQueryParam('perPage', NumberParam);
   return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
     [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, ingredients, category, page, perPage],
-    () => getMealsByFilter(searchParams)
+    () =>
+      getMealsByFilter(
+        category ? searchParams : new URLSearchParams('?category=Breakfast')
+      )
   );
 };
 
