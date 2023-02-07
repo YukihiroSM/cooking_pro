@@ -44,7 +44,7 @@ async def find_my_meals(user_id: str, request: Request):
 
     meals = list(request.app.database.meals.find({"user_id": user_id}))
     return JSONResponse({
-        "message": "Meals were created successfully.",
+        "message": "Got meals successfully.",
         "meals": meals
     }, 200)
 
