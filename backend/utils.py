@@ -1,6 +1,10 @@
 import csv
+
+import requests
 from fastapi.encoders import jsonable_encoder
+
 import schemas
+from constants import MEAL_API_BASE_URL
 
 
 def initialise_ingredients(collection):
@@ -10,7 +14,7 @@ def initialise_ingredients(collection):
             if _id == 0:
                 continue
             try:
-                collection.insert_one({"_id": row[0], "name": row[1], "category": row[2]})
+                collection.insert_one({"_id": row[0], "name": row[1], "category": row[2], "measure": row[3]})
             except Exception:
                 return False
     return True
@@ -29,7 +33,8 @@ def collect_ingredients_categories(collection):
         for ingredient in ingredients:
             ingredient_obj = {
                 "id": ingredient.get("_id"),
-                "label": ingredient.get("name")
+                "label": ingredient.get("name"),
+                "measure": ingredient.get("measure")
             }
             category_obj["children"].append(ingredient_obj)
         ingredients_by_categories.append(category_obj)
@@ -44,20 +49,23 @@ def build_meal(data):
             ingredients.append(data[key])
             measures.append(data["strMeasure" + key.replace("strIngredient", "")])
     meal = schemas.Meal(
-        id=data["idMeal"],
-        name=data["strMeal"],
-        category=data["strCategory"],
-        area=data["strArea"],
-        instructions=data["strInstructions"],
-        image=data["strMealThumb"],
-        video=parse_video(data["strYoutube"]),
+        id=data.get("idMeal", None),
+        name=data.get("strMeal", None),
+        category=data.get("strCategory", None),
+        area=data.get("strArea", None),
+        instructions=data.get("strInstructions", None),
+        image=data.get("strMealThumb", None),
+        video=parse_video(data.get("strYoutube", None)),
         ingredients=ingredients,
         measures=measures
     )
+
     return jsonable_encoder(meal)
 
 
 def parse_video(link: str):
+    if link is None:
+        return None
     key = link[link.find("=") + 1:]
     return f"https://www.youtube.com/embed/{key}?autoplay=1&mute=1"
 

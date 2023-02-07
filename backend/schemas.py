@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import List, Union
+
+from pydantic import BaseModel
 
 
 class AuthItem(BaseModel):
@@ -19,13 +20,13 @@ class AddUserIngredient(BaseModel):
 class Meal(BaseModel):
     id: str
     name: str
-    category: str
-    area: str
-    instructions: str
-    image: str
-    video: str
-    ingredients: List[str]
-    measures: List[str]
+    category: Union[str, None]
+    area: Union[str, None]
+    instructions: Union[str, None]
+    image: Union[str, None]
+    video: Union[str, None]
+    ingredients: Union[List[str], None]
+    measures: Union[List[str], None]
 
 
 class Category(BaseModel):

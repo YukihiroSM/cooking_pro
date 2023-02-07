@@ -1,14 +1,13 @@
+import os
+
+import certifi
 import pymongo.errors
 from fastapi import FastAPI
-from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
-import jwt_auth
-from schemas import AuthItem
-from routes import meals, user
+
 import utils
-import os
-import certifi
+from routes import meals, user
 
 ca = certifi.where()
 

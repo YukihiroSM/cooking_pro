@@ -1,17 +1,13 @@
-from http.client import HTTPException
-from typing import List
-from fastapi.responses import JSONResponse
-import requests
-from fastapi import APIRouter, Request
-from fastapi.encoders import jsonable_encoder
-from utils import collect_ingredients_categories
-from constants import MEAL_API_BASE_URL
-from bson.objectid import ObjectId
-from schemas import AuthItem, UserIngredientCreation, UserIngredient
-import jwt_auth
 import hashlib
 import pickle
-import constants
+
+from bson.objectid import ObjectId
+from fastapi import APIRouter, Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+
+import jwt_auth
+from schemas import AuthItem, UserIngredientCreation
 
 router = APIRouter(prefix="/api/user")
 
@@ -73,7 +69,7 @@ async def logout_user(request: Request):
 
 
 @router.post("/{user_id}/create_ingredient")
-def get_user_ingredients(request: Request, user_id: str, ingredient: UserIngredientCreation):
+async def get_user_ingredients(request: Request, user_id: str, ingredient: UserIngredientCreation):
     token = jwt_auth.get_authorisation(request)
     if token is None:
         return JSONResponse({"message": "User not authorised!"}, status_code=401)
@@ -84,9 +80,9 @@ def get_user_ingredients(request: Request, user_id: str, ingredient: UserIngredi
     existing_ingredient = request.app.database.ingredients.find_one({"_id": ingredient.id})
     ingredients = pickle.loads(user.get("ingredients"))
     new_ingredient = {
-        "id": f"{existing_ingredient.get('_id')} - {user_id}",
+        "id": f"{existing_ingredient.get('_id')}",
         "label": existing_ingredient.get("name"),
-        "category": existing_ingredient.get("category"),
+        "category": existing_ingredient.get("category", "").replace("_", " ").capitalize(),
         "measure": ingredient.measure
     }
     for usr_ingredient in ingredients:
@@ -102,7 +98,7 @@ def get_user_ingredients(request: Request, user_id: str, ingredient: UserIngredi
 
 
 @router.get("/{user_id}/ingredients")
-def get_user_ingredients(request: Request, user_id: str, page: int = 0, perPage: int = 12):
+async def get_user_ingredients(request: Request, user_id: str, page: int = 0, perPage: int = 12):
     token = jwt_auth.get_authorisation(request)
     if token is None:
         return JSONResponse({"message": "User not authorised!"}, status_code=401)
@@ -117,7 +113,7 @@ def get_user_ingredients(request: Request, user_id: str, page: int = 0, perPage:
 
 
 @router.delete("/{user_id}/delete_ingredient/{ingredient_id}")
-def delete_user_ingredient(request: Request, user_id: str, ingredient_id: str):
+async def delete_user_ingredient(request: Request, user_id: str, ingredient_id: str):
     token = jwt_auth.get_authorisation(request)
     if token is None:
         return JSONResponse({"message": "User not authorised!"}, status_code=401)
@@ -135,7 +131,6 @@ def delete_user_ingredient(request: Request, user_id: str, ingredient_id: str):
             return JSONResponse({"message": "Ingredient deleted!"}, status_code=200)
 
     return JSONResponse({"message": "Ingredient not found!"}, status_code=404)
-
 
 # @router.get("/{user_id}/meals")
 # def get_possible_meals(request: Request, user_id: str, page: int=0, perPage: int=12):
