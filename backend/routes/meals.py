@@ -1,18 +1,55 @@
 from typing import List, Union
 
 import requests
+from bson import ObjectId
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
+import jwt_auth
 import schemas
 import utils
 from constants import MEAL_API_BASE_URL
+from schemas import Meal, DemoMeal
 
 router = APIRouter(prefix="/api/meals")
 
 
-def get_meals_response(meals: List[Union[schemas.Meal, schemas.DemoMeal]]) -> JSONResponse:
+@router.post("/{user_id}/create")
+async def create_meal(user_id: str, meal: Meal, request: Request):
+    token = jwt_auth.get_authorisation(request)
+    if token is None:
+        return JSONResponse({"message": "User not authorised!"}, status_code=401)
+
+    user = request.app.database.users.find_one({"_id": ObjectId(user_id)})
+    if user is None:
+        return JSONResponse({"message": "User not found!"}, status_code=404)
+
+    meal.user_id = user_id
+    meal_query = jsonable_encoder(meal)
+
+    meal = request.app.database.meals.insert_one(meal_query)
+    return JSONResponse({"message": "Meal was created successfully.", "meal": meal}, 201)
+
+
+@router.get("/{user_id}/mine")
+async def find_my_meals(user_id: str, request: Request):
+    token = jwt_auth.get_authorisation(request)
+    if token is None:
+        return JSONResponse({"message": "User not authorised!"}, status_code=401)
+
+    user = request.app.database.users.find_one({"_id": ObjectId(user_id)})
+    if user is None:
+        return JSONResponse({"message": "User not found!"}, status_code=404)
+
+    meals = list(request.app.database.meals.find({"user_id": user_id}))
+    return JSONResponse({
+        "message": "Got meals successfully.",
+        "meals": meals
+    }, 200)
+
+
+def get_meals_response(meals: List[Union[Meal, DemoMeal]]) -> JSONResponse:
     meals_response = jsonable_encoder(
         schemas.MealsResponse(data=meals)
     )
@@ -24,13 +61,12 @@ async def get_filtered_meals_by_category(category: str = None, area: str = None)
     if not is_filter_query_valid(category, area) and category is None:
         user_ingredients = "garlic,salt"  # FIXME
         return get_filtered_by_ingredients(user_ingredients)
-        # return JSONResponse({"message": "Query is not valid."}, status_code=400)
     url = f"{MEAL_API_BASE_URL}/filter.php?c={category}"
     response = requests.get(url)
     data = response.json().get("meals")
     meals = []
     for item in data:
-        meal = schemas.DemoMeal(
+        meal = DemoMeal(
             id=item["idMeal"],
             name=item["strMeal"],
         )
