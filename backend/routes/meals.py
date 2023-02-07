@@ -108,7 +108,7 @@ async def get_meals_ingredients_categories(request: Request):
 
 @router.get("/filter")
 async def filter_meals(request: Request, ingredients: Union[str, None] = None, category: Union[str, None] = None,
-                       page: int = 0, perPage: int = 10):
+                       page: int = 0, perPage: int = 12):
     if ingredients:
         url = f"{MEAL_API_BASE_URL}/filter.php?i={ingredients}"
     elif category:
