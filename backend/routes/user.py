@@ -135,7 +135,7 @@ async def delete_user_ingredient(request: Request, user_id: str, ingredient_id: 
     return JSONResponse({"message": "Ingredient not found!"}, status_code=404)
 
 
-@router.get("/{user_id}/meals")
+@router.get("/{user_id}/possible_meals")
 def get_possible_meals(request: Request, user_id: str, page: int = 0, perPage: int = 12):
     token = jwt_auth.get_authorisation(request)
     if token is None:
