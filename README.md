@@ -1,4 +1,9 @@
 # Cooking Pro Application
+# Overview:
+
+![InterfaceOverview.gif](DocsAssets%2FInterfaceOverview.gif)
+
+# Working schema:
 ![CookingProDiagram.png](DocsAssets%2FCookingProDiagram.png)
 ## 1. Introduction
 
@@ -29,7 +34,7 @@ ingredients: [TheMealsDB](https://www.themealdb.com/api.php).**
 
 You can find the application on the following links:
 - Whole application: [Application](https://cooking-pro-376509.web.app/)
-- Backend API: [API](https://cooking-pro-backend.herokuapp.com/docs)
+- Backend API: [API](https://cooking-pro.herokuapp.com/docs)
 
 ## 2. Installation and run
 
