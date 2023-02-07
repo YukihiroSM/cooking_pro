@@ -20,7 +20,7 @@ def get_meals_response(meals: List[Union[schemas.Meal, schemas.DemoMeal]]) -> JS
 
 
 @router.get("/")
-async def getFilteredMealsByCategory(category: str = None, area: str = None):
+async def get_filtered_meals_by_category(category: str = None, area: str = None):
     if not is_filter_query_valid(category, area) and category is None:
         user_ingredients = "garlic,salt"  # FIXME
         return get_filtered_by_ingredients(user_ingredients)

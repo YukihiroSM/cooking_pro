@@ -64,7 +64,6 @@ def startup_db_client():
     if not ingredient:
         if not utils.initialise_ingredients(app.database.ingredients):
             print("Unable to write Ingredients entities into DB!")
-    utils.collect_ingredients_measures(app.database.ingredients)
 
     print("Connected to the MongoDB database!")
 
