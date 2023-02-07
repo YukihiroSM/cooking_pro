@@ -76,6 +76,61 @@ This application is built with the latest and most powerful JavaScript tools to 
 - Formik: A library for handling user registration, providing a clean and efficient way to manage form data.
 - Yarn: A package manager used for managing dependencies and packages used in the project.
 
+### FrontEnd instructions
+
+On the main page of the application you can see 4 random meals. By clicking on them - you will be able to see the meal details, including the ingredients and the recipe.
+![Front_1.png](DocsAssets%2FFront_1.png)
+
+If you scroll down, you will see the recommended meals. You can click on them to see the details as well. They are separated by most popular categories.
+![Front_2.png](DocsAssets%2FFront_2.png)
+
+To create an account you should push the "Sign Up" button in the top right corner. After that you will be redirected to the registration page.
+![Front_3.png](DocsAssets%2FFront_3.png)
+
+Registration page:
+![Front_4.png](DocsAssets%2FFront_4.png)
+
+To preform registration you should fill all the fields and push the "Sign Up" button. After that you will be redirected to the main page.
+
+To log in you should push the "Log In" button in the top right corner. After that you will be redirected to the login page.
+After passing the login form you will be redirected back to the main page.
+
+On the main page you can see two tabs: Recipes and Ingredients.
+![Front_5.png](DocsAssets%2FFront_5.png)
+![Front_6.png](DocsAssets%2FFront_6.png)
+
+By hovering over this tabs you will see categories of recipes and ingredients, grouped by categories. 
+
+By  clicking one of them you will be redirected to the page with all the meals in chosen category of the meals, which contain chosen ingredient.
+
+![Front_7.png](DocsAssets%2FFront_7.png)
+
+On this page you can see several meals. By clicking on the "Read more" button you will be redirected to the page with the details of the meal.
+
+![Front_8.png](DocsAssets%2FFront_8.png)
+
+Meals details page contains the following information:
+- Meal name
+- Meal category and area
+- Meal instructions
+- Meal ingredients and measurements
+- Meal video (if available)
+- Meal image
+
+Also, you can create some ingredients that you have in your fridge. To do this you should push circle button with an avatar in the top right corner and select "My Ingredients" from the dropdown menu.
+
+![Front_9.png](DocsAssets%2FFront_9.png)
+
+On the My Ingredients page you are able to create a see your ingredients. To create an ingredient you should chose the category, after that chose the ingredient and measure. Push Add Ingredient button to add the ingredient to the list.
+![Front_10.png](DocsAssets%2FFront_10.png)
+
+As a result you will see, that ingredient was added to the list. You can delete it by clicking on the trash icon.
+![Front_11.png](DocsAssets%2FFront_11.png)
+
+After you added enough ingredients - you can click the round Avatar button again and push "What can I cook?". You will be redirected to the page, where you will be able to see the list of meals, which you can cook, using the ingredients you have in your fridge (probably, you will need to buy something else to cook this).
+![Front_12.png](DocsAssets%2FFront_12.png)
+
+
 ## 4. API Documentation
 ##  **User API** 
 
