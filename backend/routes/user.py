@@ -80,7 +80,7 @@ async def get_user_ingredients(request: Request, user_id: str, ingredient: UserI
     existing_ingredient = request.app.database.ingredients.find_one({"_id": ingredient.id})
     ingredients = pickle.loads(user.get("ingredients"))
     new_ingredient = {
-        "id": f"{existing_ingredient.get('_id')} - {user_id}",
+        "id": f"{existing_ingredient.get('_id')}_{user_id}",
         "label": existing_ingredient.get("name"),
         "category": existing_ingredient.get("category"),
         "measure": ingredient.measure
