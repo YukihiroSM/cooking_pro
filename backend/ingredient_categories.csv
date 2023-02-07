@@ -1,0 +1,575 @@
+id,ingredient,category,measure
+1,Chicken,meat,qty
+2,Salmon,seafood,g
+3,Beef,meat,kg
+4,Pork,meat,lb
+5,Avocado,vegetables,qty
+6,Apple Cider Vinegar,vegetables,ml
+7,Asparagus,herb,qty
+8,Aubergine,vegetables,qty
+9,Baby Plum Tomatoes,vegetables,qty
+10,Bacon,meat,qty
+11,Baking Powder,others,tsp
+12,Balsamic Vinegar,vinegar,ml
+13,Basil,herb,ll
+14,Basil Leaves,herb,ll
+15,Basmati Rice,cereals,g
+16,Bay Leaf,spices,ll
+17,Bay Leaves,spices,ll
+18,Beef Brisket,meat,pound
+19,Beef Fillet,meat,g
+20,Beef Gravy,meat,can
+21,Beef Stock,meat,ml
+22,Bicarbonate Of Soda,others,tsp
+23,Biryani Masala,spices,tsp
+24,Black Pepper,spices,tsp
+25,Black Treacle,spices,tbls
+26,Borlotti Beans,herb,can
+27,Bowtie Pasta,pasta,g
+28,Bramley Apples,fruits,qty
+29,Brandy,alcohol,tbsp
+30,Bread,others,qty
+31,Breadcrumbs,others,tbsp
+32,Broccoli,vegetables,florets
+33,Brown Lentils,spices,cups
+34,Brown Rice,cereals,g
+35,Brown Sugar,sugar,g
+36,Butter,dairy_products,tbsp
+37,Cacao,others,tbsp
+38,Cajun,spices,
+39,Canned Tomatoes,vegetables,can
+40,Cannellini Beans,vegetables,can
+41,Cardamom,spices,qty
+42,Carrots,vegetables,qty
+43,Cashew Nuts,others,g
+44,Cashews,others,g
+45,Caster Sugar,sugar,g
+46,Cayenne Pepper,spices,tsp
+47,Celeriac,vegetables,g
+48,Celery,vegetables,g
+49,Celery Salt,spices,tsp
+50,Challots,vegetables,qty
+51,Charlotte Potatoes,vegetables,qty
+52,Cheddar Cheese,dairy_products,g
+53,Cheese,dairy_products,g
+54,Cheese Curds,dairy_products,cup
+55,Cherry Tomatoes,vegetables,g
+56,Chestnut Mushroom,vegetables,g
+57,Chicken Breast,meat,qty
+58,Chicken Breasts,meat,qty
+59,Chicken Legs,meat,qty
+60,Chicken Stock,meat,ml
+61,Chicken Thighs,meat,qty
+62,Chickpeas,meat,g
+63,Chili Powder,spices,tsp
+64,Chilled Butter,spices,tbsp
+65,Chilli,spices,qty
+66,Chilli Powder,spices,tbsp
+67,Chinese Broccoli,vegetables,qty
+68,Chocolate Chips,others,cup
+69,Chopped Onion,vegetables,tbsp
+70,Chopped Parsley,vegetables,tbsp
+71,Chopped Tomatoes,vegetables,kg
+72,Chorizo,meat,g
+73,Christmas Pudding,others,g
+74,Cilantro,herb,ll
+75,Cinnamon,spices,tsp
+76,Cinnamon Stick,spices,qty
+77,Cloves,spices,qty
+78,Coco Sugar,sugar,g
+79,Cocoa,others,g
+80,Coconut Cream,dairy_products,cup
+81,Coconut Milk,dairy_products,cup
+82,Colby Jack Cheese,dairy_products,qty
+83,Cold Water,others,ml
+84,Condensed Milk,dairy_products,can
+85,Coriander,herb,tbsp
+86,Coriander Leaves,herb,tbsp
+87,Coriander Seeds,herb,tbsp
+88,Corn Tortillas,others,qty
+89,Cornstarch,others,tbsp
+90,Cream,others,g
+91,Creme Fraiche,dairy_products,g
+92,Cubed Feta Cheese,dairy_products,g
+93,Cucumber,vegetables,qty
+94,Cumin,spices,qty
+95,Cumin Seeds,spices,tsp
+96,Curry Powder,spices,tsp
+97,Dark Brown Sugar,sugar,g
+98,Dark Soft Brown Sugar,sugar,g
+99,Dark Soy Sauce,spices,g
+100,Demerara Sugar,sugar,g
+101,Diced Tomatoes,vegetables,g
+102,Digestive Biscuits,others,g
+103,Dill,herb,tbsp
+104,Doner Meat,meat,g
+105,Double Cream,dairy_products,ml
+106,Dried Oregano,spices,tbsp
+107,Dry White Wine,alcohol,ml
+108,Egg Plants,vegetables,qty
+109,Egg Rolls,others,qty
+110,Egg White,others,qty
+111,Egg Yolks,others,qty
+112,Eggs,others,qty
+113,Enchilada Sauce,spices,g
+114,English Mustard,spices,tsp
+115,Extra Virgin Olive Oil,others,ml
+116,Fajita Seasoning,spices,g
+117,Farfalle,pasta,g
+118,Fennel Bulb,herb,g
+119,Fennel Seeds,herb,tsp
+120,Fenugreek,spices,tsp
+121,Feta,dairy_products,g
+122,Fish Sauce,spices,tsp
+123,Flaked Almonds,cereals,g
+124,Flax Eggs,others,qty
+125,Flour,others,g
+126,Flour Tortilla,others,qty
+127,Floury Potatoes,others,g
+128,"Free-range Egg, Beaten",others,qty
+129,"Free-range Eggs, Beaten",others,qty
+130,French Lentils,spices,cup
+131,Fresh Basil,herb,qty
+132,Fresh Thyme,herb,qty
+133,Freshly Chopped Parsley,herb,qty
+134,Fries,vegetables,g
+135,Full Fat Yogurt,dairy_products,ml
+136,Garam Masala,spices,tsp
+137,Garlic,vegetables,qty
+138,Garlic Clove,vegetables,qty
+139,Garlic Powder,spices,tsp
+140,Garlic Sauce,spices,tbsp
+141,Ghee,others,tbsp
+142,Ginger,herb,qty
+143,Ginger Cordial,alcohol,tsp
+144,Ginger Garlic Paste,others,tsp
+145,Ginger Paste,others,tsp
+146,Golden Syrup,others,g
+147,Gouda Cheese,dairy_products,g
+148,Granulated Sugar,sugar,g
+149,Grape Tomatoes,vegetables,qty
+150,Greek Yogurt,dairy_products,ml
+151,Green Beans,others,g
+152,Green Chilli,vegetables,qty
+153,Green Olives,vegetables,g
+154,Green Red Lentils,spices,qty
+155,Green Salsa,spices,qty
+156,Ground Almonds,spices,g
+157,Ground Cumin,spices,tsp
+158,Ground Ginger,spices,tbsp
+159,Gruyère,dairy_products,tbsp
+160,Hard Taco Shells,others,qty
+161,Harissa Spice,spices,tblsp
+162,Heavy Cream,dairy_products,cup
+163,Honey,others,tblsp
+164,Horseradish,vegetables,qty
+165,Hot Beef Stock,others,ml
+166,Hotsauce,others,ml
+167,Ice Cream,others,g
+168,Italian Fennel Sausages,meat,qty
+169,Italian Seasoning,spices,g
+170,Jalapeno,herb,qty
+171,Jasmine Rice,cereals,g
+172,Jerusalem Artichokes,vegetables,g
+173,Kale,herb,qty
+174,Khus Khus,cereals,g
+175,King Prawns,seafood,qty
+176,Kosher Salt,spices,tsp
+177,Lamb,meat,g
+178,Lamb Loin Chops,meat,g
+179,Lamb Mince,meat,g
+180,Lasagne Sheets,pasta,g
+181,Lean Minced Beef,meat,g
+182,Leek,vegetables,qty
+183,Lemon,vegetables,qty
+184,Lemon Juice,others,tbsp
+185,Lemon Zest,others,tbsp
+186,Lemons,vegetables,qty
+187,Lettuce,vegetables,ll
+188,Lime,vegetables,qty
+189,Little Gem Lettuce,vegetables,qty
+190,Macaroni,pasta,g
+191,Mackerel,seafood,qty
+192,Madras Paste,spices,tbsp
+193,Marjoram,herb,ll
+194,Massaman Curry Paste,spices,tsp
+195,Medjool Dates,others,qty
+196,Meringue Nests,others,qty
+197,Milk,dairy_products,ml
+198,Minced Garlic,spices,tsp
+199,Miniature Marshmallows,others,cup
+200,Mint,herb,ll
+201,Monterey Jack Cheese,dairy_products,g
+202,Mozzarella Balls,dairy_products,g
+203,Muscovado Sugar,sugar,g
+204,Mushrooms,vegetables,g
+205,Mustard,others,tbsp
+206,Mustard Powder,spices,tsp
+207,Mustard Seeds,spices,tsp
+208,Nutmeg,herb,ll
+209,Oil,others,ml
+210,Olive Oil,others,tbsp
+211,Onion Salt,others,tsp
+212,Onions,vegetables,g
+213,Orange,fruits,qty
+214,Orange Zest,others,tsp
+215,Oregano,herb,ll
+216,Oyster Sauce,spices,tbsp
+217,Paprika,spices,tsp
+218,Parma Ham,meat,g
+219,Parmesan,dairy_products,cup
+220,Parmesan Cheese,dairy_products,g
+221,Parmigiano-reggiano,dairy_products,g
+222,Parsley,herb,tbsp
+223,Peanut Butter,others,tbsp
+224,Peanut Oil,others,ml
+225,Peanuts,others,g
+226,Peas,fruits,cup
+227,Pecorino,dairy_products,g
+228,Penne Rigate,pasta,g
+229,Pepper,spices,tsp
+230,Pine Nuts,others,g
+231,Pitted Black Olives,vegetables,qty
+232,Plain Chocolate,others,g
+233,Plain Flour,others,g
+234,Plum Tomatoes,vegetables,g
+235,Potato Starch,vegetables,qty
+236,Potatoes,vegetables,g
+237,Prawns,seafood,g
+238,Puff Pastry,others,g
+239,Raspberry Jam,others,g
+240,Raw King Prawns,seafood,qty
+241,Red Chile Flakes,spices,tsp
+242,Red Chilli,spices,qty
+243,Red Chilli Powder,spices,tsp
+244,Red Onions,vegetables,qty
+245,Red Pepper,spices,qty
+246,Red Pepper Flakes,spices,tsp
+247,Red Wine,alcohol,ml
+248,Refried Beans,vegetables,can
+249,Rice,cereals,g
+250,Rice Noodles,pasta,g
+251,Rice Stick Noodles,pasta,g
+252,Rice Vermicelli,pasta,g
+253,Rigatoni,pasta,g
+254,Rocket,herb,ll
+255,Rolled Oats,cereals,g
+256,Saffron,spices,tsp
+257,Sage,herb,ll
+258,Sake,alcohol,tbsp
+259,Salsa,spices,tsp
+260,Salt,spices,tsp
+261,Salted Butter,dairy_products,g
+262,Sausages,meat,qty
+263,Sea Salt,spices,tsp
+264,Self-raising Flour,others,g
+265,Semi-skimmed Milk,dairy_products,ml
+266,Sesame Seed,herb,tbsp
+267,Shallots,vegetables,qty
+268,Shredded Mexican Cheese,dairy_products,cup
+269,Shredded Monterey Jack Cheese,dairy_products,cup
+270,Small Potatoes,vegetables,qty
+271,Smoked Paprika,spices,tbsp
+272,Smoky Paprika,spices,tbsp
+273,Sour Cream,dairy_products,g
+274,Soy Sauce,spices,ml
+275,Soya Milk,others,ml
+276,Spaghetti,pasta,g
+277,Spinach,vegetables,qty
+278,Spring Onions,vegetables,qty
+279,Squash,vegetables,qty
+280,Stir-fry Vegetables,vegetables,qty
+281,Strawberries,fruits,qty
+282,Sugar,sugar,g
+283,Sultanas,others,qty
+284,Sunflower Oil,others,tsp
+285,Tamarind Ball,others,qty
+286,Tamarind Paste,spices,tbsp
+287,Thai Fish Sauce,spices,tsp
+288,Thai Green Curry Paste,spices,tsp
+289,Thai Red Curry Paste,spices,tsp
+290,Thyme,herb,qty
+291,Tomato Ketchup,spices,tsp
+292,Tomato Puree,vegetables,tbsp
+293,Tomatoes,vegetables,cup
+294,Toor Dal,cereals,g
+295,Tuna,seafood,can
+296,Turmeric,spices,tbsp
+297,Turmeric Powder,spices,tbsp
+298,Turnips,vegetables,qty
+299,Vanilla,spices,tsp
+300,Vanilla Extract,spices,ml
+301,Veal,meat,g
+302,Vegan Butter,dairy_products,g
+303,Vegetable Oil,others,tbsp
+304,Vegetable Stock,others,g
+305,Vegetable Stock Cube,others,qty
+306,Vinaigrette Dressing,spices,qty
+307,Vine Leaves,herb,ll
+308,Vinegar,vinegar,tbsp
+309,Water,others,cup
+310,White Chocolate Chips,others,cup
+311,White Fish,seafood,qty
+312,White Fish Fillets,seafood,g
+313,White Vinegar,vinegar,tbsp
+314,White Wine,alcohol,tbsp
+315,Whole Milk,dairy_products,ml
+316,Whole Wheat,others,qty
+317,Wholegrain Bread,others,qty
+318,Worcestershire Sauce,spices,tsp
+319,Yogurt,dairy_products,ml
+320,Zucchini,vegetables,qty
+321,Pretzels,others,g
+322,Cream Cheese,dairy_products,g
+323,Icing Sugar,sugar,g
+324,Toffee Popcorn,others,g
+325,Caramel,others,g
+326,Caramel Sauce,spices,tbsp
+327,Tagliatelle,pasta,g
+328,Fettuccine,pasta,g
+329,Clotted Cream,dairy_products,g
+330,Corn Flour,others,tbsp
+331,Mussels,seafood,g
+332,Fideo,others,qty
+333,Monkfish,seafood,qty
+334,Vermicelli Pasta,pasta,g
+335,Baby Squid,seafood,qty
+336,Squid,seafood,qty
+337,Fish Stock,seafood,ml
+338,Pilchards,seafood,g
+339,Black Olives,vegetables,g
+340,Onion,vegetables,qty
+341,Tomato,vegetables,qty
+342,Duck,meat,qty
+343,Duck Legs,meat,qty
+344,Chicken Stock Cube,meat,qty
+345,Pappardelle Pasta,pasta,g
+346,Paccheri Pasta,pasta,g
+347,Linguine Pasta,pasta,g
+348,Sugar Snap Peas,vegetables,g
+349,Crusty Bread,others,qty
+350,Fromage Frais,dairy_products,g
+351,Clams,seafood,g
+352,Passata,spices,g
+353,Rapeseed Oil,others,tbsp
+354,Stilton Cheese,dairy_products,g
+355,Lamb Leg,meat,g
+356,Lamb Shoulder,meat,g
+357,Apricot,fruits,qty
+358,Butternut Squash,vegetables,g
+359,Couscous,cereals,g
+360,Minced Beef,meat,g
+361,Turkey Mince,meat,g
+362,Barbeque Sauce,spices,tbsp
+363,Sweetcorn,vegetables,qty
+364,Goose Fat,meat,tsp
+365,Duck Fat,meat,tsp
+366,Fennel,herb,qty
+367,Red Wine Vinegar,vinegar,tsp
+368,Haricot Beans,vegetables,qty
+369,Rosemary,herb,qty
+370,Butter Beans,vegetables,g
+371,Pinto Beans,vegetables,g
+372,Tomato Sauce,spices,can
+373,Mascarpone,dairy_products,g
+374,Mozzarella,dairy_products,g
+375,Ricotta,dairy_products,g
+376,Dried Apricots,fruits,qty
+377,Capers,vegetables,tbsp
+378,Banana,fruits,qty
+379,Raspberries,fruits,g
+380,Blueberries,fruits,g
+381,Walnuts,others,g
+382,Pecan Nuts,others,g
+383,Maple Syrup,spices,tbsp
+384,Light Brown Soft Sugar,others,g
+385,Dark Brown Soft Sugar,others,tbsp
+386,Dark Chocolate Chips,others,g
+387,Milk Chocolate,others,g
+388,Dark Chocolate,others,g
+389,Pumpkin,vegetables,g
+390,Shortcrust Pastry,others,g
+391,Peanut Cookies,others,g
+392,Gelatine Leafs,others,ll
+393,Peanut Brittle,others,g
+394,Peaches,fruits,qty
+395,Yellow Pepper,vegetables,qty
+396,Green Pepper,vegetables,qty
+397,Courgettes,vegetables,qty
+398,Tinned Tomatos,vegetables,can
+399,Chestnuts,others,g
+400,Wild Mushrooms,others,g
+401,Truffle Oil,others,ml
+402,Paneer,dairy_products,g
+403,Naan Bread,others,qty
+404,Lentils,cereals,cup
+405,Roasted Vegetables,vegetables,g
+406,Kidney Beans,vegetables,g
+407,Mixed Grain,others,qty
+408,Tahini,spices,g
+409,Tortillas,others,qty
+410,Udon Noodles,pasta,g
+411,Cabbage,vegetables,cup
+412,Shiitake Mushrooms,vegetables,qty
+413,Mirin,spices,tbsp
+414,Sesame Seed Oil,others,tsp
+415,Baguette,others,qty
+416,Vine Tomatoes,vegetables,qty
+417,Suet,meat,g
+418,Swede,vegetables,g
+419,Ham,meat,g
+420,Oysters,seafood,qty
+421,Stout,alcohol,ml
+422,Lard,others,qty
+423,Lamb Kidney,meat,qty
+424,Beef Kidney,meat,qty
+425,Haddock,seafood,g
+426,Smoked Haddock,seafood,g
+427,Brussels Sprouts,vegetables,qty
+428,Raisins,others,g
+429,Currants,fruits,g
+430,Custard,others,g
+431,Mixed Peel,fruits,g
+432,Redcurrants,fruits,g
+433,Blackberries,fruits,g
+434,Hazlenuts,others,g
+435,Braeburn Apples,fruits,g
+436,Red Food Colouring,others,g
+437,Pink Food Colouring,others,g
+438,Blue Food Colouring,others,g
+439,Yellow Food Colouring,others,g
+440,Apricot Jam,others,tbsp
+441,Marzipan,others,qty
+442,Almonds,others,g
+443,Black Pudding,others,qty
+444,Baked Beans,vegetables,g
+445,White Flour,others,g
+446,Yeast,others,qty
+447,Fruit Mix,fruits,g
+448,Dried Fruit,fruits,g
+449,Cherry,fruits,qty
+450,Glace Cherry,others,g
+451,Treacle,spices,tbsp
+452,Oatmeal,cereals,g
+453,Oats,cereals,qty
+454,Egg,others,qty
+455,Beef Shin,meat,g
+456,Bouquet Garni,herb,ll
+457,Single Cream,dairy_products,tsp
+458,Red Wine Jelly,alcohol,tbsp
+459,Apples,fruits,qty
+460,Goats Cheese,dairy_products,g
+461,Prosciutto,meat,g
+462,Unsalted Butter,dairy_products,g
+463,Brie,dairy_products,g
+464,Tarragon Leaves,herb,ll
+465,Chives,herb,tbsp
+466,Pears,fruits,qty
+467,White Chocolate,others,g
+468,Star Anise,herb,ll
+469,Tiger Prawns,seafood,g
+470,Custard Powder,spices,tbsp
+471,Desiccated Coconut,fruits,g
+472,Frozen Peas,fruits,g
+473,Minced Pork,meat,g
+474,Creamed Corn,vegetables,ml
+475,Sun-Dried Tomatoes,vegetables,qty
+476,Dijon Mustard,spices,tbsp
+477,Tabasco Sauce,spices,tbsp
+478,Canola Oil,others,tbsp
+479,Cod,seafood,qty
+480,Salt Cod,seafood,g
+481,Ackee,herb,g
+482,Jerk,meat,g
+483,Ground Beef,meat,g
+484,Baby Aubergine,vegetables,qty
+485,Paella Rice,others,g
+486,Scotch Bonnet,herb,qty
+487,Oxtail,meat,g
+488,Broad Beans,others,cup
+489,Red Snapper,seafood,g
+490,Malt Vinegar,vinegar,tsp
+491,Rice Vinegar,vinegar,tsp
+492,Water Chestnut,others,g
+493,Tofu,others,cup
+494,Doubanjiang,spices,tsp
+495,Fermented Black Beans,others,tsp
+496,Scallions,herb,ll
+497,Sichuan Pepper,spices,tsp
+498,Wonton Skin,others,qty
+499,Starch,others,tbsp
+500,Rice wine,alcohol,ml
+501,Cooking wine,alcohol,ml
+502,Duck Sauce,spices,ml
+503,Gochujang,spices,g
+504,Bean Sprouts,herb,qty
+505,Noodles,pasta,g
+506,Wood Ear Mushrooms,vegetables,cup
+507,Dark Rum,alcohol,tbsp
+508,Light Rum,alcohol,tbsp
+509,Rum,alcohol,tbsp
+510,English Muffins,others,qty
+511,Muffins,others,qty
+512,White Wine Vinegar,vinegar,tsp
+513,Smoked Salmon,seafood,g
+514,Mars Bar,others,qty
+515,Rice Krispies,others,g
+516,Ancho Chillies,spices,tsp
+517,Almond Milk,dairy_products,ml
+518,Allspice,spices,tsp
+519,Almond Extract,spices,tsp
+520,Tripe,meat,g
+521,Goat Meat,meat,g
+522,Black Beans,others,g
+523,Anchovy Fillet,seafood,g
+524,Ras el hanout,spices,tbsp
+525,Filo Pastry,others,qty
+526,Orange Blossom Water,others,tbsp
+527,Candied Peel,others,g
+528,Grand Marnier,alcohol,tbsl
+529,Sherry,alcohol,ml
+530,Rose water,others,ml
+531,Mixed Spice,spices,tbsp
+532,Mincemeat,others,g
+533,Sweet Potatoes,vegetables,qty
+534,Bread Rolls,others,qty
+535,Bun,others,qty
+536,Potatoe Buns,others,qty
+537,Ground Pork,meat,g
+538,Pork Chops,meat,g
+539,Yukon Gold Potatoes,vegetables,qty
+540,Yellow Onion,vegetables,qty
+541,Beef Stock Concentrate,others,ml
+542,Chicken Stock Concentrate,others,ml
+543,Persian Cucumber,vegetables,qty
+544,Mayonnaise,spices,cup
+545,Sriracha,spices,tbsp
+546,Rhubarb,herb,g
+547,Pita Bread,others,qty
+548,Bulgur Wheat,cereals,g
+549,Quinoa,cereals,g
+550,Dill Pickles,vegetables,qty
+551,Sesame Seed Burger Buns,others,qty
+552,Buns,others,qty
+553,Iceberg Lettuce,vegetables,qty
+554,Gherkin Relish,others,qty
+555,Cheese Slices,dairy_products,qty
+556,Shortening,others,cup
+557,Warm Water,others,ml
+558,Boiling Water,others,ml
+559,Pickle Juice,others,cup
+560,Powdered Sugar,sugar,tbsp
+561,Kielbasa,meat,g
+562,Polish Sausage,meat,qty
+563,Sauerkraut,vegetables,can
+564,Caraway Seed,herb,tbsp
+565,Herring,seafood,qty
+566,Jam,others,can
+567,Mulukhiyah,vegetables,g
+568,Sushi Rice,cereals,g
+569,Figs,fruits,qty
+570,Cider,alcohol,ml
+571,Beetroot,vegetables,qty
+572,Sardines,seafood,g
+573,Ciabatta,others,qty
+574,Buckwheat,cereals,g

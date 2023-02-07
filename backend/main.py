@@ -1,58 +1,71 @@
+import os
+
+import certifi
 import pymongo.errors
 from fastapi import FastAPI
-import jwt
-from pydantic import BaseModel
-from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
+
+import utils
+from routes import meals, user, recipes
+
+ca = certifi.where()
 
 SECRET_KEY = "my_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 800
-dummy_user = {
-    "username": "test",
-    "password": "test",
-}
+
 app = FastAPI()
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8000",
-    "http://localhost:3000",
-]
+app.include_router(meals.router)
+app.include_router(user.router)
+app.include_router(recipes.router)
+#
+# origins = [
+#     "http://localhost.tiangolo.com",
+#     "https://localhost.tiangolo.com",
+#     "http://localhost",
+#     "http://localhost:8000",
+#     "http://localhost:3000",
+#     "http://127.0.0.1"
+#     "http://127.0.0.1:8000"
+#     "http://127.0.0.1:3000"
+# ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-class LoginItem(BaseModel):
-    username: str
-    password: str
-
-
-class TestItem(BaseModel):
-    token: str
-
-
 @app.on_event("startup")
 def startup_db_client():
-    app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@127.0.0.1:27017')
-    app.database = app.mongodb_client["users"]
-    user = {"username": "test", "password": "test", "name": "hellllloooooo!!!", "token": ""}
+    if os.environ.get("ENVIRONMENT") == "development":
+        app.mongodb_client = MongoClient('mongodb://mongoadmin:bdung@127.0.0.1:27017')
+    else:
+        app.mongodb_client = MongoClient(
+            'mongodb+srv://cooking-db-admin:lh5zLcAz3HYIOwWD@cookingprocluster.jwyfoeq.mongodb.net/?retryWrites=true&w=majority',
+            tlsCAFile=ca
+        )
+    app.database = app.mongodb_client.cooking_db
     try:
         app.database.create_collection("users")
     except pymongo.errors.CollectionInvalid:
         pass
-    app.collection = app.database.get_collection("users")
-    app.collection.insert_one(user)
-    user = app.collection.find_one({"username": "test"})
-    print(f"test_user: {user}")
+
+    try:
+        app.database.create_collection("ingredients")
+
+    except pymongo.errors.CollectionInvalid:
+        pass
+
+    ingredient = app.database.ingredients.find_one({"_id": "1"})
+    if not ingredient:
+        if not utils.initialise_ingredients(app.database.ingredients):
+            print("Unable to write Ingredients entities into DB!")
+
     print("Connected to the MongoDB database!")
 
 
@@ -61,27 +74,6 @@ def shutdown_db_client():
     app.mongodb_client.close()
 
 
-@app.options("/login")
-@app.post("/login")
-async def login_user(login_item: LoginItem):
-    data = jsonable_encoder(login_item)
-    user_name = data['username']
-    password = data['password']
-    user_query = {"username": user_name, "password": password}
-    user = app.collection.find_one(user_query)
-    if user:
-        encoded_jwt = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
-        set_jwt = {"$set": {"token": encoded_jwt}}
-        app.collection.update_one(user_query, set_jwt)
-        return {'token': encoded_jwt, "username": user_name}
-    else:
-        return {'message': 'Login failed'}
-
-
-@app.post("/test_sending_token")
-@app.options("/test_sending_token")
-def test_token(request: TestItem):
-    data = jsonable_encoder(request)
-    token = data["token"]
-    user = app.collection.find_one({"token": token})
-    print(user)
+@app.get("/health")
+def health():
+    return {"status": "ok"}

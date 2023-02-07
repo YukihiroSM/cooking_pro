@@ -1,0 +1,46 @@
+version: '3.3'
+services:
+    backend_app:
+      build:
+        context: ./
+        dockerfile: ./backend/Dockerfile
+      ports:
+        - '8000:8000'
+      restart: always
+      environment:
+        - ENVIRONMENT=development
+        - SECRET_KEY=dummy_secret
+      depends_on:
+        - mongo
+      networks:
+        - backend
+
+    frontend_app:
+      build: ./frontend
+      ports:
+        - '80:80'
+      restart: always
+      depends_on:
+        - backend_app
+      networks:
+        - backend
+
+    mongo:
+        ports:
+            - '27017:27017'
+        container_name: dkrcomp-mongo
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+            - MONGO_INITDB_ROOT_PASSWORD=bdung
+        image: mongo
+        volumes:
+          - ./data:/data/db
+        networks:
+          - backend
+networks:
+  backend:
+    driver: bridge
