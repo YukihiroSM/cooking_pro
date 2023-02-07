@@ -53,7 +53,7 @@ export const MealsByIngredientsComponent = () => {
     isLoading: isLoadingAll,
     isError: isErrorAll,
     error: errorAll,
-    data: dataAll = { data: templateMeals, metadata: { total: 0 } },
+    data: dataAll = { data: undefined, metadata: { total: 0 } },
   } = useMealsByIngredients();
   const { data: meals, metadata } = dataAll;
   const { total } = metadata;
