@@ -1,4 +1,9 @@
 # Cooking Pro Application
+# Overview:
+
+![InterfaceOverview.gif](DocsAssets%2FInterfaceOverview.gif)
+
+# Working schema:
 ![CookingProDiagram.png](DocsAssets%2FCookingProDiagram.png)
 ## 1. Introduction
 
