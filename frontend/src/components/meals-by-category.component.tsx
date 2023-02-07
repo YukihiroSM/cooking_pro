@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { useNavigate, useParams } from 'react-router';
-
 import Select, { SingleValue } from 'react-select';
 
 import {
@@ -14,18 +12,19 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 
-import { useCategoriesAndIngredients, useMealsByCategory } from '../hooks';
+import { useCategoriesAndIngredients, useMealsByFilter } from '../hooks';
 import { Meal, NavItemFilter, SortBy } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 import { PaginationComponent } from './pagination.component';
 import { sortByComplexity } from '../utils';
 import { SORT_BY_OPTIONS } from '../consts';
+import { StringParam, useQueryParam } from 'use-query-params';
 
 export const MealsByCategoryComponent = () => {
   const toast = useToast();
-  const { category } = useParams();
-  const [filtered, setFiltered] = useState<Meal[] | undefined>();
+  const [category, setCategory] = useQueryParam('category', StringParam);
+  const [filtered, setFiltered] = useState<Meal[] | undefined>([]);
   const [options, setOptions] = useState<NavItemFilter[] | undefined>(
     undefined
   );
@@ -41,8 +40,8 @@ export const MealsByCategoryComponent = () => {
     isLoading: isLoadingAll,
     isError: isErrorAll,
     error: errorAll,
-    data: dataAll = { data: undefined, metadata: { total: 0 } },
-  } = useMealsByCategory();
+    data: dataAll = { data: undefined, metadata: { total: undefined } },
+  } = useMealsByFilter();
   const { data: meals, metadata } = dataAll;
 
   const handleSortingMethod = (method: SingleValue<SortBy>) => {
@@ -67,6 +66,20 @@ export const MealsByCategoryComponent = () => {
   useEffect(() => {
     setFiltered(meals);
   }, [meals]);
+
+  useEffect(() => {
+    if (!isLoadingNav && !isLoadingAll && !filtered?.length && !meals?.length) {
+      toast({
+        title: 'Nothing found',
+        description:
+          'Chosen category does not match any of the existing recipes.',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  }, [filtered, isLoadingAll, meals]);
 
   useEffect(() => {
     setOptions(
@@ -96,7 +109,7 @@ export const MealsByCategoryComponent = () => {
       {(isLoadingNav || isLoadingAll) && <Loader />}
       <Container maxW={'none'} m={0} p={0}>
         <FormControl>
-          <Grid columnGap={10} templateColumns={'1fr 5fr'}>
+          <Grid columnGap={10} templateColumns={'repeat(2, 1fr)'}>
             <GridItem>
               <Box>
                 <FormLabel>Choose sorting</FormLabel>
@@ -145,7 +158,7 @@ export const MealsByCategoryComponent = () => {
                     } as NavItemFilter
                   }
                   onChange={(newValue: SingleValue<NavItemFilter>) => {
-                    window.location.href = `/meals/category/${newValue?.label}?page=0&perPage=12`;
+                    setCategory(newValue?.label);
                   }}
                 />
               </Box>
@@ -154,7 +167,7 @@ export const MealsByCategoryComponent = () => {
         </FormControl>
       </Container>
       {filtered && <FilteredMealsComponent meals={filtered} />}
-      {metadata.total !== 0 && <PaginationComponent total={metadata.total} />}
+      <PaginationComponent total={metadata?.total || 0} />
     </Container>
   );
 };

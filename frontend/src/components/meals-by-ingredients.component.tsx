@@ -6,7 +6,6 @@ import Select, { MultiValue, SingleValue } from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import {
-  Stack,
   useToast,
   FormLabel,
   Box,
@@ -16,7 +15,7 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 
-import { useCategoriesAndIngredients, useMealsByIngredients } from '../hooks';
+import { useCategoriesAndIngredients, useMealsByFilter } from '../hooks';
 import { Meal, NavItem, NavItemFilter, SortBy } from '../types';
 import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
@@ -30,7 +29,7 @@ import { MyIngredientsParam } from '../utils';
 const animatedComponents = makeAnimated();
 
 export const MealsByIngredientsComponent = () => {
-  const [filtered, setFiltered] = useState<Meal[] | undefined>();
+  const [filtered, setFiltered] = useState<Meal[] | undefined>([]);
   const [ingredients, setIngredients] = useQueryParam(
     'ingredients',
     MyIngredientsParam
@@ -56,8 +55,8 @@ export const MealsByIngredientsComponent = () => {
     isLoading: isLoadingAll,
     isError: isErrorAll,
     error: errorAll,
-    data: dataAll = { data: [], metadata: { total: 0 } },
-  } = useMealsByIngredients();
+    data: dataAll = { data: undefined, metadata: { total: undefined } },
+  } = useMealsByFilter();
   const { data: meals, metadata } = dataAll;
 
   const handleSortingMethod = (method: SingleValue<SortBy>) => {
@@ -101,18 +100,18 @@ export const MealsByIngredientsComponent = () => {
   }, [meals]);
 
   useEffect(() => {
-    if (!isLoadingNav && !isLoadingAll && !filtered && !meals) {
+    if (!isLoadingNav && !isLoadingAll && !filtered?.length && !meals?.length) {
       toast({
         title: 'Nothing found',
         description:
-          'Chosen ingredients do not match ant of the existing recipes.',
+          'Chosen ingredients do not match any of the existing recipes.',
         status: 'info',
         duration: 3000,
         isClosable: true,
         position: 'top-right',
       });
     }
-  }, [filtered, meals]);
+  }, [filtered, isLoadingAll, meals]);
 
   useEffect(() => {
     if (isErrorNav || isErrorAll) {
@@ -130,19 +129,15 @@ export const MealsByIngredientsComponent = () => {
   }, [isErrorNav, isErrorAll]);
 
   return (
-    <Container bg={'light'} maxW={'full'} px={20} py={10}>
+    <Container bg={'light'} maxW={'full'} px={{ sm: 5, md: 10 }} py={10}>
       {(isLoadingNav || isLoadingAll) && <Loader />}
-      <Stack
-        direction={'column'}
-        spacing={10}
-        maxWidth={'100wv'}
-        w={'full'}
-        px={20}
-        py={10}
-        m={0}
-      >
+      <Container maxW={'none'} m={0} p={0}>
         <FormControl>
-          <Grid columnGap={10} templateColumns={'1fr repeat(2, 3fr)'}>
+          <Grid
+            columnGap={10}
+            templateColumns={{ sm: 'none', md: 'repeat(3, 1fr)' }}
+            templateRows={{ sm: 'repeat(3, 1fr)', md: 'none' }}
+          >
             <GridItem>
               <Box>
                 <FormLabel>Choose sorting</FormLabel>
@@ -166,7 +161,7 @@ export const MealsByIngredientsComponent = () => {
             </GridItem>
             <GridItem>
               <Box>
-                <FormLabel>Choose category</FormLabel>
+                <FormLabel>Choose category *</FormLabel>
                 <Select
                   theme={(theme) => ({
                     ...theme,
@@ -191,7 +186,7 @@ export const MealsByIngredientsComponent = () => {
             <GridItem>
               <Box>
                 <FormLabel>
-                  Choose recipe <strong>by ingredients</strong>
+                  Choose ingredient <strong>by ingredients</strong>
                 </FormLabel>
                 <Select
                   theme={(theme) => ({
@@ -203,7 +198,9 @@ export const MealsByIngredientsComponent = () => {
                     },
                   })}
                   isSearchable
-                  isDisabled={isLoadingNav || isLoadingAll}
+                  isDisabled={
+                    isLoadingNav || isLoadingAll || !ingredientsCategory
+                  }
                   isMulti
                   name='ingredients'
                   options={optionsIngredients}
@@ -244,9 +241,9 @@ export const MealsByIngredientsComponent = () => {
             </GridItem>
           </Grid>
         </FormControl>
-        {filtered && <FilteredMealsComponent meals={filtered} />}
-        {metadata?.total && <PaginationComponent total={metadata?.total} />}
-      </Stack>
+      </Container>
+      {filtered && <FilteredMealsComponent meals={filtered} />}
+      <PaginationComponent total={metadata?.total || 0} />
     </Container>
   );
 };

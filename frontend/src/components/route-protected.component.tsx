@@ -7,12 +7,15 @@ import { LocalStorageUser } from '../types';
 import { ROUTER_KEYS } from '../consts';
 
 export const ProtectedRoute = ({ children }: any) => {
-  const [{ token }] = useLocalStorage<LocalStorageUser>('cooking-app-user', {
-    id: undefined,
-    token: undefined,
-  });
+  const [{ id, token }] = useLocalStorage<LocalStorageUser>(
+    'cooking-app-user',
+    {
+      id: undefined,
+      token: undefined,
+    }
+  );
 
-  if (!token) {
+  if (!token || !id) {
     return <Navigate to={ROUTER_KEYS.USER_LOGIN} replace />;
   }
 

@@ -33,7 +33,17 @@ export const PaginationComponent = ({ total }: Props) => {
   const [canPreviousPage, setCanPreviousPage] = useState<boolean>(false);
   const [canNextPage, setCanNextPage] = useState<boolean>(true);
 
+  const scrollTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   useEffect(() => {
+    setTimeout(() => {
+      scrollTop();
+    }, 300);
     perPage && setCanNextPage(page !== Math.floor(total / perPage));
     setCanPreviousPage(page !== 0);
   }, [page, perPage]);
@@ -96,7 +106,7 @@ export const PaginationComponent = ({ total }: Props) => {
               setPage(page);
             }}
             isDisabled={!canNextPage}
-            value={typeof page === 'number' ? +1 : 0}
+            value={typeof page === 'number' ? page + 1 : 0}
           >
             <NumberInputField
               disabled={!canNextPage}
@@ -130,7 +140,7 @@ export const PaginationComponent = ({ total }: Props) => {
             <IconButton
               size={{ sm: 'sm', md: 'md' }}
               aria-label='pagination-last-page'
-              onClick={() => setPage((page || 1) + 1)}
+              onClick={() => setPage((page || 0) + 1)}
               isDisabled={!canNextPage}
               icon={
                 <ChevronRightIcon h={{ sm: 4, md: 6 }} w={{ sm: 4, md: 6 }} />
@@ -141,7 +151,7 @@ export const PaginationComponent = ({ total }: Props) => {
             <IconButton
               size={{ sm: 'sm', md: 'md' }}
               aria-label='pagination-next-page'
-              onClick={() => setPage(total)}
+              onClick={() => setPage(perPage && Math.floor(total / perPage))}
               isDisabled={!canNextPage}
               icon={
                 <ArrowRightIcon h={{ sm: 2, md: 3 }} w={{ sm: 2, md: 3 }} />

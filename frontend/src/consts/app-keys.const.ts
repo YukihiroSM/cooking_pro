@@ -1,6 +1,5 @@
 const BACKEND_KEYS = {
-  MEALS_BY_INGREDIENTS: 'meals/filter',
-  MEALS_BY_CATEGORY: 'meals/category/',
+  MEALS_BY_FILTER: 'meals/filter',
   CATEGORIES_AND_INGREDIENTS: 'meals/categories_and_ingredients',
   RANDOM_MEALS: 'meals/random',
   SINGLE_MEAL: 'meals/',
@@ -14,8 +13,8 @@ const BACKEND_KEYS = {
 
 const ROUTER_KEYS = {
   MAIN: '/',
-  MEALS_BY_INGREDIENTS: '/meals/filter',
-  MEALS_BY_CATEGORY: '/meals/category/:category',
+  MEALS_BY_INGREDIENTS: '/meals/ingredient/filter',
+  MEALS_BY_CATEGORY: '/meals/category/filter',
   SINGLE_MEAL: '/meals/:mealID',
   CREATE_INGREDIENT: '/meals/create-ingredient/:userID',
   USER_POSSIBLE_MEALS: '/user/:userID/possible-meals',

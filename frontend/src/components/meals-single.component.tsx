@@ -16,7 +16,7 @@ import {
   Progress,
 } from '@chakra-ui/react';
 import {
-  useMealsByCategory,
+  useMealsByFilter,
   useSingleMeal,
   useUserIngredients,
 } from '../hooks';
@@ -42,7 +42,7 @@ export const SingleMealComponent = () => {
     isError: isErrorAll,
     error: errorAll,
     data: dataMealsBeCategory = { data: undefined, metadata: { total: null } },
-  } = useMealsByCategory();
+  } = useMealsByFilter();
   const { data: dataUser = { data: undefined, metadata: { total: 0 } } } =
     useUserIngredients();
   const { data: userIngredients } = dataUser;

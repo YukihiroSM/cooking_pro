@@ -8,8 +8,7 @@ import {
   getRandomMeals,
   getSingleMeal,
   getCategoriesAndIngredients,
-  getMealsByIngredients,
-  getMealsByCategory,
+  getMealsByFilter,
 } from '../api/meal';
 
 import { PREVENT_BUG, REACT_QUERY_KEYS } from '../consts/app-keys.const';
@@ -36,25 +35,15 @@ export const useSingleMeal = (): ISingleMealResponse => {
   );
 };
 
-export const useMealsByIngredients = (): IAllMealsResponse => {
+export const useMealsByFilter = (): IAllMealsResponse => {
   const [searchParams] = useSearchParams();
+  const [category] = useQueryParam('category', StringParam);
   const [ingredients] = useQueryParam('ingredients', MyIngredientsParam);
   const [page] = useQueryParam('page', NumberParam);
   const [perPage] = useQueryParam('perPage', NumberParam);
   return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
-    [REACT_QUERY_KEYS.MEALS_BY_INGREDIENTS, ingredients, page, perPage],
-    () => getMealsByIngredients(searchParams)
-  );
-};
-
-export const useMealsByCategory = (): IAllMealsResponse => {
-  const [searchParams] = useSearchParams();
-  const [category] = useQueryParam('category', StringParam);
-  const [page] = useQueryParam('page', NumberParam);
-  const [perPage] = useQueryParam('perPage', NumberParam);
-  return useQuery<MealsResponseData, AxiosError<AxiosResponse, any> | null>(
-    [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, category, page, perPage],
-    () => getMealsByCategory(category || 'Breakfast', searchParams)
+    [REACT_QUERY_KEYS.MEALS_BY_CATEGORY, ingredients, category, page, perPage],
+    () => getMealsByFilter(searchParams)
   );
 };
 

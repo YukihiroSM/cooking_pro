@@ -35,7 +35,7 @@ export const FilteredMealsComponent = ({ meals }: Props) => {
     <Container bg={'light'} maxW={'none'} m={0} p={0} my={5}>
       <Flex
         direction={{ sm: 'column', md: 'row' }}
-        justifyContent={'space-between'}
+        justifyContent={'space-around'}
         gap={5}
         w={'full'}
         flexWrap={'wrap'}

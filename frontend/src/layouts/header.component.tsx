@@ -130,7 +130,7 @@ export const HeaderComponent = () => {
         display={'flex'}
         justify={{ sm: 'space-between', md: 'start' }}
         py={{ sm: 2 }}
-        px={{ sm: 10, md: pathname === '/' ? 40 : 10 }}
+        px={{ sm: 10, md: pathname === '/' ? 40 : 5 }}
         bg={'dark'}
         color={'white'}
         minH={'60px'}
@@ -253,7 +253,7 @@ const DesktopSubNav = ({
     switch (param) {
       case 'Recipes':
         param = 'category';
-        url = `/meals/category/${value}?page=0&perPage=12`;
+        url = `${ROUTER_KEYS.MEALS_BY_CATEGORY}?page=0&perPage=12&${param}=${value}`;
         break;
       case 'Ingredients':
         param = 'ingredients';
