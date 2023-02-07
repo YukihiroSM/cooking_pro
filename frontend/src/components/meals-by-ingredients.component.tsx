@@ -22,6 +22,9 @@ import { FilteredMealsComponent } from './meals-filtered.component';
 import { Loader } from './loader.component';
 import { PaginationComponent } from './pagination.component';
 
+import { SORT_BY_OPTIONS } from '../consts';
+import { sortByComplexity } from '../utils';
+import { templateMeals } from '../templateData';
 import { MyIngredientsParam } from '../utils';
 
 const animatedComponents = makeAnimated();
