@@ -43,7 +43,6 @@ export const CarouselComponent = () => {
     data: mealsRandom,
   } = useRandomMeals();
   const {
-    isLoading: isLoadingAll,
     isError: isErrorAll,
     error: errorAll,
     data = { data: undefined, metadata: { total: null } },
